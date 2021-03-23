@@ -1,5 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lff"
+  class="shadow-2 rounded-borders"
+  >
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -8,7 +10,7 @@
           round
           icon="menu"
           aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
+          @click="$q.screen.gt.sm?miniState = !miniState:leftDrawerOpen=!leftDrawerOpen"
         />
 
         <q-toolbar-title>
@@ -18,28 +20,40 @@
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
-
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-grey-1"
+      :mini="miniState"
+      content-class="bg-blue-1"
+      breakpoint="500"
+      :width="280"
     >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+      <q-scroll-area class="fit">
+        <q-list padding class="text-grey-8">
+          <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" clickable>
+            <q-item-section avatar>
+              <q-icon :name="link.icon"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
 
+          <q-separator inset="true" class="q-my-sm"/>
+
+          <q-item class="GNL__drawer-item " v-ripple v-for="link in links2" :key="link.text" clickable>
+            <q-item-section avatar>
+              <q-icon :name="link.icon" :class="link.color"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+        </q-list>
+      </q-scroll-area>
+    </q-drawer>
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -47,60 +61,53 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksData = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink },
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      miniState: false,
+      links1: [
+        {
+          icon: 'move_to_inbox',
+          text: 'Inbox'
+        },
+        {
+          icon: 'star',
+          text: 'Stared'
+        },
+        {
+          icon: 'send',
+          text: 'Sent'
+        },
+        {
+          icon: 'error',
+          text: 'Spam'
+        }
+      ],
+      links2: [
+        {
+          icon: 'flag',
+          text: 'Updates',
+          color: 'text-orange'
+        },
+        {
+          icon: 'group',
+          text: 'Social',
+          color: 'text-red'
+        },
+        {
+          icon: 'label',
+          text: 'Promos',
+          color: 'text-indigo-8'
+        },
+        {
+          icon: 'forum',
+          text: 'Forums',
+          color: 'text-teal'
+        }
+      ]
     }
   }
 }
