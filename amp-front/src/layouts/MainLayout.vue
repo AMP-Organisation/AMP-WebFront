@@ -26,12 +26,12 @@
       bordered
       :mini="miniState"
       content-class="bg-blue-1"
-      breakpoint="500"
+      :breakpoint="500"
       :width="280"
     >
       <q-scroll-area class="fit">
         <q-list padding class="text-grey-8">
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" clickable>
+          <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="{name: link.link }">
             <q-item-section avatar>
               <q-icon :name="link.icon"/>
             </q-item-section>
@@ -71,7 +71,8 @@ export default {
       links1: [
         {
           icon: 'move_to_inbox',
-          text: 'Inbox'
+          text: 'Inbox',
+          link: 'info'
         },
         {
           icon: 'star',
