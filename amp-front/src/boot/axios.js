@@ -10,7 +10,7 @@ if (process.env.DEBUGGING) {
   })
 } else {
   axiosInstance = axios.create({
-    baseURL: 'https://api.example.com'
+    baseURL: 'https://amp-back.herokuapp.com/api'
   })
 }
 
