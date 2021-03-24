@@ -10,6 +10,8 @@ jobs:
     - uses: actions/checkout@master
     - name: set remote url
       run: git remote set-url --push origin https://$GITHUB_ACTOR:${{ secrets.PERSONNAL_GITHUB_SECRET }}@github.com/$GITHUB_REPOSITORY
+    - name: navigating to project dir
+      run: cd amp-front
     - name: package-update
       uses: taichi/actions-package-update@master
       env:
