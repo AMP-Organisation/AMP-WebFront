@@ -26,4 +26,3 @@ jobs:
         LOG_LEVEL: debug
       with:
         args: -u --packageFile package.json --loglevel verbose
-          echo test, and deploy your project.
