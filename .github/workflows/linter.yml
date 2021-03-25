@@ -5,5 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm run lint
+      - name: install npm dep
+        run: npm install
+        working-directory: amp-front
+      - name: verification linter
+        run: npm run lint
         working-directory: amp-front
