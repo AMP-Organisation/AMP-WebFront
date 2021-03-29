@@ -85,6 +85,11 @@ export default {
         {
           icon: 'error',
           text: 'Spam'
+        },
+        {
+          icon: 'outlet',
+          text: 'Diseases',
+          link: 'disease'
         }
       ],
       links2: [
