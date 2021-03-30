@@ -1,67 +1,37 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
-    <q-header class="bg-white text-grey-8">
-      <q-toolbar class="GNL__toolbar">
-        <!-- Bouton drawer gauche -->
-        <q-btn
-          flat
-          dense
-          round
-          @click="$q.screen.gt.sm?miniState = !miniState:leftDrawerOpen=!leftDrawerOpen"
-          aria-label="Menu"
-          icon="menu"
-          class="q-mr-sm"
-        />
-        <!-- Titre de la page -->
-        <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
-          <!--          <img src="https://cdn.quasar.dev/img/layout-gallery/logo-google.svg">-->
-          Lieux recensé
-        </q-toolbar-title>
-
-        <q-space/>
-        <!-- Recherche lieux-->
-        <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
-                 placeholder="Hôpital de...">
-          <template v-slot:prepend>
-            <q-icon v-if="search === ''" name="search"/>
-            <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>
-          </template>
-        </q-input>
-
-        <q-space/>
-        <!-- Profile de l'utilisateur -->
-        <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn round flat>
-            <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" alt="user_picture">
-            </q-avatar>
-            <q-tooltip>Account</q-tooltip>
-          </q-btn>
-        </div>
-      </q-toolbar>
-    </q-header>
     <q-page-container class="container-fluid">
+      <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
+               placeholder="Hôpital de...">
+        <template v-slot:prepend>
+          <q-icon v-if="search === ''" name="search"/>
+          <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>
+        </template>
+      </q-input>
       <div class="q-ma-sm q-mt-md">
-        <q-select
-          filled
-          class="GNL__select"
-          v-model="select_model"
-          use-input
-          label="Hôpital, pharmacie, ..."
-          :options="options"
-          option-value="id"
-          option-label="type"
-          @filter="filterFn"
-          @input="getPlaceFiltered"
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey">
-                No results
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+        <div class="row">
+          <q-select
+            filled
+            class="GNL__select"
+            v-model="select_model"
+            use-input
+            label="Hôpital, pharmacie, ..."
+            :options="options"
+            option-value="id"
+            option-label="type"
+            @filter="filterFn"
+            @input="getPlaceFiltered"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No results
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+          <q-btn class="GNL__btn_reset" color="secondary" icon-right="restart_alt" label="reset" v-on:click="reset"/>
+        </div>
         <q-list class="q-ma-sm q-mt-md">
           <q-expansion-item
             v-for=" (place, index) in getResults" :key="index"
@@ -127,8 +97,6 @@ export default {
           this.place_selected = response.data
         }
       )
-  },
-  mounted: function () {
     axiosInstance.get('place/type_place')
       .then(
         response => {
@@ -166,19 +134,34 @@ export default {
             this.place_selected = response.data
           }
         )
+    },
+    reset () {
+      this.select_model = ''
+      this.search = ''
+      axiosInstance.get('place/getAll')
+        .then(
+          response => {
+            this.place_selected = response.data
+          }
+        )
     }
   }
 }
 </script>
 
 <style>
-.GNL__toolbar {
-  height: 64px;
-}
 .GNL__toolbar-input {
   width: 55%;
+  margin-left: 20%;
+  margin-top: 5%;
+  display: flex;
 }
 .GNL__select {
   width: 55%;
+  margin-left: 20%;
+}
+
+.GNL__btn_reset {
+  margin-left: 2%;
 }
 </style>
