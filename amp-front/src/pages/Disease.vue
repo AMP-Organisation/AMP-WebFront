@@ -16,7 +16,7 @@
         <div class="q-pa-md" style="max-width: 400px">
           <q-list bordered separator>
             <q-item
-              v-for="dis in disease"
+              v-for="dis in diseasePages"
               v-bind:key="dis.id"
               v-on:click="disease_selected = dis"
               class="q-my-sm"
@@ -31,6 +31,13 @@
               </q-item-section>
             </q-item>
           </q-list>
+          <div class="q-pa-lg flex flex-center">
+            <q-pagination
+              @input="changePage"
+              v-model="current"
+              :max="maxPages"
+            />
+          </div>
         </div>
 
         <div class="q-pa-md" style="max-width: 400px">
@@ -78,13 +85,14 @@
           round
           color="primary"
           icon="playlist_add"
-          v-on:click="initNewDiseaseCard"
+          v-on:click="newDisease = false"
           v-show="newDisease"
         />
         <q-card class="my-card col-7" v-show="!newDisease">
           <q-card-section>
             <div class="text-h6">Add a new disease</div>
             <div class="text-subtitle2"></div>
+            <q-btn color="warning" icon="close" v-on:click="newDisease = !newDisease" />
           </q-card-section>
           <q-card-actions vertical>
             <q-input rounded outlined v-model="newDisName" label="Name" />
@@ -137,11 +145,15 @@ export default {
       editDisease: false,
       confirmDeleteDisease: false,
       disease: [],
+      diseasePages: [],
       // refacto a faire pour les variable de la nouvelle maladie à ajouter
       newDisName: undefined,
       newDisDescripption: undefined,
       isVaccine: 'false',
+      maxPages: 6,
+      current: 1,
       value: '',
+      maxPerPage: 10,
       majDisease: {
         majName: undefined,
         majDescription: undefined
@@ -159,21 +171,32 @@ export default {
   methods: {
     // changement : je n'utilise plus async/await
     loadDiseases () {
-      axios.get(`${apiAddr}/diseases?limit=100`).then(elem => { this.disease = elem.data })
+      axios.get(`${apiAddr}/diseases?limit=100`).then(elem => {
+        this.disease = elem.data
+        console.log(this.disease)
+        console.log(this.disease.length)
+        this.maxPages = this.disease.length / this.maxPerPage + 1
+        this.diseasePages = this.disease.slice(0, this.maxPerPage)
+      })
       console.log('les maladie chargé')
       console.log(this.disease)
+      this.maxPages = 6
     },
     initNewDiseaseCard () {
       this.newDisease = false
     },
-    async postNewDisease () {
+    async postNewDisease (newDis) {
       console.log('le post de la maladie')
-      console.log(this.newDiseaseCard)
-      const res = await axios.post(`${apiAddr}/diseases`, this.newDiseaseCard)
+      console.log(newDis)
+      const res = await axios.post(`${apiAddr}/diseases`, newDis)
+        .catch(function (error) {
+          console.log(error)
+          console.log('ERRRR:: ', error.response.data)
+        })
       console.log(res)
       this.resetData()
     },
-    async deleteDisease () {
+    deleteDisease () {
       console.log('I am going to delete a disease')
       axios({
         method: 'delete',
@@ -186,28 +209,34 @@ export default {
       }).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
+      }).then(() => {
+        this.resetData()
       })
-      /* axios.delete(`${apiAddr}/diseases`, { id: 42 })
-        .then(function (response) {
-          console.log(response)
-        }).catch(function (error) {
-          console.log(error)
-          console.log('ERRRR:: ', error.response.data)
-        }) */
-      /* await axios.delete(`${apiAddr}/diseases`, '{id: 42}').catch(error => {
-        console.log('ERRRR:: ', error.response.data)
-      }) */
-      console.log('deletion done')
+    },
+    changePage (page) {
+      console.log('la nouvelle page : ')
+      console.log(page)
+      // this.maxPages = this.disease.length / 10 + 1
+      this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
     },
     validateNewDisease () {
       console.log(`le nom : ${this.newDisName}`)
       console.log(`la ddescripption : ${this.newDisDescripption}`)
       console.log(` is vaccine :${this.isVaccine}`)
+      const body = {
+        name: this.newDisName,
+        description: this.newDisDescripption,
+        is_vaccine: this.isVaccine
+      }
       this.newDiseaseCard.name = this.newDisName
       this.newDiseaseCard.description = this.newDisDescripption
       this.newDiseaseCard.is_vaccine = this.isVaccine
-      this.postNewDisease()
+      console.log(this.newDiseaseCard)
+      console.log('le body')
+      console.log(body)
+      this.postNewDisease(body)
       this.newDisease = false
+      this.resetData()
     },
     printDiseaseListTitle (dis) {
       console.log(dis)
@@ -215,7 +244,11 @@ export default {
     },
     printDiseaseListDescription (dis) {
       console.log(dis)
-      return `description : ${dis.description.slice(0, 36)}...`
+      if (dis.description.length < 36) {
+        return dis.description
+      } else {
+        return `description : ${dis.description.slice(0, 36)}...`
+      }
     },
     resetData () {
       this.newDiseaseCard.name = ''
@@ -223,7 +256,7 @@ export default {
       this.newDiseaseCard.is_vaccine = ''
       this.editDisease = false
       this.disease_selected = undefined
-      this.newDisease = false
+      this.newDisease = true
       this.loadDiseases()
       this.$forceUpdate()
     }
