@@ -1,10 +1,12 @@
 <template>
   <q-page>
-    <div class="row q-col-gutter-sm q-ma-xs-md">
-      <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
-        <q-card class="my-card" flat bordered>
+    <div class="row q-col-gutter-sm q-ma-xs">
+      <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+        <q-card
+          class="my-card" flat bordered>
           <q-card-section horizontal>
-            <q-card-section class="q-pt-xs-md">
+            <q-card-section
+              class="q-pl-xl">
               <div class="text-overline">{{ this.place.address }}</div>
               <div class="text-h5 q-mt-sm q-mb-xs">{{ this.place.region }}, {{ this.place.department }}</div>
               <div class="text-caption text-black">
@@ -27,8 +29,7 @@
                 </q-list>
               </div>
             </q-card-section>
-
-            <q-card-section class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <q-card-section class="col-6 flex flex-center">
               <q-img
                 class="rounded-borders"
                 src="https://cdn.quasar.dev/img/boy-avatar.png"
@@ -70,5 +71,16 @@ export default {
 </script>
 
 <style scoped>
-
+.my-card {
+  margin-left: 10%;
+  margin-top: 3%;
+}
+.q-pl-xl {
+  min-width: 20%;
+}
+.rounded-borders {
+  min-width: 80%;
+  margin-top: 5%;
+  margin-left: 10%;
+}
 </style>
