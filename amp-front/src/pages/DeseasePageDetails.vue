@@ -1,5 +1,11 @@
 <template lang="">
   <div>
+    <q-page>
+    <router-link :to="{name: 'disease'}">
+    <q-btn color="warning" icon="keyboard_return">
+      <q-tooltip>Go back to diseases Page</q-tooltip>
+    </q-btn>
+    </router-link>
     <div v-if="disease">
       <div class="row q-ml-md">
         <div class="col">
@@ -15,7 +21,7 @@
           </div>
           <div v-if="!disease.is_treatment">
             There is NOT a treatment
-            <q-icon name="closeh" />
+            <q-icon name="close" />
           </div>
           <div v-if="disease.is_vaccine">
             There is a vaccine
@@ -23,11 +29,16 @@
           </div>
           <div v-if="!disease.is_vaccine">
             There is NOT a vaccine
-            <q-icon name="closeh" />
+            <q-icon name="close" />
           </div>
         </div>
       </div>
-      <div class="row q-ml-md q-mt-lg">
+       <div class="row q-ml-md q-mt-lg">
+        <div class="col">
+          <h4>Description :</h4>
+        </div>
+      </div>
+      <div class="row q-ml-md">
         <div class="col">
           {{ disease.description }}
         </div>
@@ -41,6 +52,7 @@
       size="10px"
       skip-hijack
     />
+    </q-page>
   </div>
 </template>
 <script>

@@ -1,7 +1,16 @@
 <template lang="">
   <div>
     <q-page>
-      {{ intro }}
+      <div class="q-ml-md q-mt-md q-mb-md">
+        <div class="row justify-left">
+          <div class="col-1">
+            <q-icon name="outlet" color="green-12" :size="'xl'" />
+          </div>
+          <div class="col">
+            <div class="text-h4">{{ intro }}</div>
+          </div>
+        </div>
+      </div>
       <div class="row justify-center">
         <q-select
           class="col-6"
@@ -9,7 +18,7 @@
           v-model="disease_selected"
           :options="disease"
           option-label="name_disease"
-          label="maladie"
+          label="Disease List"
         />
       </div>
       <div class="row">
@@ -50,16 +59,18 @@
             {{ disease_selected.description }}
           </q-card-section>
           <q-card-section>
-            <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
+            <!-- <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
               LinkTitle
-              </router-link>
+              </router-link> -->
             <q-btn-group>
-              <q-btn color="amber-6" icon="add" >
-                <q-tooltip>More info</q-tooltip>
-              </q-btn>
-              <q-btn color="primary" icon="double_arrow" v-on:click="showDetails = true">
+              <q-btn color="amber-6" icon="add"  v-on:click="showDetails = true">
                 <q-tooltip>More info pop up</q-tooltip>
               </q-btn>
+              <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
+                <q-btn color="primary" icon="double_arrow">
+                  <q-tooltip>More info page</q-tooltip>
+                </q-btn>
+              </router-link>
               <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="editDisease = true">
                 <q-tooltip>Edit data</q-tooltip>
               </q-btn>
@@ -158,7 +169,8 @@
 
 <script>
 import * as axios from 'axios'
-import DetailDisease from 'src/pages/DetailsDisease'
+import DetailDisease from 'src/components/DetailsDisease'
+
 // a mettre dans les variable
 const apiAddr = 'http://localhost:2395/api'
 
