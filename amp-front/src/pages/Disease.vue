@@ -50,9 +50,15 @@
             {{ disease_selected.description }}
           </q-card-section>
           <q-card-section>
+            <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
+              LinkTitle
+              </router-link>
             <q-btn-group>
-              <q-btn color="primary" icon="double_arrow">
+              <q-btn color="amber-6" icon="add" >
                 <q-tooltip>More info</q-tooltip>
+              </q-btn>
+              <q-btn color="primary" icon="double_arrow" v-on:click="showDetails = true">
+                <q-tooltip>More info pop up</q-tooltip>
               </q-btn>
               <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="editDisease = true">
                 <q-tooltip>Edit data</q-tooltip>
@@ -76,13 +82,13 @@
         </div>
       </div>
       <div>
-        <q-dialog v-model="confirmDeleteDisease" persistent>
+        <!-- Pop-up card to print deletion confirmation  -->
+      <q-dialog v-model="confirmDeleteDisease" persistent>
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="close" color="red-9" text-color="white" />
           <span class="q-ml-sm" v-if="disease_selected != undefined">Are you sure to delete disease {{ disease_selected.name_disease }}</span>
         </q-card-section>
-
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
           <q-btn flat label="Delete it" color="red-8" v-close-popup v-on:click="deleteDisease()"/>
@@ -91,6 +97,7 @@
     </q-dialog>
       </div>
 
+      <!-- The card to add a desease -->
       <div class="row justify-center">
         <q-btn
           round
@@ -133,7 +140,18 @@
           </q-card-actions>
         </q-card>
       </div>
-      <DetailDisease v-if="disease_selected" :disease="disease_selected"/>
+      <div>
+      <q-dialog v-model="showDetails" persistent>
+        <q-card>
+          <q-card-actions align="left">
+            <q-btn flat icon="close" color="warning" v-close-popup />
+          </q-card-actions>
+          <q-card-section class="row items-center">
+            <DetailDisease v-if="disease_selected" :disease="disease_selected"/>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+      </div>
     </q-page>
   </div>
 </template>
@@ -155,6 +173,7 @@ export default {
       isAdmin: true,
       editDisease: false,
       confirmDeleteDisease: false,
+      showDetails: false,
       disease: [],
       diseasePages: [],
       // refacto a faire pour les variable de la nouvelle maladie à ajouter

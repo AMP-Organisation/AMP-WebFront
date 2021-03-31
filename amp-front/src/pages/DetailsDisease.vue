@@ -2,6 +2,7 @@
   <div>
     {{message}} :
     {{disease.name_disease}}
+    {{disease.id}}
   </div>
 </template>
 <script>
