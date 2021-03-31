@@ -29,8 +29,8 @@ export default {
     }
   },
   methods: {
-    getDisease () {
-      axios.get(`${apiAddr}/diseases`).then(elem => { this.disease = elem.data })
+    getDisease (id) {
+      axios.get(`${apiAddr}/diseases/${id}`).then(elem => { this.disease = elem.data })
       console.log('les maladie chargé')
       console.log(this.diseases)
     },

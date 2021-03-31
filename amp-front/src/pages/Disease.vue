@@ -40,7 +40,7 @@
           </div>
         </div>
 
-        <div class="q-pa-md" style="max-width: 400px">
+        <div class="q-pa-md" style="max-width: 500px">
         <q-card bordered class="my-card col-4" v-if="disease_selected">
           <q-card-section>
             <div class="text-h6">{{ disease_selected.name_disease }}</div>
@@ -51,15 +51,26 @@
           </q-card-section>
           <q-card-section>
             <q-btn-group>
-              <q-btn color="primary" icon="double_arrow" />
-              <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="editDisease = true"/>
-              <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true"/>
-              <q-btn color="warning" icon="close" v-on:click="editDisease = false" v-show="editDisease" />
+              <q-btn color="primary" icon="double_arrow">
+                <q-tooltip>More info</q-tooltip>
+              </q-btn>
+              <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="editDisease = true">
+                <q-tooltip>Edit data</q-tooltip>
+              </q-btn>
+              <q-btn color="warning" icon="keyboard_return" v-on:click="startEdition" v-show="editDisease">
+                <q-tooltip>Close details</q-tooltip>
+              </q-btn>
+              <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true">
+               <q-tooltip>Delete this desease card</q-tooltip>
+              </q-btn>
             </q-btn-group>
           </q-card-section>
           <q-card-section v-if="editDisease">
-            <q-input square outlined v-model="majDisease.majName" label="Square outlined" />
-            <q-input square outlined v-model="majDisease.majDescription" label="Square outlined" />
+            <q-input square outlined v-model="majDisease.majName" label="name"/>
+            <q-input square outlined v-model="majDisease.majDescription" label="description"/>
+            <q-btn color="green-9" icon="check"  v-if="isAdmin" >
+               <q-tooltip>Validate</q-tooltip>
+            </q-btn>
           </q-card-section>
         </q-card>
         </div>
@@ -185,6 +196,12 @@ export default {
     initNewDiseaseCard () {
       this.newDisease = false
     },
+    startEdition () {
+      this.editDisease = false
+      this.majDisease.majName = this.disease_selected.name_disease
+      this.majDisease.majDescription = this.disease_selected.description
+    },
+    // TODO a refacto : I had some trouble, and now I know why I have to clean it up
     async postNewDisease (newDis) {
       console.log('le post de la maladie')
       console.log(newDis)
@@ -216,7 +233,6 @@ export default {
     changePage (page) {
       console.log('la nouvelle page : ')
       console.log(page)
-      // this.maxPages = this.disease.length / 10 + 1
       this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
     },
     validateNewDisease () {
