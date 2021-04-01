@@ -105,6 +105,7 @@
             </q-btn>
           </q-card-section>
         </q-card>
+        <!-- The card to add a new disease -->
         <q-card class="my-card col-7" v-show="!newDisease">
           <q-card-section>
             <div class="text-h6">Add a new disease</div>
@@ -129,6 +130,22 @@
               v-model="isVaccine"
               val="false"
               label="There is no vaccine"
+            />
+            <q-radio
+              v-model="isTreatment"
+              val="true"
+              label="yes, there is a treatment"
+            />
+            <q-radio
+              v-model="isTreatment"
+              val="false"
+              label="There is no treatment"
+            />
+            <q-input
+              v-model.number="dangerLevel"
+              type="number"
+              filled
+              style="max-width: 200px"
             />
             <q-btn
               round
@@ -199,6 +216,8 @@ export default {
       newDisName: undefined,
       newDisDescripption: undefined,
       isVaccine: 'false',
+      isTreatment: 'false',
+      dangerLevel: 0,
       maxPages: 6,
       current: 1,
       value: '',
@@ -256,13 +275,6 @@ export default {
       }).then(() => {
         this.resetData()
       })
-      // TODO : faire le put corectement
-      // const res = await axios.put(`${apiAddr}/diseases`, disToUp)
-      //   .catch(function (error) {
-      //     console.log(error)
-      //     console.log('ERRRR:: ', error.response.data)
-      //   })
-      // console.log(res)
     },
     validateDiseaseUpdate () {
       console.log('on va valider la maj des donnée de la maladie')
@@ -317,8 +329,8 @@ export default {
         name: this.newDisName,
         description: this.newDisDescripption,
         is_vaccine: this.isVaccine,
-        is_treatment: false,
-        danger_level: 5
+        is_treatment: this.isTreatment,
+        danger_level: this.dangerLevel
       }
       this.newDiseaseCard.name = this.newDisName
       this.newDiseaseCard.description = this.newDisDescripption
