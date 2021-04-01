@@ -62,7 +62,6 @@
             <q-item-section>
               <q-item-label>toto</q-item-label>
             </q-item-section>
-            <!-- v-on:click="moreMenuDrawerOpen = !moreMenuDrawerOpen"-->
             <q-scroll-area class="fit">
               <q-list padding class="text-grey-8">
                 <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="{name: link.link }">
@@ -87,6 +86,7 @@
 
 <script>
 import Vue from 'vue'
+
 export default {
   name: 'MainLayout',
   data () {
