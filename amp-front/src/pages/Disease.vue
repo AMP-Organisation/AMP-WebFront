@@ -11,45 +11,59 @@
           </div>
         </div>
       </div>
-      <div class="row justify-center">
-        <q-select
+      <div class="row q-ml-xl justify-center">
+        <div class="col">
+          <q-select
           class="col-6"
           outlined
           v-model="disease_selected"
           :options="disease"
           option-label="name_disease"
           label="Disease List"
+          />
+        </div>
+        <div class="col q-ml-xl justify-left">
+          <q-btn
+          round
+          color="primary"
+          icon="playlist_add"
+          v-on:click="newDisease = false"
+          v-show="newDisease"
         />
+        </div>
       </div>
       <div class="row">
-        <div class="q-pa-md" style="max-width: 400px">
-          <q-list bordered separator>
-            <q-item
+        <div class="q-pa-md" > <!-- style="max-width: 400px"-->
+          <div class="col">
+            <q-list bordered separator>
+              <q-item
               v-for="dis in diseasePages"
               v-bind:key="dis.id"
               v-on:click="disease_selected = dis"
               class="q-my-sm"
               clickable
               v-ripple
-            >
+              >
               <q-item-section>
                 <q-item-label>{{ printDiseaseListTitle(dis) }}</q-item-label>
                 <q-item-label caption>{{
                   printDiseaseListDescription(dis)
                 }}</q-item-label>
               </q-item-section>
-            </q-item>
-          </q-list>
-          <div class="q-pa-lg flex flex-center">
-            <q-pagination
+              </q-item>
+            </q-list>
+            <div class="q-pa-lg flex flex-center">
+              <q-pagination
               @input="changePage"
               v-model="current"
               :max="maxPages"
-            />
-          </div>
+              />
+            </div>
+          </div> <!-- de la classe col-->
         </div>
 
-        <div class="q-pa-md" style="max-width: 500px">
+        <!-- it is the card which print the data of the disease  style="max-width: 500px"-->
+        <div class="col q-ma-md q-mr-xl" >
         <q-card bordered class="my-card col-4" v-if="disease_selected">
           <q-card-section>
             <div class="text-h6">{{ disease_selected.name_disease }}</div>
@@ -80,7 +94,7 @@
             </q-btn-group>
           </q-card-section>
 
-          <!-- The edition card for the disease  -->
+          <!-- The edition part of the card for the disease  -->
           <q-card-section v-if="editDisease">
             <q-input square outlined v-model="majDisease.majName" label="name"/>
             <q-input square outlined v-model="majDisease.majDescription" filled type="textarea" label="description"/>
@@ -89,34 +103,6 @@
             </q-btn>
           </q-card-section>
         </q-card>
-        </div>
-      </div>
-      <div>
-
-        <!-- Pop-up card to print deletion confirmation  -->
-      <q-dialog v-model="confirmDeleteDisease" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="close" color="red-9" text-color="white" />
-          <span class="q-ml-sm" v-if="disease_selected != undefined">Are you sure to delete disease {{ disease_selected.name_disease }}</span>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Delete it" color="red-8" v-close-popup v-on:click="deleteDisease()"/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-      </div>
-
-      <!-- The card to add a desease -->
-      <div class="row justify-center">
-        <q-btn
-          round
-          color="primary"
-          icon="playlist_add"
-          v-on:click="newDisease = false"
-          v-show="newDisease"
-        />
         <q-card class="my-card col-7" v-show="!newDisease">
           <q-card-section>
             <div class="text-h6">Add a new disease</div>
@@ -150,8 +136,26 @@
             />
           </q-card-actions>
         </q-card>
+        </div>
       </div>
       <div>
+
+      <!-- Pop-up card to print deletion confirmation  -->
+      <q-dialog v-model="confirmDeleteDisease" persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar icon="close" color="red-9" text-color="white" />
+            <span class="q-ml-sm" v-if="disease_selected != undefined">Are you sure to delete disease {{ disease_selected.name_disease }}</span>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" color="primary" v-close-popup />
+            <q-btn flat label="Delete it" color="red-8" v-close-popup v-on:click="deleteDisease()"/>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      </div>
+      <div>
+
       <q-dialog v-model="showDetails" persistent>
         <q-card>
           <q-card-actions align="left">
@@ -162,6 +166,7 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+
       </div>
     </q-page>
   </div>
@@ -240,6 +245,10 @@ export default {
       //     console.log('ERRRR:: ', error.response.data)
       //   })
       // console.log(res)
+    },
+    showNewDiseaseCard () {
+      this.newDisease = false
+      this.disease_selected = undefined
     },
     validateDiseaseUpdate () {
       console.log('on va valider la maj des donnée de la maladie')
