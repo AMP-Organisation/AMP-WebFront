@@ -14,10 +14,14 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          {{ appName }}
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn round>
+          <q-avatar size="40px">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+          </q-avatar>
+        </q-btn>
       </q-toolbar>
     </q-header>
     <q-drawer
@@ -50,7 +54,28 @@
               <q-item-label>{{ link.text }}</q-item-label>
             </q-item-section>
           </q-item>
-
+          <q-separator inset="true" class="q-my-sm"/>
+          <q-item class="GNL__drawer-item " v-ripple  clickable >
+            <q-item-section avatar>
+              <q-icon :name="'flag'" :class="'red-9'"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>toto</q-item-label>
+            </q-item-section>
+            <!-- v-on:click="moreMenuDrawerOpen = !moreMenuDrawerOpen"-->
+            <q-scroll-area class="fit">
+              <q-list padding class="text-grey-8">
+                <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="{name: link.link }">
+                <q-item-section avatar>
+                  <q-icon :name="link.icon"/>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ link.text }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-scroll-area>
+          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -61,12 +86,14 @@
 </template>
 
 <script>
-
+import Vue from 'vue'
 export default {
   name: 'MainLayout',
   data () {
     return {
+      appName: Vue.prototype.$appName,
       leftDrawerOpen: false,
+      moreMenuDrawerOpen: false,
       miniState: false,
       links1: [
         {
@@ -110,6 +137,10 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    console.log('creation of the app')
+    console.log(Vue.prototype.$appName)
   }
 }
 </script>
