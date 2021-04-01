@@ -17,29 +17,36 @@
             <q-form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
               <q-input
                 v-model="input.email"
+                ref="email"
                 label="Your email *"
                 hint="email address"
                 :rules="[ val => val && val.length > 0 || 'Please type something']"
               />
               <q-input
                 type="password"
+                ref="password"
                 v-model="input.password"
                 aria-autocomplete="inline"
                 :rules="[ val => val && val.length > 5 || 'Please type a strong password']"
                 label="Your password *"
               />
-              <div>
-                <q-btn label="Login" type="button" color="primary" v-on:click="login"/>
-                <q-btn
-                  flat
-                  dense
-                  round
-                  icon="home"
-                  aria-label="Home page"
-                  to="/"
-                >
-                  <q-tooltip>Home</q-tooltip>
-                </q-btn>
+              <div class="column items-center">
+                <div class="row items-start">
+                  <q-btn
+                    label="Login"
+                    type="button"
+                    color="primary"
+                    v-on:click="login"/>
+                  <q-space/>
+                  <q-btn
+                    flat
+                    label="register"
+                    icon="login"
+                    to="/register"
+                  >
+                    <q-tooltip>No account yet ? Register</q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </q-form>
           </q-card-section>
@@ -66,10 +73,23 @@ export default {
   },
   methods: {
     login: function () {
-      const input = this.input
-      store.dispatch('login', { input })
-        .then(() => this.$router.push('/'))
-        .catch(err => console.log(err))
+      if (this.$refs.email.hasError || this.$refs.password.hasError) {
+        this.$q.notify({
+          message: 'Le formulaire contient des erreurs !',
+          icon: 'warning'
+        })
+      } if (this.input.email === '' || this.input.password === '') {
+        this.$q.notify({
+          message: 'Le formulaire contient des éléments vide !',
+          icon: 'warning'
+        })
+      } else {
+        console.log(this.input.password)
+        const input = this.input
+        store.dispatch('login', { input })
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
+      }
     }
   }
 }
