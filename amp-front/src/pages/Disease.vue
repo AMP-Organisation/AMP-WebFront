@@ -59,9 +59,6 @@
             {{ disease_selected.description }}
           </q-card-section>
           <q-card-section>
-            <!-- <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
-              LinkTitle
-              </router-link> -->
             <q-btn-group>
               <q-btn color="amber-6" icon="add"  v-on:click="showDetails = true">
                 <q-tooltip>More info pop up</q-tooltip>
@@ -71,10 +68,10 @@
                   <q-tooltip>More info page</q-tooltip>
                 </q-btn>
               </router-link>
-              <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="editDisease = true">
+              <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="startEdition">
                 <q-tooltip>Edit data</q-tooltip>
               </q-btn>
-              <q-btn color="warning" icon="keyboard_return" v-on:click="startEdition" v-show="editDisease">
+              <q-btn color="warning" icon="keyboard_return" v-on:click="editDisease = false" v-show="editDisease">
                 <q-tooltip>Close details</q-tooltip>
               </q-btn>
               <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true">
@@ -82,10 +79,12 @@
               </q-btn>
             </q-btn-group>
           </q-card-section>
+
+          <!-- The edition card for the disease  -->
           <q-card-section v-if="editDisease">
             <q-input square outlined v-model="majDisease.majName" label="name"/>
-            <q-input square outlined v-model="majDisease.majDescription" label="description"/>
-            <q-btn color="green-9" icon="check"  v-if="isAdmin" >
+            <q-input square outlined v-model="majDisease.majDescription" filled type="textarea" label="description"/>
+            <q-btn color="green-9" icon="check"  v-if="isAdmin" v-on:click="validateDiseaseUpdate" >
                <q-tooltip>Validate</q-tooltip>
             </q-btn>
           </q-card-section>
@@ -93,6 +92,7 @@
         </div>
       </div>
       <div>
+
         <!-- Pop-up card to print deletion confirmation  -->
       <q-dialog v-model="confirmDeleteDisease" persistent>
       <q-card>
@@ -228,9 +228,21 @@ export default {
       this.newDisease = false
     },
     startEdition () {
-      this.editDisease = false
+      this.editDisease = true
       this.majDisease.majName = this.disease_selected.name_disease
       this.majDisease.majDescription = this.disease_selected.description
+    },
+    async updateDisease () {
+      // TODO : faire le put corectement
+      // const res = await axios.put(`${apiAddr}/diseases`, disToUp)
+      //   .catch(function (error) {
+      //     console.log(error)
+      //     console.log('ERRRR:: ', error.response.data)
+      //   })
+      // console.log(res)
+    },
+    validateDiseaseUpdate () {
+      console.log('on va valider la maj des donnée de la maladie')
     },
     // TODO a refacto : I had some trouble, and now I know why I have to clean it up
     async postNewDisease (newDis) {

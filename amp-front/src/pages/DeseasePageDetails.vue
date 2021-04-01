@@ -1,39 +1,56 @@
 <template lang="">
   <div>
     <q-page>
-    <router-link :to="{name: 'disease'}">
-    <q-btn color="warning" icon="keyboard_return">
-      <q-tooltip>Go back to diseases Page</q-tooltip>
-    </q-btn>
-    </router-link>
-    <div v-if="disease">
-      <div class="row q-ml-md">
-        <div class="col">
-          <h2>{{ disease.name_disease }}</h2>
+      <!-- the button to go back to the diseases page  -->
+      <div class="row q-ml-md q-mt-md">
+        <router-link :to="{name: 'disease'}">
+          <q-btn color="warning" icon="keyboard_return">
+            <q-tooltip>Go back to diseases Page</q-tooltip>
+          </q-btn>
+        </router-link>
+      </div>
+      <!-- Begining of the data itselves  -->
+      <div v-if="disease">
+        <div class="row q-ml-md">
+          <!-- We have a first row with two columns  -->
+          <!-- first columns for the name, and first data... -->
+          <div class="col">
+            <div class="row">
+              <!-- Name of the disease  -->
+              <h2>{{ disease.name_disease }}</h2>
+            </div>
+            <div class="row">
+              {{ disease.danger_level }}
+            </div>
+            <div class="row">
+              <div v-if="disease.is_treatment">
+                There is a treatment
+                <q-icon name="check" />
+              </div>
+              <div v-if="!disease.is_treatment">
+                There is NOT a treatment
+                <q-icon name="close" />
+              </div>
+            </div>
+            <div class="row">
+              <div v-if="disease.is_vaccine">
+                There is a vaccine
+                <q-icon name="check" />
+              </div>
+              <div v-if="!disease.is_vaccine">
+                There is NOT a vaccine
+                <q-icon name="close" />
+              </div>
+            </div>
+          </div>
+          <!--... and the second one is for the image  -->
+          <div class="col q-mr-xl">
+            <!-- <h2>image</h2> -->
+            <q-img src="../assets/virus_covid.jpg" :ratio="1" />
+          </div>
         </div>
       </div>
-      <div class="row q-ml-md">
-        <div class="col">
-          {{ disease.danger_level }}
-          <div v-if="disease.is_treatment">
-            There is a treatment
-            <q-icon name="check" />
-          </div>
-          <div v-if="!disease.is_treatment">
-            There is NOT a treatment
-            <q-icon name="close" />
-          </div>
-          <div v-if="disease.is_vaccine">
-            There is a vaccine
-            <q-icon name="check" />
-          </div>
-          <div v-if="!disease.is_vaccine">
-            There is NOT a vaccine
-            <q-icon name="close" />
-          </div>
-        </div>
-      </div>
-       <div class="row q-ml-md q-mt-lg">
+      <div class="row q-ml-md q-mt-lg">
         <div class="col">
           <h4>Description :</h4>
         </div>
@@ -43,7 +60,6 @@
           {{ disease.description }}
         </div>
       </div>
-    </div>
     <!-- Une barre de chargement qui ne focntionne pas encore -->
     <q-ajax-bar
       ref="bar"
