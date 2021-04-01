@@ -73,15 +73,17 @@
             {{ disease_selected.description }}
           </q-card-section>
           <q-card-section>
-            <q-btn-group>
-              <q-btn color="amber-6" icon="add"  v-on:click="showDetails = true">
+              <!-- This is the button to open a pop up tp print all the details in a pop up, but it is not finished yet. so that why I comented it
+              And it is redundance with the more detail page -->
+              <!-- <q-btn color="amber-6" icon="add"  v-on:click="showDetails = true">
                 <q-tooltip>More info pop up</q-tooltip>
-              </q-btn>
+              </q-btn> -->
               <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
-                <q-btn color="primary" icon="double_arrow">
+                <q-btn color="primary" icon="double_arrow" class="q-mr-md">
                   <q-tooltip>More info page</q-tooltip>
                 </q-btn>
               </router-link>
+            <q-btn-group>
               <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="startEdition">
                 <q-tooltip>Edit data</q-tooltip>
               </q-btn>
@@ -238,6 +240,22 @@ export default {
       this.majDisease.majDescription = this.disease_selected.description
     },
     async updateDisease () {
+      axios({
+        method: 'patch',
+        url: `${apiAddr}/diseases`,
+        data: {
+          id: this.disease_selected.id,
+          name_disease: this.newDisName,
+          description: this.newDisDescripption
+        }
+      }).then(function (response) {
+        console.log(response)
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      }).then(() => {
+        this.resetData()
+      })
       // TODO : faire le put corectement
       // const res = await axios.put(`${apiAddr}/diseases`, disToUp)
       //   .catch(function (error) {
@@ -246,12 +264,16 @@ export default {
       //   })
       // console.log(res)
     },
+    validateDiseaseUpdate () {
+      console.log('on va valider la maj des donnée de la maladie')
+      console.log(this.disease_selected)
+      console.log(this.newDisName)
+      console.log(this.newDisDescripption)
+      this.updateDisease()
+    },
     showNewDiseaseCard () {
       this.newDisease = false
       this.disease_selected = undefined
-    },
-    validateDiseaseUpdate () {
-      console.log('on va valider la maj des donnée de la maladie')
     },
     // TODO a refacto : I had some trouble, and now I know why I have to clean it up
     async postNewDisease (newDis) {
@@ -294,7 +316,9 @@ export default {
       const body = {
         name: this.newDisName,
         description: this.newDisDescripption,
-        is_vaccine: this.isVaccine
+        is_vaccine: this.isVaccine,
+        is_treatment: false,
+        danger_level: 5
       }
       this.newDiseaseCard.name = this.newDisName
       this.newDiseaseCard.description = this.newDisDescripption
