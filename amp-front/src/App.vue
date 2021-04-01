@@ -5,6 +5,11 @@
 </template>
 <script>
 export default {
-  name: 'App'
+  name: 'AMP',
+  data () {
+    return {
+      baseUrl: 'toto/titi'
+    }
+  }
 }
 </script>

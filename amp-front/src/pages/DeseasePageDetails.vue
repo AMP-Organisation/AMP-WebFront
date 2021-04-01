@@ -73,6 +73,7 @@
 </template>
 <script>
 import * as axios from 'axios'
+// import axiosInstance from 'boot/axios.js'
 
 const apiAddr = 'http://localhost:2395/api'
 

@@ -258,14 +258,14 @@ export default {
       this.majDisease.majName = this.disease_selected.name_disease
       this.majDisease.majDescription = this.disease_selected.description
     },
-    async updateDisease () {
+    updateDisease () {
       axios({
         method: 'patch',
         url: `${apiAddr}/diseases`,
         data: {
           id: this.disease_selected.id,
-          name_disease: this.newDisName,
-          description: this.newDisDescripption
+          name: this.majDisease.majName,
+          description: this.majDisease.majDescription
         }
       }).then(function (response) {
         console.log(response)
@@ -279,8 +279,8 @@ export default {
     validateDiseaseUpdate () {
       console.log('on va valider la maj des donnée de la maladie')
       console.log(this.disease_selected)
-      console.log(this.newDisName)
-      console.log(this.newDisDescripption)
+      console.log(this.majDisease.majName)
+      console.log(this.majDisease.majDescription)
       this.updateDisease()
     },
     showNewDiseaseCard () {
