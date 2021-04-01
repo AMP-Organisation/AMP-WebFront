@@ -98,8 +98,8 @@
 
           <!-- The edition part of the card for the disease  -->
           <q-card-section v-if="editDisease">
-            <q-input square outlined v-model="majDisease.majName" label="name"/>
-            <q-input square outlined v-model="majDisease.majDescription" filled type="textarea" label="description"/>
+            <q-input rounded outlined v-model="majDisease.majName" label="name" class=" q-mb-md"/>
+            <q-input rounded outlined v-model="majDisease.majDescription" filled type="textarea" label="description" class="q-mt-md q-mb-md min-width: 500px"/>
             <q-btn color="green-9" icon="check"  v-if="isAdmin" v-on:click="validateDiseaseUpdate" >
                <q-tooltip>Validate</q-tooltip>
             </q-btn>
@@ -235,6 +235,11 @@ export default {
   },
   components: {
     DetailDisease
+  },
+  watch: {
+    disease_selected () {
+      this.editDisease = false
+    }
   },
   methods: {
     // changement : je n'utilise plus async/await
