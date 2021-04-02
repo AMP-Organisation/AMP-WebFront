@@ -93,16 +93,15 @@ export default {
   },
   methods: {
     loadDisease () {
-      console.log('ici on fera axios')
       axios.get(`${apiAddr}/diseases/${this.id}`).then(elem => {
         this.disease = elem.data
-        console.log('la maladie est chargé')
-        console.log(this.disease)
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
       })
     }
   },
   created () {
-    console.log('creation ')
     this.loadDisease()
   }
 }
