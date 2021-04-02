@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-let axiosInstance = ''
+let axiosInstance
 
 if (process.env.DEBUGGING) {
   axiosInstance = axios.create({
@@ -11,10 +11,9 @@ if (process.env.DEBUGGING) {
   })
 } else {
   axiosInstance = axios.create({
-    baseURL: 'https://api.example.com'
+    baseURL: 'https://amp-back.herokuapp.com/api'
   })
 }
-
 Vue.prototype.$axios = axiosInstance
 
 export { axiosInstance }
