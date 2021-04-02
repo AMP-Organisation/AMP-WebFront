@@ -5,6 +5,10 @@ import routes from './routes'
 import store from 'src/store/store'
 
 Vue.use(VueRouter)
+/**
+ * global string and variable
+ */
+Vue.prototype.$appName = 'Assistant Médical Personnel'
 
 /*
  * If not building with SSR mode, you can
