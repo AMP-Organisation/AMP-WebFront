@@ -87,9 +87,10 @@ export default {
           text: 'Spam'
         },
         {
-          icon: 'outlet',
+          icon: 'sick',
           text: 'Diseases',
-          link: 'disease'
+          link: 'disease',
+          color: 'red-8'
         }
       ],
       links2: [

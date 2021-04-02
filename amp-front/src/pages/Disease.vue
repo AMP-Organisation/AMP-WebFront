@@ -4,7 +4,7 @@
       <div class="q-ml-md q-mt-md q-mb-md">
         <div class="row justify-left">
           <div class="col-1">
-            <q-icon name="outlet" color="green-12" :size="'xl'" />
+            <q-icon name="sick" color="red-6" :size="'xl'" />
           </div>
           <div class="col">
             <div class="text-h4">{{ intro }}</div>
