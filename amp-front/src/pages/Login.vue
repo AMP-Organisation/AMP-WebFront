@@ -16,40 +16,37 @@
           <q-card-section>
             <q-form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
               <q-input
-                ref="email"
-                filled
                 v-model="input.email"
+                ref="email"
                 label="Your email *"
                 hint="email address"
-                lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Please type something']"
               />
-
               <q-input
+                type="password"
                 ref="password"
-                filled
-                type="text"
                 v-model="input.password"
+                aria-autocomplete="inline"
+                :rules="[ val => val && val.length > 5 || 'Please type a strong password']"
                 label="Your password *"
-                lazy-rules
-                :rules="[
-          val => val !== null && val !== '' || 'Please type your password',
-          val => val > 0 && val < 3 || 'Please type a real password'
-        ]"
               />
-
-              <div>
-                <q-btn label="Login" type="button" color="primary" v-on:click="login"/>
-                <q-btn
-                  flat
-                  dense
-                  round
-                  icon="home"
-                  aria-label="Home page"
-                  to="/"
-                >
-                  <q-tooltip>Home</q-tooltip>
-                </q-btn>
+              <div class="column items-center">
+                <div class="row items-start">
+                  <q-btn
+                    label="Login"
+                    type="button"
+                    color="primary"
+                    v-on:click="login"/>
+                  <q-space/>
+                  <q-btn
+                    flat
+                    label="register"
+                    icon="login"
+                    to="/register"
+                  >
+                    <q-tooltip>No account yet ? Register</q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </q-form>
           </q-card-section>
@@ -59,10 +56,9 @@
 
 <script>
 
-import { axiosInstance } from 'boot/axios'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import store from 'src/store/store'
 Vue.use(VueRouter)
 
 export default {
@@ -76,17 +72,24 @@ export default {
     }
   },
   methods: {
-    login () {
-      axiosInstance.post('users/get',
-        {
-          email: this.input.email
-        }).then(function (response) {
-        /** Find out why redirection not working **/
-        console.log(response.data)
-      }).catch(function (error) {
-        // we get back the error message we setup in our back.
-        console.log(error.response.data.detail)
-      })
+    login: function () {
+      if (this.$refs.email.hasError || this.$refs.password.hasError) {
+        this.$q.notify({
+          message: 'Le formulaire contient des erreurs !',
+          icon: 'warning'
+        })
+      } if (this.input.email === '' || this.input.password === '') {
+        this.$q.notify({
+          message: 'Le formulaire contient des éléments vide !',
+          icon: 'warning'
+        })
+      } else {
+        console.log(this.input.password)
+        const input = this.input
+        store.dispatch('login', { input })
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
+      }
     }
   }
 }

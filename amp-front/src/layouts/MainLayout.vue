@@ -12,12 +12,25 @@
           aria-label="Menu"
           @click="$q.screen.gt.sm?miniState = !miniState:leftDrawerOpen=!leftDrawerOpen"
         />
-
         <q-toolbar-title>
-          Quasar App
+          Bienvenue {{ currentUser.username }}
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-space/>
+        <div class="q-gutter-lg-sm items-center row no-wrap">
+          <div style="margin-right: 20%"
+          v-if="connected"
+          >
+            <q-btn
+              style="min-width: 50%; background: transparent"
+              v-on:click="logout"
+              unelevated
+              rounded
+              label="Déconexion"
+              class="vertical-top"
+            />
+          </div>
+          <div>Quasar v{{ $q.version }}</div>
+        </div>
       </q-toolbar>
     </q-header>
     <q-drawer
@@ -62,6 +75,8 @@
 
 <script>
 
+import store from 'src/store/store'
+
 export default {
   name: 'MainLayout',
   data () {
@@ -86,6 +101,12 @@ export default {
         {
           icon: 'error',
           text: 'Spam'
+        },
+        {
+          icon: 'sick',
+          text: 'Diseases',
+          link: 'disease',
+          color: 'red-8'
         }
       ],
       links2: [
@@ -109,7 +130,20 @@ export default {
           text: 'Forums',
           color: 'text-teal'
         }
-      ]
+      ],
+      currentUser: JSON.parse(localStorage.getItem('user'))
+    }
+  },
+  methods: {
+    connected: function () {
+      const user = JSON.parse(localStorage.getItem('user'))
+      return !!user
+    },
+    logout: function () {
+      store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/login')
+        })
     }
   }
 }
