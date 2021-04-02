@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="q-pa-md" > <!-- style="max-width: 400px"-->
+        <div class="q-pa-md" >
           <div class="col">
             <q-list bordered separator>
               <q-item
@@ -66,7 +66,14 @@
         <div class="col q-ma-md q-mr-xl" >
         <q-card bordered class="my-card col-4" v-if="disease_selected">
           <q-card-section>
-            <div class="text-h6">{{ disease_selected.name_disease }}</div>
+            <div class="row">
+              <div class="col">
+                <div class="text-h6">{{ disease_selected.name_disease }}</div>
+              </div>
+              <div class="col-1">
+                  <q-btn class="justify-end" color="warning" icon="close" v-on:click="disease_selected = undefined" />
+              </div>
+            </div>
           </q-card-section>
           <q-separator inset />
           <q-card-section>
@@ -106,47 +113,44 @@
           </q-card-section>
         </q-card>
         <!-- The card to add a new disease -->
-        <q-card class="my-card col-7" v-show="!newDisease">
+        <q-card class="my-card col-7 q-mt-sm" v-show="!newDisease">
           <q-card-section>
-            <div class="text-h6">Add a new disease</div>
-            <div class="text-subtitle2"></div>
-            <q-btn color="warning" icon="close" v-on:click="newDisease = !newDisease" />
+            <div class="row">
+              <div class="col">
+                <div class="text-h6">Add a new disease</div>
+                <div class="text-subtitle2"></div>
+              </div>
+              <div class="col-1">
+                <q-btn class="justify-end" color="warning" icon="close" v-on:click="newDisease = !newDisease" />
+              </div>
+            </div>
           </q-card-section>
           <q-card-actions vertical>
-            <q-input rounded outlined v-model="newDisName" label="Name" />
-            <q-input
-              rounded
-              outlined
-              v-model="newDisDescripption"
-              label="Description"
-              type="textarea"
-            />
-            <q-radio
-              v-model="isVaccine"
-              val="true"
-              label="yes, there is a vaccine"
-            />
-            <q-radio
-              v-model="isVaccine"
-              val="false"
-              label="There is no vaccine"
-            />
-            <q-radio
-              v-model="isTreatment"
-              val="true"
-              label="yes, there is a treatment"
-            />
-            <q-radio
-              v-model="isTreatment"
-              val="false"
-              label="There is no treatment"
-            />
-            <q-input
-              v-model.number="dangerLevel"
-              type="number"
-              filled
-              style="max-width: 200px"
-            />
+            <div class="row">
+              <div class="col">
+              <q-input rounded outlined v-model="newDisName" label="Name" />
+              <q-input rounded outlined v-model="newDisDescripption" class="q-mt-md" label="Description" type="textarea"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <q-card-actions vertical>
+                  <q-radio v-model="isVaccine" val="true" label="yes, there is a vaccine" />
+                  <q-radio v-model="isVaccine" val="false" label="There is no vaccine" />
+                </q-card-actions>
+              <q-separator dark inset />
+              <q-card-actions vertical>
+                <q-radio v-model="isTreatment" val="true" label="yes, there is a treatment" />
+                <q-radio v-model="isTreatment" val="false" label="There is no treatment" />
+              </q-card-actions>
+              <q-input v-model.number="dangerLevel" type="number" filled />
+              </div>
+              <div class="col-6">
+                <q-card-actions vertical>
+                  <q-select class="q-mt-md" rounded outlined v-model="disease_type_selected" :options="diseaseType" option-label="type_name" label="Type Disease" />
+                </q-card-actions>
+              </div>
+            </div>
             <q-btn
               round
               color="secondary"
@@ -204,6 +208,7 @@ export default {
     return {
       intro: 'page pour les maladie',
       disease_selected: undefined,
+      disease_type_selected: undefined,
       copy_disease: [],
       newDisease: true,
       isAdmin: true,
@@ -211,6 +216,7 @@ export default {
       confirmDeleteDisease: false,
       showDetails: false,
       disease: [],
+      diseaseType: [],
       diseasePages: [],
       // refacto a faire pour les variable de la nouvelle maladie à ajouter
       newDisName: undefined,
@@ -251,8 +257,11 @@ export default {
         this.maxPages = this.disease.length / this.maxPerPage + 1
         this.diseasePages = this.disease.slice(0, this.maxPerPage)
       })
-      console.log('les maladie chargé')
-      console.log(this.disease)
+      axios.get(`${apiAddr}/diseases/type`).then(elem => {
+        this.diseaseType = elem.data
+        console.log(this.diseaseType)
+        console.log(this.diseaseType.length)
+      })
       this.maxPages = 6
     },
     initNewDiseaseCard () {
@@ -273,6 +282,7 @@ export default {
           description: this.majDisease.majDescription
         }
       }).then(function (response) {
+        console.log('updated disease')
         console.log(response)
       }).catch(function (error) {
         console.log(error)
@@ -282,10 +292,6 @@ export default {
       })
     },
     validateDiseaseUpdate () {
-      console.log('on va valider la maj des donnée de la maladie')
-      console.log(this.disease_selected)
-      console.log(this.majDisease.majName)
-      console.log(this.majDisease.majDescription)
       this.updateDisease()
     },
     showNewDiseaseCard () {
@@ -294,8 +300,6 @@ export default {
     },
     // TODO a refacto : I had some trouble, and now I know why I have to clean it up
     async postNewDisease (newDis) {
-      console.log('le post de la maladie')
-      console.log(newDis)
       const res = await axios.post(`${apiAddr}/diseases`, newDis)
         .catch(function (error) {
           console.log(error)
@@ -305,7 +309,6 @@ export default {
       this.resetData()
     },
     deleteDisease () {
-      console.log('I am going to delete a disease')
       axios({
         method: 'delete',
         url: `${apiAddr}/diseases`,
@@ -313,6 +316,7 @@ export default {
           id: this.disease_selected.id
         }
       }).then(function (response) {
+        console.log('disease deleted')
         console.log(response)
       }).catch(function (error) {
         console.log(error)
@@ -322,14 +326,9 @@ export default {
       })
     },
     changePage (page) {
-      console.log('la nouvelle page : ')
-      console.log(page)
       this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
     },
     validateNewDisease () {
-      console.log(`le nom : ${this.newDisName}`)
-      console.log(`la ddescripption : ${this.newDisDescripption}`)
-      console.log(` is vaccine :${this.isVaccine}`)
       const body = {
         name: this.newDisName,
         description: this.newDisDescripption,
@@ -340,19 +339,14 @@ export default {
       this.newDiseaseCard.name = this.newDisName
       this.newDiseaseCard.description = this.newDisDescripption
       this.newDiseaseCard.is_vaccine = this.isVaccine
-      console.log(this.newDiseaseCard)
-      console.log('le body')
-      console.log(body)
       this.postNewDisease(body)
       this.newDisease = false
       this.resetData()
     },
     printDiseaseListTitle (dis) {
-      console.log(dis)
       return `${dis.name_disease}`
     },
     printDiseaseListDescription (dis) {
-      console.log(dis)
       if (dis.description.length < 36) {
         return dis.description
       } else {
