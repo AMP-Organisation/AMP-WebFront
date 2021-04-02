@@ -7,7 +7,7 @@ const routes = [
       { path: '', name: 'home', component: () => import('pages/Index.vue'), meta: { requiresAuth: true } },
       { path: '/info', name: 'info', component: () => import('pages/Info.vue') },
       { path: '/places', name: 'places', component: () => import('pages/Places.vue') },
-      { path: '/details_place', name: 'details_places', component: () => import('pages/DetailsPlace.vue') }
+      { path: '/details_place', name: 'details_places', component: () => import('pages/DetailsPlace.vue') },
       { path: '/disease', name: 'disease', component: () => import('pages/Disease.vue') },
       {
         path: '/disease/:id',
