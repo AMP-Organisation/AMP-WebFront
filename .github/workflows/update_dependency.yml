@@ -1,0 +1,24 @@
+on:
+  # Triggon:
+  schedule:
+  - cron: "0 0 * * 3"
+name: Update
+jobs:
+  package-update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: set remote url
+      run: git remote set-url --push origin https://$GITHUB_ACTOR:${{ secrets.PERSONNAL_GITHUB_SECRET }}@github.com/$GITHUB_REPOSITORY
+    - name: navigating to project dir
+      run: cd amp-front
+    - name: package-update
+      uses: taichi/actions-package-update@master
+      env:
+        AUTHOR_EMAIL: nathan.sens@hotmail.fr
+        AUTHOR_NAME: Nathan Sens
+        EXECUTE: "true"
+        GITHUB_TOKEN: ${{ secrets.PERSONNAL_GITHUB_SECRET }}
+        LOG_LEVEL: debug
+      with:
+        args: -u --packageFile package.json --loglevel verbose
