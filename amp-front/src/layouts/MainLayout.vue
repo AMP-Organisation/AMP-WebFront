@@ -86,12 +86,13 @@ export default {
       links1: [
         {
           icon: 'move_to_inbox',
-          text: 'Inbox',
+          text: 'Info',
           link: 'info'
         },
         {
           icon: 'star',
-          text: 'Stared'
+          text: 'Places',
+          link: 'places'
         },
         {
           icon: 'send',
