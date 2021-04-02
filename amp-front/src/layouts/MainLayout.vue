@@ -16,7 +16,7 @@
         />
         <!-- Here we can put the "welcome `username`" that we have on the login branch -->
         <q-toolbar-title>
-          Quasar App
+
           {{ appName }}
         </q-toolbar-title>
 
