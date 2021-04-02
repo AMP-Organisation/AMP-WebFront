@@ -72,10 +72,7 @@
   </div>
 </template>
 <script>
-import * as axios from 'axios'
-// import axiosInstance from 'boot/axios.js'
-
-const apiAddr = 'http://localhost:2395/api'
+import { axiosInstance } from 'boot/axios'
 
 export default {
   name: 'DeseasePageDetails',
@@ -93,7 +90,7 @@ export default {
   },
   methods: {
     loadDisease () {
-      axios.get(`${apiAddr}/diseases/${this.id}`).then(elem => {
+      axiosInstance.get(`diseases/${this.id}`).then(elem => {
         this.disease = elem.data
       }).catch(function (error) {
         console.log(error)

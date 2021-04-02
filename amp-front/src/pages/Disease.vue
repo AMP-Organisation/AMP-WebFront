@@ -196,11 +196,8 @@
 </template>
 
 <script>
-import * as axios from 'axios'
 import DetailDisease from 'src/components/DetailsDisease'
-
-// a mettre dans les variable
-const apiAddr = 'http://localhost:2395/api'
+import { axiosInstance } from 'boot/axios'
 
 export default {
   name: 'Disease',
@@ -250,12 +247,12 @@ export default {
   methods: {
     // changement : je n'utilise plus async/await
     loadDiseases () {
-      axios.get(`${apiAddr}/diseases?limit=100`).then(elem => {
+      axiosInstance.get('diseases').then(elem => {
         this.disease = elem.data
         this.maxPages = this.disease.length / this.maxPerPage + 1
         this.diseasePages = this.disease.slice(0, this.maxPerPage)
       })
-      axios.get(`${apiAddr}/diseases/type`).then(elem => {
+      axiosInstance.get('diseases/type').then(elem => {
         this.diseaseType = elem.data
       })
       this.maxPages = 6
@@ -269,9 +266,9 @@ export default {
       this.majDisease.majDescription = this.disease_selected.description
     },
     updateDisease () {
-      axios({
+      axiosInstance({
         method: 'patch',
-        url: `${apiAddr}/diseases`,
+        url: 'diseases',
         data: {
           id: this.disease_selected.id,
           name: this.majDisease.majName,
@@ -293,7 +290,7 @@ export default {
     },
     // TODO a refacto : I had some trouble, and now I know why I have to clean it up
     async postNewDisease (newDis) {
-      await axios.post(`${apiAddr}/diseases`, newDis)
+      await axiosInstance.post('diseases', newDis)
         .catch(function (error) {
           console.log(error)
           console.log('ERRRR:: ', error.response.data)
@@ -301,9 +298,9 @@ export default {
       this.resetData()
     },
     deleteDisease () {
-      axios({
+      axiosInstance({
         method: 'delete',
-        url: `${apiAddr}/diseases`,
+        url: 'diseases',
         data: {
           id: this.disease_selected.id
         }
