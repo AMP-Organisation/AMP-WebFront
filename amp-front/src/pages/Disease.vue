@@ -252,15 +252,11 @@ export default {
     loadDiseases () {
       axios.get(`${apiAddr}/diseases?limit=100`).then(elem => {
         this.disease = elem.data
-        console.log(this.disease)
-        console.log(this.disease.length)
         this.maxPages = this.disease.length / this.maxPerPage + 1
         this.diseasePages = this.disease.slice(0, this.maxPerPage)
       })
       axios.get(`${apiAddr}/diseases/type`).then(elem => {
         this.diseaseType = elem.data
-        console.log(this.diseaseType)
-        console.log(this.diseaseType.length)
       })
       this.maxPages = 6
     },
@@ -281,9 +277,6 @@ export default {
           name: this.majDisease.majName,
           description: this.majDisease.majDescription
         }
-      }).then(function (response) {
-        console.log('updated disease')
-        console.log(response)
       }).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
@@ -300,12 +293,11 @@ export default {
     },
     // TODO a refacto : I had some trouble, and now I know why I have to clean it up
     async postNewDisease (newDis) {
-      const res = await axios.post(`${apiAddr}/diseases`, newDis)
+      await axios.post(`${apiAddr}/diseases`, newDis)
         .catch(function (error) {
           console.log(error)
           console.log('ERRRR:: ', error.response.data)
         })
-      console.log(res)
       this.resetData()
     },
     deleteDisease () {
@@ -315,9 +307,6 @@ export default {
         data: {
           id: this.disease_selected.id
         }
-      }).then(function (response) {
-        console.log('disease deleted')
-        console.log(response)
       }).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
