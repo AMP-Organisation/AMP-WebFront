@@ -100,6 +100,12 @@ export default {
         {
           icon: 'error',
           text: 'Spam'
+        },
+        {
+          icon: 'sick',
+          text: 'Diseases',
+          link: 'disease',
+          color: 'red-8'
         }
       ],
       links2: [
