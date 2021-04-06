@@ -158,8 +158,7 @@ export default {
         },
         {
           icon: 'error',
-          text: 'Spam',
-          link: 'test_page'
+          text: 'Spam'
         },
         {
           icon: 'sick',
