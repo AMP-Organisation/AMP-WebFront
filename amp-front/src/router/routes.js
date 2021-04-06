@@ -8,7 +8,11 @@ const routes = [
       { path: '/info', name: 'info', component: () => import('pages/Info.vue') },
       { path: '/places', name: 'places', component: () => import('pages/Places.vue') },
       { path: '/details_place', name: 'details_places', component: () => import('pages/DetailsPlace.vue') },
-      { path: '/disease', name: 'disease', component: () => import('pages/Disease.vue') },
+      {
+        path: '/disease',
+        name: 'disease',
+        component: () => import('pages/Disease.vue')
+      },
       {
         path: '/disease/:id',
         name: 'disease_details',
@@ -17,13 +21,38 @@ const routes = [
       },
       {
         path: '/profil',
-        name: '/profil_page',
+        name: 'profil_page',
         component: () => import('pages/ProfilPage.vue')
       },
       {
+        path: '/medicine',
+        name: 'medicine_page',
+        component: () => import('pages/Medicine.vue')
+      },
+      {
         path: '/settings',
-        name: '/settings_page',
+        name: 'settings_page',
         component: () => import('pages/Settings.vue')
+      },
+      {
+        path: '/help',
+        name: 'help_page',
+        component: () => import('pages/Help.vue')
+      },
+      {
+        path: '/optionone',
+        name: 'option_one',
+        component: () => import('pages/OptionOne.vue')
+      },
+      {
+        path: '/optiontwo',
+        name: 'option_two',
+        component: () => import('pages/OptionTwo.vue')
+      },
+      {
+        path: '/test',
+        name: 'test_page',
+        component: () => import('pages/Test.vue')
       }
     ]
   },

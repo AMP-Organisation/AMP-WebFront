@@ -16,23 +16,9 @@
         />
         <!-- Here we have the app name + welcom to the username -->
         <q-toolbar-title>
-          {{ appName }} : Bienvenue {{ currentUser.username }}
+          {{ appName }}.  Bienvenue {{ currentUser.username }}
         </q-toolbar-title>
-        <q-space/>
         <!-- boutton deconnexion de nathan a mettre dans le menu -->
-        <div class="q-gutter-lg-sm items-center row no-wrap">
-          <div style="margin-right: 20%"
-          v-if="connected"
-          >
-            <q-btn
-              style="min-width: 50%; background: transparent"
-              v-on:click="logout"
-              unelevated
-              rounded
-              label="Déconexion"
-              class="vertical-top"
-            />
-          </div>
         <!-- This is the version of quasar. We rmeove it ? -->
         <div>Quasar v{{ $q.version }}</div>
         <!-- This is the menu we ca open from the top rigth buton -->
@@ -48,23 +34,20 @@
                     <q-item-section
                     >Profil</q-item-section>
                   </q-item>
-                  <q-item clickable v-close-popup>
-                    <q-item-section>Data</q-item-section>
-                  </q-item>
                   <q-separator />
-                  <q-item clickable v-close-popup>
+                  <q-item :to="{name: 'option_one'}" clickable v-close-popup>
                     <q-item-section>Menu 1</q-item-section>
                   </q-item>
-                  <q-item clickable v-close-popup>
+                  <q-item :to="{name: 'option_two'}" clickable v-close-popup>
                     <q-item-section>Menu 2</q-item-section>
                   </q-item>
                   <q-separator />
                   <q-item v-ripple
-                    :to="{name: 'settings_pages'}" clickable v-close-popup>
+                    :to="{name: 'settings_page'}" clickable v-close-popup>
                     <q-item-section>Settings</q-item-section>
                   </q-item>
                   <q-separator />
-                  <q-item clickable v-close-popup>
+                  <q-item :to="{name: 'help_page'}" clickable v-close-popup>
                     <q-item-section>Help &amp; Feedback</q-item-section>
                   </q-item>
                 </q-list>
@@ -80,6 +63,7 @@
                   class="q-mt-md"
                   color="primary"
                   label="Logout"
+                  v-on:click="logout"
                   push
                   size="sm"
                   v-close-popup
@@ -88,7 +72,6 @@
             </div>
           </q-menu>
         </q-btn>
-        </div>
       </q-toolbar>
     </q-header>
     <q-drawer
@@ -124,6 +107,7 @@
             v-ripple
             v-for="link in links2"
             :key="link.text"
+            :to="{ name: link.link }"
             clickable
           >
             <q-item-section avatar>
@@ -158,7 +142,7 @@ export default {
       firstname: 'firstname',
       links1: [
         {
-          icon: 'move_to_inbox',
+          icon: 'home',
           text: 'Info',
           link: 'info'
         },
@@ -168,12 +152,14 @@ export default {
           link: 'places'
         },
         {
-          icon: 'send',
-          text: 'Sent'
+          icon: 'medication',
+          text: 'Medicine',
+          link: 'medicine_page'
         },
         {
           icon: 'error',
-          text: 'Spam'
+          text: 'Spam',
+          link: 'test_page'
         },
         {
           icon: 'sick',
@@ -189,9 +175,10 @@ export default {
           color: 'text-orange'
         },
         {
-          icon: 'group',
-          text: 'Social',
-          color: 'text-red'
+          icon: 'face',
+          text: 'Profile',
+          color: 'text-red',
+          link: 'profil_page'
         },
         {
           icon: 'label',
