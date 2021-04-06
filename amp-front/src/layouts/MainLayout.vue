@@ -43,8 +43,10 @@
               <div class="column">
                 <div class="text-h6 q-mb-md">Menu</div>
                 <q-list style="min-width: 100px">
-                  <q-item clickable v-close-popup>
-                    <q-item-section>Profil</q-item-section>
+                  <q-item v-ripple
+                    :to="{name: 'profil_page'}" clickable v-close-popup>
+                    <q-item-section
+                    >Profil</q-item-section>
                   </q-item>
                   <q-item clickable v-close-popup>
                     <q-item-section>Data</q-item-section>
@@ -57,7 +59,8 @@
                     <q-item-section>Menu 2</q-item-section>
                   </q-item>
                   <q-separator />
-                  <q-item clickable v-close-popup>
+                  <q-item v-ripple
+                    :to="{name: 'settings_pages'}" clickable v-close-popup>
                     <q-item-section>Settings</q-item-section>
                   </q-item>
                   <q-separator />
@@ -71,8 +74,8 @@
                 <q-avatar size="72px">
                   <q-icon name="sick" size="xl" />
                 </q-avatar>
-                <div class="text-h6 q-mt-md q-mb-xs">{{ lastname }}</div>
-                <div class="text-body1 q-mt-md q-mb-xs">{{ firstname }}</div>
+                <div class="text-h6 q-mt-md q-mb-xs">{{ currentUser.last_name }}</div>
+                <div class="text-body1 q-mt-md q-mb-xs">{{ currentUser.first_name }}</div>
                 <q-btn
                   class="q-mt-md"
                   color="primary"

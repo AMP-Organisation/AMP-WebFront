@@ -14,6 +14,16 @@ const routes = [
         name: 'disease_details',
         component: () => import('pages/DeseasePageDetails.vue'),
         props: r => ({ id: r.params.id })
+      },
+      {
+        path: '/profil',
+        name: '/profil_page',
+        component: () => import('pages/ProfilPage.vue')
+      },
+      {
+        path: '/settings',
+        name: '/settings_page',
+        component: () => import('pages/Settings.vue')
       }
     ]
   },
