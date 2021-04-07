@@ -16,13 +16,14 @@
         />
         <!-- Here we have the app name + welcom to the username -->
         <q-toolbar-title>
-          {{ appName }}.  Bienvenue {{ currentUser.username }}
+          {{ appName }}.
         </q-toolbar-title>
         <!-- boutton deconnexion de nathan a mettre dans le menu -->
         <!-- This is the version of quasar. We rmeove it ? -->
-        <div>Quasar v{{ $q.version }}</div>
+        <div class="q-mr-md">Bienvenue {{ currentUser.username }}</div>
         <!-- This is the menu we ca open from the top rigth buton -->
-        <q-btn round>
+        <q-btn round style="background: transparent"
+        unelevated >
           <q-icon name="person" size="sm" />
           <q-menu >
             <div class="row no-wrap q-pa-md">

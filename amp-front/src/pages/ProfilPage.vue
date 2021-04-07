@@ -116,6 +116,7 @@ export default {
         console.log('le nouvel user : ')
         console.log(elem)
         this.user = elem.data
+        localStorage.setItem('user', JSON.stringify(elem.data))
       })
     },
     resetData () {
