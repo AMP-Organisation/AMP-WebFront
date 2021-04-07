@@ -84,7 +84,6 @@ export default {
           icon: 'warning'
         })
       } else {
-        console.log(this.input.password)
         const input = this.input
         store.dispatch('login', { input })
           .then(() => this.$router.push('/'))

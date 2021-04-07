@@ -158,8 +158,9 @@ export default {
           link: 'medicine_page'
         },
         {
-          icon: 'error',
-          text: 'Spam'
+          icon: 'coronavirus',
+          text: 'Symptoms',
+          link: 'symptoms'
         },
         {
           icon: 'sick',
