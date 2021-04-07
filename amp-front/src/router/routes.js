@@ -16,6 +16,42 @@ const routes = [
         meta: { requiresAuth: true },
         props: r => ({ id: r.params.id })
       },
+      {
+        path: '/profil',
+        name: 'profil_page',
+        component: () => import('pages/ProfilPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/medicine',
+        name: 'medicine_page',
+        component: () => import('pages/Medicine.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/settings',
+        name: 'settings_page',
+        component: () => import('pages/Settings.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/help',
+        name: 'help_page',
+        component: () => import('pages/Help.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/optionone',
+        name: 'option_one',
+        component: () => import('pages/OptionOne.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/optiontwo',
+        name: 'option_two',
+        component: () => import('pages/OptionTwo.vue'),
+        meta: { requiresAuth: true }
+      },
       { path: '/symptoms', name: 'symptoms', component: () => import('pages/Symptoms'), meta: { requiresAuth: true } }
     ]
   },

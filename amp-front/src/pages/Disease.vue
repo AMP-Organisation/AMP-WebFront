@@ -245,7 +245,6 @@ export default {
     }
   },
   methods: {
-    // changement : je n'utilise plus async/await
     loadDiseases () {
       axiosInstance.get('diseases').then(elem => {
         this.disease = elem.data
