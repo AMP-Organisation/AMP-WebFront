@@ -48,11 +48,6 @@ const routes = [
         path: '/optiontwo',
         name: 'option_two',
         component: () => import('pages/OptionTwo.vue')
-      },
-      {
-        path: '/test',
-        name: 'test_page',
-        component: () => import('pages/Test.vue')
       }
     ]
   },
