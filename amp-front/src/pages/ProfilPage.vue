@@ -17,16 +17,6 @@
         </div>
       </q-card-section>
       <q-separator />
-        <!-- <q-card-section align="left">
-          <div class="row">
-            <div class="col">
-              {{ lorem }}
-            </div>
-            <div class="col">
-              {{ lorem }}
-            </div>
-          </div>
-        </q-card-section> -->
       <q-separator />
       <q-card-section align="left">
         <div class="row">
