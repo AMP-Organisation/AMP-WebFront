@@ -22,9 +22,6 @@ export default {
       valueThree: true,
       valueFour: true
     }
-  },
-  created () {
-    console.log('creation de l apage settings')
   }
 }
 </script>

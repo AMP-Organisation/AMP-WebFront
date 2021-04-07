@@ -101,16 +101,12 @@ export default {
       this.majData.age = this.user.age
     },
     getUserData () {
-      console.log('axio get user with id')
       axiosInstance.post('users/get', { email: this.user.email }).then(elem => {
-        console.log('le nouvel user : ')
-        console.log(elem)
         this.user = elem.data
         localStorage.setItem('user', JSON.stringify(elem.data))
       })
     },
     resetData () {
-      console.log('reset data TODO')
       this.getUserData()
     },
     updateUser () {
@@ -133,18 +129,12 @@ export default {
       })
     },
     validateUpdate () {
-      console.log('on va valider une mise a jour')
       this.isEdit = false
       this.updateUser()
     }
   },
   created () {
     this.user = JSON.parse(localStorage.getItem('user'))
-    console.log(this.user)
-    console.log(this.user.last_name)
   }
 }
 </script>
-<style lang="">
-
-</style>
