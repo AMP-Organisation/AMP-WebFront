@@ -99,8 +99,9 @@ export default {
           text: 'Sent'
         },
         {
-          icon: 'error',
-          text: 'Spam'
+          icon: 'coronavirus',
+          text: 'Symptoms',
+          link: 'symptoms'
         },
         {
           icon: 'sick',

@@ -137,7 +137,6 @@ export default {
         const input = this.input
         input.age = this.getAge(input.birthDate)
         input.birthDate = date.formatDate(input.birthDate, 'YYYY-MM-DD' + ' 00:00')
-        console.log(input)
         store.dispatch('register', { input })
           .then(() => this.$router.push('/'))
           .catch(err => console.log(err))
