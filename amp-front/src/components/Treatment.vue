@@ -8,7 +8,12 @@
         <div v-if="dateEnd != null">{{ dateEnd | formatTheDate }}</div>
         <div v-else>traitement en cours</div>
       </q-card-section>
-
+      <q-card-section class="q-mt-md q-mb-md">
+        <Medicine class="q-mt-md q-mb-md" v-for="med in medicineLst" v-bind:key="med.nom" :name="med.name" :description="med.description"></Medicine>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+      </q-card-section>
+      <q-separator inset />
       <q-card-actions vertical align="right">
         <p class="text-body1">{{ description }}</p>
       </q-card-actions>
@@ -16,9 +21,13 @@
   </div>
 </template>
 <script>
+import Medicine from 'src/components/Medicine.vue'
 import { date } from 'quasar'
 export default {
   name: 'Treatment',
+  components: {
+    Medicine
+  },
   props: {
     name: {
       type: String,
@@ -46,6 +55,17 @@ export default {
   },
   data () {
     return {
+      // j'ai mis comme ca, car, je pense qu'on recuperera les medicament lié depuis un requete depuis ce composant
+      medicineLst: [
+        {
+          name: 'medicine One',
+          description: 'la description de la medicine one'
+        },
+        {
+          name: 'medicine two',
+          description: 'la description de la medicine two'
+        }
+      ]
     }
   },
   created () {
