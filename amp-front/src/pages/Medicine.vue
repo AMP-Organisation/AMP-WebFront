@@ -83,10 +83,15 @@
       </div>
       <div class="q-mt-md q-mb-md justify-right">
           <q-btn
-
           color="warning"
           icon="add"
+          v-show="!addNewMed"
+          v-on:click="addNewMed = true"
           />
+      </div>
+      <div v-show="addNewMed">
+        <p>et la il y a la carte pour ajouter un medicament</p>
+        <q-btn style="background: #FF0080; color: white" icon="sick" v-on:click="addNewMed = false"/>
       </div>
     </q-page>
   </div>
@@ -99,6 +104,7 @@ export default {
   data () {
     return {
       intro: 'la page de medicament',
+      addNewMed: false,
       medicine: [],
       columnsTab: [
         {
