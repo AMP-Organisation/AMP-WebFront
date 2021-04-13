@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <div>
     <q-card class="my-card">
       <q-card-section class="bg-teal text-white">
