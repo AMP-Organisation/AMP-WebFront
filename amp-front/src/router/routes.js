@@ -52,7 +52,8 @@ const routes = [
         component: () => import('pages/OptionTwo.vue'),
         meta: { requiresAuth: true }
       },
-      { path: '/symptoms', name: 'symptoms', component: () => import('pages/Symptoms'), meta: { requiresAuth: true } }
+      { path: '/symptoms', name: 'symptoms', component: () => import('pages/Symptoms'), meta: { requiresAuth: true } },
+      { path: '/pillbox', name: 'pillbox', component: () => import('pages/Pillbox'), meta: { requiresAuth: true } }
     ]
   },
   {
