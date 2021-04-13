@@ -3,10 +3,11 @@
     <h3>{{ intro }}</h3>
     <div class="q-mr-xl q-ml-xl q-mb-md">
       <Treatment class="q-mb-md" v-for="tre in  traitement"
-      :key="tre.nom"
+      :key="tre.id"
       :name='tre.nom'
       :description="tre.description"
-      :dateBegin="tre.dateBegin"/>
+      :dateBegin="tre.dateBegin"
+      :dateEnd="tre.dateEnd"/>
     </div>
   </div>
 </template>
@@ -25,18 +26,21 @@ export default {
       dt: undefined,
       traitement: [
         {
+          id: 1,
           nom: 'un nom',
           description: 'une description au premier',
           dateBegin: new Date(),
           dateEnd: undefined
         },
         {
+          id: 2,
           nom: 'deux',
           description: 'une description au second',
           dateBegin: new Date(),
-          dateEnd: undefined
+          dateEnd: null
         },
         {
+          id: 3,
           nom: 'un traitement fini',
           description: 'une description du traitement terminé',
           dateBegin: new Date(2017, 2, 7),

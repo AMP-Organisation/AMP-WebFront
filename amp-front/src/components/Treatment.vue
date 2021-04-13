@@ -9,7 +9,13 @@
         <div v-else>traitement en cours</div>
       </q-card-section>
       <q-card-section class="q-mt-md q-mb-md">
-        <Medicine class="q-mt-md q-mb-md" v-for="med in medicineLst" v-bind:key="med.nom" :name="med.name" :description="med.description"></Medicine>
+        <Medicine
+        class="q-mt-md q-mb-md"
+        v-for="med in medicineLst"
+        v-bind:key="med.nom"
+        :name="med.name"
+        :description="med.description">
+        </Medicine>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </q-card-section>
@@ -23,12 +29,17 @@
 <script>
 import Medicine from 'src/components/Medicine.vue'
 import { date } from 'quasar'
+
 export default {
   name: 'Treatment',
   components: {
     Medicine
   },
   props: {
+    id: {
+      type: Number,
+      default: 0
+    },
     name: {
       type: String,
       default: 'un nom par defaut'
@@ -49,7 +60,7 @@ export default {
   filters: {
     formatTheDate: function (dt) {
       console.log(`je formate : ${dt}`)
-      const formattedString = date.formatDate(dt, 'YY-MMMM-DD')
+      const formattedString = date.formatDate(dt, 'DD MMMM YYYY')
       return formattedString
     }
   },
