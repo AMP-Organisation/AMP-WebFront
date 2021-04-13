@@ -39,11 +39,14 @@
                 {{pillbox.description}}
               </q-card-section>
               <!-- Lien la maladie -->
-              <q-card-section>
-                <q-btn color="primary" icon="more" label="Plus d'informations sur le lieu"
-                       v-on:click="$router.push({name:'details_places', params: { current_place: place.id }})"
-                />
-              </q-card-section>
+             <q-card-section>
+               <Treatment class="q-mb-md" v-for="tre in  pillbox.information_treatment"
+                          :key="tre.id"
+                          :name='tre.name'
+                          :description="tre.description"
+                          :dateBegin="convertDate(tre.beginning_date)"
+                          :dateEnd="tre.ending_date"/>
+             </q-card-section>
             </q-card>
           </q-expansion-item>
         </q-list>
@@ -54,9 +57,14 @@
 
 <script>
 import { axiosInstance } from 'boot/axios'
+import Treatment from 'components/Treatment'
+import { date } from 'quasar'
 
 export default {
   name: 'Pillbox',
+  components: {
+    Treatment
+  },
   data () {
     return {
       current_treatment: [],
@@ -72,6 +80,7 @@ export default {
         response => {
           this.currents_pillbox = response.data
           this.currents_pillbox.forEach(pillbox => {
+            pillbox.beginning_date = date.formatDate(pillbox.beginning_date, 'DD MMMM YYYY')
             axiosInstance.post('treatment/treatmentRelated',
               { all_treatment: pillbox.list_treatment }).then(
               response => {
@@ -90,6 +99,11 @@ export default {
           return result.name.toLowerCase().includes(this.search.toLowerCase())
         })
       }
+    }
+  },
+  methods: {
+    convertDate (dt) {
+      return new Date(dt)
     }
   }
 }
