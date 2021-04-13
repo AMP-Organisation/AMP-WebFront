@@ -36,7 +36,7 @@
                     >Profil</q-item-section>
                   </q-item>
                   <q-separator />
-                  <q-item :to="{name: 'option_one'}" clickable v-close-popup>
+                  <q-item :to="{name: 'HealthCard'}" clickable v-close-popup>
                     <q-item-section>Menu 1</q-item-section>
                   </q-item>
                   <q-item :to="{name: 'option_two'}" clickable v-close-popup>
