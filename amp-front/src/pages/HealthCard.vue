@@ -11,7 +11,6 @@
             <q-list class="row">
               <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <q-item-section>
-                 <!--  <q-input dark color="white" dense v-model="user_details.user_name" label="User Name"/> -->
                   <q-select
                     class="GNL__select"
                     multiple
@@ -20,7 +19,7 @@
                     color="green"
                     v-model="allergies_model"
                     use-input
-                    label="allergie(s)"
+                    label="allergie(s) principe actif"
                     :options="allergies_options"
                     option-value="id"
                     option-label="name"
@@ -89,7 +88,23 @@
             </q-list>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white">Enregistrer</q-btn>
+            <q-btn class="text-capitalize bg-info text-white" @click="persistent = true">Enregistrer</q-btn>
+            <q-dialog v-model="persistent" persistent transition-show="scale" transition-hide="scale">
+              <q-card class="bg-teal text-white" style="width: 300px">
+                <q-card-section>
+                  <div class="text-h6">Demande de validation</div>
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  En validant cette fiche, vous acceptez que vos informations soit enregistré, souhaitez-vous continué ?
+                </q-card-section>
+
+                <q-card-actions align="center" class="bg-white text-teal">
+                  <q-btn flat label="Non" v-close-popup />
+                  <q-btn flat label="Oui" v-close-popup @click="save" />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
           </q-card-actions>
         </q-card>
       </div>
@@ -120,6 +135,8 @@
 </template>
 
 <script>
+import { axiosInstance } from 'boot/axios'
+
 export default {
   name: 'HealthCard',
   data () {
@@ -145,8 +162,18 @@ export default {
       allergies_options: this.allergies_default,
       disease_model: null,
       disease_default: [],
-      disease_options: this.disease_default
+      disease_options: this.disease_default,
+      persistent: false
     }
+  },
+  created () {
+    axiosInstance.get('medicine/')
+      .then(
+        response => {
+          this.allergies_default = response.data
+          this.allergies_default = response.data
+        }
+      )
   },
   methods: {
     filterAllergie (val, update) {
@@ -184,6 +211,9 @@ export default {
         const needle = val.toLowerCase()
         this.disease_options = this.disease_default.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    save () {
+      console.log('Data saved !')
     }
   }
 }
