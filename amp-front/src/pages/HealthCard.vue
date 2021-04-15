@@ -130,6 +130,73 @@
           </q-card-section>
         </q-card>
       </div>
+      <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12" v-if="this.information_user !== null">
+        <q-card class="card-bg bg-teal-6 text-white">
+          <q-card-section class="text-h6 ">
+            <div class="text-h6">Vos informations</div>
+            <div class="text-subtitle2">Ci-dessous, vos informations actuelles</div>
+          </q-card-section>
+          <q-card-section class="q-pa-sm">
+            <q-list class="row">
+              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item-section v-if="this.information_user.blood_group == null">
+                  Groupe sanguin :
+                  <br>
+                  Vous n'avez pas indiqué votre groupe sanguin
+                </q-item-section>
+                <q-item-section v-else>
+                  Groupe sanguin :
+                  <br>
+                  {{ this.information_user.blood_group }}
+                </q-item-section>
+              </q-item>
+              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item-section v-if="this.information_user.allergy == null">
+                  Allergie(s) :
+                  <br>
+                  Vous n'avez aucune allergie
+                </q-item-section>
+                <q-item-section v-else v-for="(element, index) in this.information_user.allergy" :key="index">
+                  Allergie(s) :
+                  <br>
+                  {{ element }}
+                </q-item-section>
+              </q-item>
+              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item-section v-if="this.information_user.disease == null">
+                  Maladie(s) chronique :
+                  <br>
+                  Vous n'avez aucune maladie
+                </q-item-section>
+                <q-item-section v-else>
+                  Maladie(s) chronique :
+                  <br>
+                  {{ this.information_user.disease }}
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn class="text-capitalize bg-info text-white" @click="persistent = true">Supprimer</q-btn>
+            <q-dialog v-model="persistent" persistent transition-show="scale" transition-hide="scale">
+              <q-card class="bg-teal text-white" style="width: 300px">
+                <q-card-section>
+                  <div class="text-h6">Demande de validation</div>
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  En supprimant ces informations, nous ne pourrions plus vous aider efficacement, continuer ?
+                </q-card-section>
+
+                <q-card-actions align="center" class="bg-white text-teal">
+                  <q-btn flat label="Non" v-close-popup />
+                  <q-btn flat label="Oui" v-close-popup @click="deleteInformations" />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
+          </q-card-actions>
+        </q-card>
+      </div>
     </div>
   </q-page>
 </template>
@@ -141,9 +208,7 @@ export default {
   name: 'HealthCard',
   data () {
     return {
-      user_details: {
-
-      },
+      user_details: JSON.parse(localStorage.getItem('user')),
       password_dict: {},
       blood_model: null,
       default_blood: [
@@ -163,7 +228,8 @@ export default {
       disease_model: null,
       disease_default: [],
       disease_options: this.disease_default,
-      persistent: false
+      persistent: false,
+      information_user: null
     }
   },
   created () {
@@ -174,6 +240,7 @@ export default {
           this.allergies_default = response.data
         }
       )
+    this.get_informations_user()
   },
   methods: {
     filterAllergie (val, update) {
@@ -212,8 +279,35 @@ export default {
         this.disease_options = this.disease_default.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
     },
-    save () {
-      console.log('Data saved !')
+    get_informations_user () {
+      axiosInstance.post('health_card/', {
+        user_id: this.user_details.id
+      }).then(
+        resp => {
+          this.information_user = resp.data
+          if (this.information_user.allergy !== null) {
+            axiosInstance.post('medicine/find',
+              { id: this.information_user.allergy }).then(
+              response => {
+                const allergyName = []
+                const allergy = response.data
+                allergy.forEach(value => {
+                  allergyName.push(value.name)
+                })
+                this.$set(this.information_user, 'allergy', allergyName)
+              }
+            )
+          }
+        }
+      )
+    },
+    deleteInformations () {
+      axiosInstance.delete('health_card/deleteInformations',
+        { user_id: this.user_details.id }).then(
+        resp => {
+          console.log(resp)
+        }
+      )
     }
   }
 }
