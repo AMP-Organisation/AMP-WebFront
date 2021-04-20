@@ -29,6 +29,13 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: '/medicine/:id',
+        name: 'medicine_details',
+        component: () => import('pages/MedicinePageDetails.vue'),
+        meta: { requiresAuth: true },
+        props: r => ({ id: r.params.id })
+      },
+      {
         path: '/settings',
         name: 'settings_page',
         component: () => import('pages/Settings.vue'),

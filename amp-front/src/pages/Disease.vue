@@ -315,7 +315,7 @@ export default {
     },
     validateNewDisease () {
       const body = {
-        name: this.newDisName,
+        name_disease: this.newDisName,
         description: this.newDisDescripption,
         is_vaccine: this.isVaccine,
         is_treatment: this.isTreatment,
