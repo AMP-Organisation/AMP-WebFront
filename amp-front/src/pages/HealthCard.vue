@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-pa-sm">
+    <div class="column">
     <div class="row q-col-gutter-sm">
       <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
         <q-card class="card-bg bg-teal-6 text-white">
@@ -8,88 +9,92 @@
             <div class="text-subtitle2">Compléter vos informations</div>
           </q-card-section>
           <q-card-section class="q-pa-sm">
-            <q-list class="row">
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <q-item-section>
-                  <q-select
-                    class="GNL__select"
-                    multiple
-                    use-chips
-                    dark
-                    color="green"
-                    v-model="allergies_model"
-                    use-input
-                    label="allergie(s) principe actif"
-                    :options="allergies_options"
-                    option-value="id"
-                    option-label="name"
-                    @filter="filterAllergie"
-                  >
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No results
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-                </q-item-section>
-              </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <q-item-section>
-                  <q-select
-                    class="GNL__select"
-                    multiple
-                    use-chips
-                    dark
-                    color="green"
-                    v-model="disease_model"
-                    use-input
-                    label="maladie(s) chronique"
-                    :options="disease_options"
-                    option-value="id"
-                    option-label="name"
-                    @filter="filterDisease"
-                  >
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No results
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-                </q-item-section>
-              </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <q-item-section>
-                  <q-select
-                    class="GNL__select"
-                    dark
-                    color="green"
-                    v-model="blood_model"
-                    use-input
-                    label="groupe sanguin"
-                    :options="blood_option"
-                    option-value="id"
-                    option-label="name"
-                    @filter="filterBlood"
-                  >
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          No results
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-                </q-item-section>
-              </q-item>
-            </q-list>
+            <div class="column">
+              <q-list class="row">
+                <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <q-item-section>
+                    <q-select
+                      class="GNL__select"
+                      multiple
+                      use-chips
+                      dark
+                      color="green"
+                      v-model="allergies_model"
+                      use-input
+                      label="allergie(s) principe actif"
+                      :options="allergies_options"
+                      option-value="id"
+                      option-label="name"
+                      @filter="filterAllergie"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                  </q-item-section>
+                </q-item>
+                <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <q-item-section>
+                    <q-select
+                      class="GNL__select"
+                      multiple
+                      use-chips
+                      dark
+                      color="green"
+                      v-model="disease_model"
+                      use-input
+                      label="maladie(s) chronique"
+                      :options="disease_options"
+                      option-value="id"
+                      option-label="name"
+                      @filter="filterDisease"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+              <q-list>
+                <q-item class="q-pt-lg col-lg-6">
+                  <q-item-section>
+                    <q-select
+                      class="GNL__select"
+                      dark
+                      color="green"
+                      v-model="blood_model"
+                      use-input
+                      label="groupe sanguin"
+                      :options="blood_option"
+                      option-value="id"
+                      option-label="name"
+                      @filter="filterBlood"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white" @click="persistent = true">Enregistrer</q-btn>
-            <q-dialog v-model="persistent" persistent transition-show="scale" transition-hide="scale">
+            <q-btn class="text-capitalize bg-info text-white" @click="persistent_validation = true">Enregistrer</q-btn>
+            <q-dialog v-model="persistent_validation" persistent transition-show="scale" transition-hide="scale">
               <q-card class="bg-teal text-white" style="width: 300px">
                 <q-card-section>
                   <div class="text-h6">Demande de validation</div>
@@ -101,7 +106,7 @@
 
                 <q-card-actions align="center" class="bg-white text-teal">
                   <q-btn flat label="Non" v-close-popup />
-                  <q-btn flat label="Oui" v-close-popup @click="save" />
+                  <q-btn flat label="Oui" v-close-popup @click="saveInformations" />
                 </q-card-actions>
               </q-card>
             </q-dialog>
@@ -109,7 +114,6 @@
         </q-card>
       </div>
       <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
-
         <q-card class="bg-teal-6 text-white">
           <q-card-section class="text-center bg-transparent">
             <q-avatar size="100px" class="shadow-10">
@@ -130,6 +134,8 @@
           </q-card-section>
         </q-card>
       </div>
+    </div>
+    <div class="row q-col-gutter-sm">
       <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12" v-if="this.information_user !== null">
         <q-card class="card-bg bg-teal-6 text-white">
           <q-card-section class="text-h6 ">
@@ -156,10 +162,12 @@
                   <br>
                   Vous n'avez aucune allergie
                 </q-item-section>
-                <q-item-section v-else v-for="(element, index) in this.information_user.allergy" :key="index">
+                <q-item-section class="row" v-else>
                   Allergie(s) :
                   <br>
+                <div v-for="(element, index) in this.information_user.allergy" :key="index">
                   {{ element }}
+                 </div>
                 </q-item-section>
               </q-item>
               <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -177,8 +185,8 @@
             </q-list>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white" @click="persistent = true">Supprimer</q-btn>
-            <q-dialog v-model="persistent" persistent transition-show="scale" transition-hide="scale">
+            <q-btn class="text-capitalize bg-info text-white" @click="persistent_delete = true">Supprimer</q-btn>
+            <q-dialog v-model="persistent_delete" persistent transition-show="scale" transition-hide="scale">
               <q-card class="bg-teal text-white" style="width: 300px">
                 <q-card-section>
                   <div class="text-h6">Demande de validation</div>
@@ -197,6 +205,7 @@
           </q-card-actions>
         </q-card>
       </div>
+    </div>
     </div>
   </q-page>
 </template>
@@ -228,7 +237,8 @@ export default {
       disease_model: null,
       disease_default: [],
       disease_options: this.disease_default,
-      persistent: false,
+      persistent_delete: false,
+      persistent_validation: false,
       information_user: null
     }
   },
@@ -299,13 +309,42 @@ export default {
             )
           }
         }
+      ).catch(
+        resp => {
+          console.log(resp.response)
+          this.$q.notify({
+            message: resp.response.data.detail,
+            icon: 'warning'
+          })
+        }
       )
     },
     deleteInformations () {
       axiosInstance.delete('health_card/deleteInformations',
-        { user_id: this.user_details.id }).then(
+        { data: { user_id: this.user_details.id } }).then(
         resp => {
-          console.log(resp)
+          this.$q.notify({
+            message: resp.data.message,
+            icon: 'info'
+          })
+          location.reload()
+        }
+      )
+    },
+    saveInformations () {
+      axiosInstance.post('health_card/saveInformations',
+        {
+          user_id: this.user_details.id,
+          allergy: this.allergies_model,
+          blood_group: this.blood_model,
+          disease: this.disease_model
+        }).then(
+        resp => {
+          this.$q.notify({
+            message: resp.data.message,
+            icon: 'info'
+          })
+          location.reload()
         }
       )
     }
