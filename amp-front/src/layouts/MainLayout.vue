@@ -192,6 +192,12 @@ export default {
           icon: 'forum',
           text: 'Forums',
           color: 'text-teal'
+        },
+        {
+          icon: 'feed',
+          text: 'Actualité covid',
+          color: 'text-red',
+          link: 'Covid'
         }
       ],
       currentUser: JSON.parse(localStorage.getItem('user'))

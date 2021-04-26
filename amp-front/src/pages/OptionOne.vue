@@ -49,6 +49,12 @@ export default {
       ]
     }
   },
+  methods: {
+    convertDate (dt) {
+      // convertie la date
+
+    }
+  },
   created () {
     this.dt = new Date()
     console.log('option un créé')

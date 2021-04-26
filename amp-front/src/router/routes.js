@@ -25,8 +25,15 @@ const routes = [
       {
         path: '/medicine',
         name: 'medicine_page',
-        component: () => import('pages/Medicine.vue'),
+        component: () => import('pages/MedicinePage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/medicine/:id',
+        name: 'medicine_details',
+        component: () => import('pages/MedicinePageDetails.vue'),
+        meta: { requiresAuth: true },
+        props: r => ({ id: r.params.id })
       },
       {
         path: '/settings',
@@ -53,7 +60,8 @@ const routes = [
         meta: { requiresAuth: true }
       },
       { path: '/symptoms', name: 'symptoms', component: () => import('pages/Symptoms'), meta: { requiresAuth: true } },
-      { path: '/pillbox', name: 'pillbox', component: () => import('pages/Pillbox'), meta: { requiresAuth: true } }
+      { path: '/pillbox', name: 'pillbox', component: () => import('pages/Pillbox'), meta: { requiresAuth: true } },
+      { path: '/news_covid', name: 'Covid', component: () => import('pages/Covid'), meta: { requiresAuth: true } }
     ]
   },
   {
