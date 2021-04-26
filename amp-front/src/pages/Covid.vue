@@ -47,7 +47,7 @@
 
 <script>
 
-import { axiosInstance } from 'boot/axios'
+import { axios } from 'boot/axios'
 import Doughnut from 'components/Doughnut'
 import moment from 'moment'
 
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     getFranceData: function () {
-      axiosInstance.get('https://coronavirusapi-france.vercel.app/FranceLiveGlobalData').then(
+      axios.get('https://coronavirusapi-france.vercel.app/FranceLiveGlobalData').then(
         resp => {
           const result = resp.data.FranceGlobalLiveData
           const deces = result.map(d => d.deces).reverse()
@@ -105,7 +105,7 @@ export default {
     getDepartmentData: function () {
       const test = moment().subtract(1, 'day').toDate()
       const yesterday = moment(String(test)).format('YYYY-MM-DD')
-      axiosInstance.get('https://coronavirusapi-france.now.sh/AllDataByDate?date=' + yesterday).then(
+      axios.get('https://coronavirusapi-france.now.sh/AllDataByDate?date=' + yesterday).then(
         resp => {
           const result = resp.data.allFranceDataByDate
           this.optionsDefault = result

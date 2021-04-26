@@ -5,7 +5,7 @@ let axiosInstance
 
 if (process.env.DEBUGGING) {
   axiosInstance = axios.create({
-    baseURL: 'http://localhost:8000/api/v1'
+    baseURL: ''
     /** http://localhost:8000/api/v1 **/
   })
 } else {
@@ -16,4 +16,4 @@ if (process.env.DEBUGGING) {
 
 Vue.prototype.$axios = axiosInstance
 
-export { axiosInstance }
+export { axiosInstance, axios }
