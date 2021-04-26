@@ -184,9 +184,9 @@ export default {
         },
         {
           icon: 'label',
-          text: 'Pillulier',
+          text: 'Promos',
           color: 'text-indigo-8',
-          link: 'pillbox'
+          link: 'option_one'
         },
         {
           icon: 'forum',
