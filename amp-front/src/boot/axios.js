@@ -5,8 +5,9 @@ let axiosInstance
 
 if (process.env.DEBUGGING) {
   axiosInstance = axios.create({
-    baseURL: 'http://localhost:2395/api/'
+    baseURL: ''
     /** http://localhost:8000/api/v1 **/
+    /** http://localhost:2395/api/ **/
   })
 } else {
   axiosInstance = axios.create({
