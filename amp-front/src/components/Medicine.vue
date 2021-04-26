@@ -125,7 +125,6 @@ export default {
     getMedicineFullInfo () {
       axiosInstance.get(`medicines/${this.id}`).then(elem => {
         this.medicine = elem.data
-        console.log(elem.data)
       }).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)

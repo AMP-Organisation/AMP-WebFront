@@ -59,7 +59,6 @@ export default {
   },
   filters: {
     formatTheDate: function (dt) {
-      console.log(`je formate : ${dt}`)
       const formattedString = date.formatDate(dt, 'DD MMMM YYYY')
       return formattedString
     }
@@ -80,13 +79,12 @@ export default {
     }
   },
   created () {
-    console.log('composant traitement créé')
-    console.log(`la date : ${this.dateBegin}`)
+    /**
+    * for futur improvment
     if (this.dateEnd == null) {
-      console.log('c\'est bien null')
-    } else {
-      console.log('il y a bien une date de fin')
+      } else {
     }
+    */
   }
 }
 </script>
