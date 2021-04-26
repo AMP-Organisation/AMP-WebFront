@@ -21,9 +21,6 @@
         </div>
       </div>
       <div class="col">
-        <!-- <div v-if="medicineLoaded">
-          <p>{{ medicineLoaded.name }}</p>
-        </div> -->
         <div class="q-mr-md q-ml-md">
           <Medicine :med="this.medicineLoaded" :id="this.medicineLoaded.id" :fullCard="true"></Medicine>
         </div>
@@ -59,17 +56,13 @@ export default {
     loadTheMedicine () {
       axiosInstance.get(`medicines/${this.id}`).then(elem => {
         this.medicineLoaded = elem.data
-        // this.maxPages = this.disease.length / this.maxPerPage + 1
-        // this.diseasePages = this.disease.slice(0, this.maxPerPage)
       }).catch(error => {
         console.log('ERROR: une erreur est survenue')
-        console.lgo(error)
+        console.log(error)
       })
     }
   },
   created () {
-    console.log('affichage du detail du medicament')
-    console.log(this.id)
     if (this.medicine === undefined && this.id) {
       this.loadTheMedicine()
     }
