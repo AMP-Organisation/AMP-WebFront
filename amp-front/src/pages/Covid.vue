@@ -1,19 +1,44 @@
 <template>
-  <div class="container">
-    <div class="row mt-5">
-      <div class="col">
-        <h1 class="text-center">COVID-19 DATA</h1>
-      </div>
-    </div>
+  <div class="q-page-container q-pa-lg">
     <div class="row mt-5 mb-5">
       <div class="col">
-        <h2 class="text-center">Deaths</h2>
-        <LineChart
+        <p style="text-align: justify">
+          Bienvenue sur cette page d'information sur l'évolution de la covid en France, ci-dessous, vous trouverez les
+          Information journalière quotidienne.
+        </p>
+        <h3 class="text-center">Données globale en France :</h3>
+        <Doughnut
           v-if="this.dataCollection"
-          :chartData="this.dataCollection"
+          :chartData="dataCollection"
+          :style="myStyles"
           :options="chartOptions"
-          :chartColors="deathColors"
-          label="Deaths"
+        />
+        <br>
+        <br>
+        <p style="text-align: justify">
+          Pour plus d'information, vous pouvez également rechercher votre département afin de pouvoir constater son état actuel.
+        </p>
+        <h3 class="text-center">Informations par département :</h3>
+        <q-select
+          class="GNL__select"
+          color="green"
+          v-model="select_model"
+          use-input
+          label="Rhône, Saint-Omer, ..."
+          :options="options"
+          option-value="nom"
+          option-label="nom"
+          @filter="filterFn"
+          @input="informationDepartment"
+        />
+        <br>
+        <br>
+        <h4 class="text-center" v-if="dataDepartment"> Dernière information pour "{{ this.dataDepartment.datasets[0].label }}"</h4>
+        <Doughnut
+          v-if="dataDepartment"
+          :chartData="dataDepartment"
+          :style="myStyles"
+          :options="chartOptions"
         />
       </div>
     </div>
@@ -23,94 +48,107 @@
 <script>
 
 import { axiosInstance } from 'boot/axios'
-import LineChart from 'components/LineChart'
+import Doughnut from 'components/Doughnut'
+import moment from 'moment'
 
 export default {
   name: 'Covid',
   components: {
-    LineChart
+    Doughnut
   },
   data () {
     return {
-      arrHospitalized: [],
-      hospitalizedChartColors: {
-        borderColor: '#251F47',
-        pointBorderColor: '#260F26',
-        pointBackgroundColor: '#858EAB',
-        backgroundColor: '#858EAB'
-      },
-      arrInIcu: [],
-      inIcuColors: {
-        borderColor: '#190B28',
-        pointBorderColor: '#190B28',
-        pointBackgroundColor: '#E55381',
-        backgroundColor: '#E55381'
-      },
-      arrNewHospitalized: [],
-      newHospitalizedChartColors: {
-        borderColor: '#077187',
-        pointBorderColor: '#0E1428',
-        pointBackgroundColor: '#AFD6AC',
-        backgroundColor: '#74A57F'
-      },
-      arrNewInIcu: [],
-      inNewIcuColors: {
-        borderColor: '#190B28',
-        pointBorderColor: '#190B28',
-        pointBackgroundColor: '#E55381',
-        backgroundColor: '#E55381'
-      },
-      arrRecovered: [],
-      recoveredColors: {
-        borderColor: '#4E5E66',
-        pointBorderColor: '#4E5E66',
-        pointBackgroundColor: '#31E981',
-        backgroundColor: '#31E981'
-      },
-      arrDeaths: [],
-      deathColors: {
-        borderColor: '#E06D06',
-        pointBorderColor: '#E06D06',
-        pointBackgroundColor: '#402A2C',
-        backgroundColor: '#402A2C'
-      },
+      dataCollection: null,
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false
+        aspectRatio: 1
       },
-      dataCollection: null
+      myStyles: {
+        height: '500px',
+        width: '100%',
+        position: 'relative'
+      },
+      optionsDefault: [],
+      options: this.optionsDefault,
+      select_model: [],
+      dataDepartment: null
     }
   },
-  async created () {
-    axiosInstance.get('https://coronavirusapi-france.vercel.app/FranceLiveGlobalData').then(
-      resp => {
-        this.dataCollection = resp.data.FranceGlobalLiveData
-        /**
-         * resp.data.FranceGlobalLiveData.forEach(d => {
-          if (d.nom !== 'France') {
-            const {
-              hospitalises,
-              reanimation,
-              nouvellesHospitalisations,
-              nouvellesReanimations,
-              deces,
-              gueris
-            } = d
-            const currentName = d.nom
-            this.arrHospitalized.push({ currentName, total: hospitalises })
-            this.arrInIcu.push({ currentName, total: reanimation })
-            this.arrNewHospitalized.push({ currentName, total: nouvellesHospitalisations })
-            this.arrNewInIcu.push({ currentName, total: nouvellesReanimations })
-            this.arrRecovered.push({ currentName, total: gueris })
-            this.arrDeaths.push({ currentName, total: deces })
+  created () {
+    this.getFranceData()
+    this.getDepartmentData()
+  },
+  methods: {
+    getFranceData: function () {
+      axiosInstance.get('https://coronavirusapi-france.vercel.app/FranceLiveGlobalData').then(
+        resp => {
+          const result = resp.data.FranceGlobalLiveData
+          const deces = result.map(d => d.deces).reverse()
+          const gueris = result.map(d => d.gueris).reverse()
+          const hospitalises = result.map(d => d.hospitalises).reverse()
+          const reanimation = result.map(d => d.reanimation).reverse()
+          this.dataCollection = {
+            hoverBackgroundColor: 'red',
+            hoverBorderWidth: 10,
+            labels: ['Nombre de personne au total décédé', 'Nombre de personne au total guéris', 'Actuellement hospitalisé',
+              'Actuellement en réanimation'],
+            datasets: [
+              {
+                label: 'Covid en France',
+                backgroundColor: ['#000000', '#3db319', '#f19427', '#d70b0b'],
+                data: [deces, gueris, hospitalises, reanimation]
+              }
+            ]
           }
+        }
+      )
+    },
+    getDepartmentData: function () {
+      const test = moment().subtract(1, 'day').toDate()
+      const yesterday = moment(String(test)).format('YYYY-MM-DD')
+      axiosInstance.get('https://coronavirusapi-france.now.sh/AllDataByDate?date=' + yesterday).then(
+        resp => {
+          const result = resp.data.allFranceDataByDate
+          this.optionsDefault = result
+          this.options = result
+        }
+      )
+    },
+    filterFn: function (val, update) {
+      if (val === '') {
+        update(() => {
+          this.options = this.optionsDefault
         })
-         */
+        return
       }
-    )
+      update(() => {
+        const needle = val.toLowerCase()
+        this.options = this.optionsDefault.filter(v => v.nom.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+    informationDepartment: function (department) {
+      this.dataDepartment = {
+        hoverBackgroundColor: 'red',
+        hoverBorderWidth: 10,
+        labels: ['Nombre de personne au total décédé', 'Nombre de personne au total guéris', 'Actuellement hospitalisé',
+          'Actuellement en réanimation'],
+        datasets: [
+          {
+            label: department.nom,
+            backgroundColor: ['#000000', '#3db319', '#f19427', '#d70b0b'],
+            data: [department.deces, department.gueris, department.hospitalises, department.reanimation]
+          }
+        ]
+      }
+    }
   }
 }
 </script>
 
 <style>
+.GNL__select {
+  width: 55%;
+  margin-left: 20%;
+  margin-top: 5%;
+  display: flex;
+}
 </style>
