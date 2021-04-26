@@ -171,9 +171,10 @@ export default {
       ],
       links2: [
         {
-          icon: 'flag',
-          text: 'Updates',
-          color: 'text-orange'
+          icon: 'medical_services',
+          text: 'Pillulier',
+          color: 'text-orange',
+          link: 'pillbox'
         },
         {
           icon: 'face',
