@@ -5,7 +5,7 @@
         <div class="row items-center no-wrap">
 
           <div class="col">
-            <div class="text-h4">{{name_display | nameWithFirstUpper }}</div>
+            <div class="text-h4">{{ name_display | nameWithFirstUpper }}</div>
           </div>
 
           <!-- a ne pas supprimer, c'est un menu "burger en boutton" pour une amelioration future -->
@@ -33,7 +33,7 @@
       <q-card-section class="justify-between" >
         <div class="row">
           <div class="col-9">
-            <p class="text-body1">{{ description }}</p>
+            <p class="text-body1">{{ description_display }}</p>
           </div>
           <div class="col-3">
             <div v-if="thumbnail">
@@ -52,7 +52,7 @@
       <q-separator />
       <q-card-actions class="justify-end" >
         <q-btn v-if="this.fullCard == true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: this.id} }" />
+        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
     </div>
@@ -95,12 +95,20 @@ export default {
       } else {
         return this.med.name
       }
+    },
+    description_display () {
+      if (this.med === undefined) {
+        return this.description
+      } else {
+        return this.med.description
+      }
     }
   },
   data () {
     return {
       intro: 'bienvenu dans le composant medicament',
-      thumbnail: undefined
+      thumbnail: undefined,
+      medicine: undefined
     }
   },
   methods: {
@@ -114,6 +122,15 @@ export default {
         })
       }
     },
+    getMedicineFullInfo () {
+      axiosInstance.get(`medicines/${this.id}`).then(elem => {
+        this.medicine = elem.data
+        console.log(elem.data)
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+    },
     enterEdit () {
       console.log('enter in edit mode')
       // TODO : edition mode for an existing medicine
@@ -121,10 +138,8 @@ export default {
   },
   created () {
     this.getPicture()
-    if (this.med !== undefined) {
-      this.name = this.med.name
-      this.description = this.med.description
-      this.id = this.med.id
+    if (this.med === undefined) {
+      this.getMedicineFullInfo()
     }
   }
 }
