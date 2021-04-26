@@ -1,10 +1,33 @@
 <template>
     <div>
-      <h2>{{ message }}</h2>
-      <div v-if="medicineLoaded">
-        <p>{{ medicineLoaded.name }}</p>
+      <div class="q-ml-sm q-mt-md q-mb-md">
+        <div class="row justify-between">
+          <div class="col-1">
+            <q-icon name="medication" color="cyan-8" :size="'xl'" />
+          </div>
+          <div class="col">
+            <div class="text-h5 q-mt-sm">{{ message }}</div>
+          </div>
+          <div class="col-1">
+          <!-- the button to go back to the medicine page  -->
+          <div class="q-mt-md q-mb-md q-mr-md">
+            <router-link :to="{name: 'medicine_page'}">
+              <q-btn color="warning" icon="keyboard_return">
+                <q-tooltip>Go back to medicine Page</q-tooltip>
+              </q-btn>
+            </router-link>
+          </div>
+          </div>
+        </div>
       </div>
-      <Medicine :med="this.medicineLoaded" :id="this.medicineLoaded.id" :fullCard="true"></Medicine>
+      <div class="col">
+        <!-- <div v-if="medicineLoaded">
+          <p>{{ medicineLoaded.name }}</p>
+        </div> -->
+        <div class="q-mr-md q-ml-md">
+          <Medicine :med="this.medicineLoaded" :id="this.medicineLoaded.id" :fullCard="true"></Medicine>
+        </div>
+      </div>
     </div>
 </template>
 <script>

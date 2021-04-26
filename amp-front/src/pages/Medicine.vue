@@ -65,23 +65,23 @@
             <q-tr v-show="props.expand" :props="props">
               <q-td colspan="100%">
                 <div class row>
-                  <div class="text-left">
+                  <!-- <div class="text-left">
                     This is expand slot for row above: {{ props.row.name }}. And
                     with id : {{ props.row.id }}
-                  </div>
+                  </div> -->
                   <Medicine
                     :med="props.row"
-                    :id="props.row.id"
+                    :id="parseInt(props.row.id)"
                     :name="props.row.name"
                     :description="props.row.description">
                   </Medicine>
-                  <q-btn
+                  <!-- <q-btn
                     rounded
                     flat
                     color="secondary"
                     icon="double_arrow"
                     :to="{name: 'medicine_details', params:{id: props.row.id} }"
-                  />
+                  /> -->
                 </div>
               </q-td>
             </q-tr>
@@ -106,10 +106,10 @@
                 v-on:click="addNewMed = !addNewMed"
               />
               <q-btn
-          style="background: #FF0080; color: white"
-          icon="sick"
-          v-on:click="addNewMed = false"
-        />
+                style="background: #FF0080; color: white"
+                icon="sick"
+                v-on:click="addNewMed = false"
+              />
             </div>
           </div>
         </q-card-section>
@@ -150,6 +150,18 @@
             v-show="!addNewMedDialog"
             v-on:click="addNewMedDialog = true"
           />
+          <q-btn
+            color="orange-10"
+            icon="add"
+            v-show="!addNewMedDialog"
+            v-on:click="addNewMedDialog = true"
+          />
+          <q-btn
+            color="orange-10"
+            icon="edit"
+            v-show="!alert"
+            v-on:click="alert = true"
+          />
         </div>
       </div>
       <!-- carte pour ajouter un nouveau medoc -->
@@ -161,40 +173,62 @@
           v-on:click="addNewMed = false"
         />
       </div> -->
+      <!-- q-dialog pour tester -->
+      <q-dialog v-model="alert">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Alert</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="OK" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
 
       <!-- q-dialog pour ajouter une maladie, une deuxieme methode -->
-      <q-dialog v-model="addNewMedDialog" persistent>
-        <q-card width="1000px">
-          <q-card-section>
+      <q-dialog v-model="addNewMedDialog"  >
+        <q-card >
+          <q-card-section class="justify-between">
             <div class="row">
               <div class="col">
                 <div class="text-h6">Add a new Medicine dialog</div>
-                <div class="text-subtitle2"></div>
+              </div>
+              <div class="col-1 q-mr-sm">
+              <q-btn
+                round
+                color="warning"
+                icon="close"
+                v-on:click="addNewMedDialog = !addNewMedDialog">
+                <q-tooltip>Cancel</q-tooltip>
+                </q-btn>
               </div>
             </div>
           </q-card-section>
           <q-card-section>
-            <div class="row">
-              <div class="col-6">
+            <div class="row justify-center">
+              <div class="col-auto q-mr-sm -qml-sm">
                 <q-input rounded outlined v-model="newMedName" label="Name" />
                 <q-input rounded outlined v-model="newMedDescription" class="q-mt-md" label="Description" type="textarea"/>
               </div>
-              <div class="col-6">
+              <div class="col-auto q-mr-sm -qml-sm">
                 <q-input rounded outlined v-model.number="newMedDose" type="number" label="Dose"/>
                 <q-input rounded outlined v-model.number="newMedDoseMax" class="q-mt-md"  type="number" label="Dose maximal"/>
                 <q-input rounded outlined v-model.number="newMedDelay" class="q-mt-md"  type="number" label="Delay between two"/>
-                <q-checkbox dense v-model="isComprime" label="Is un comprimé ?" color="orange" />
               </div>
             </div>
           </q-card-section>
+          <q-card-section class="column">
+            <q-checkbox class="col q-ml-md" dense v-model="isComprime" label="Is un comprimé ?" color="orange" />
+            <q-checkbox class="col q-ml-md q-mt-sm" dense v-model="bolleanToTest" label="checkbox pour l'ui" color="green" />
+            <q-toggle class="col" label="ceci est un label" v-model="bolleanToTest" color="yellow" />
+          </q-card-section>
           <q-card-actions align="right">
             <div class="row q-mb-sm" >
-              <q-btn
-                round
-                class="justify-end q-mr-sm"
-                color="warning"
-                icon="close"
-                v-on:click="addNewMedDialog = !addNewMedDialog"/>
               <!-- <q-btn
                 style="background: #FF0080; color: white"
                 icon="sick"
@@ -206,7 +240,10 @@
                 class="q-mr-xs"
                 color="secondary"
                 icon="add"
-                v-on:click="validateNewMedicine()"/>
+                v-on:click="validateNewMedicine()">
+              <q-tooltip>Confirm</q-tooltip>
+              </q-btn>
+
             </div>
           </q-card-actions>
         </q-card>
@@ -224,6 +261,7 @@ export default {
     return {
       intro: 'la page de medicament',
       addNewMed: false,
+      alert: false,
       addNewMedDialog: false,
       medicine: [],
       medicine_selected: undefined,
@@ -234,6 +272,7 @@ export default {
       newMedDoseMax: 0,
       newMedDelay: 0,
       isComprime: true,
+      bolleanToTest: true,
       columnsTab: [
         {
           label: 'Name',
