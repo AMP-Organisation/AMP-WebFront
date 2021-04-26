@@ -17,4 +17,4 @@ if (process.env.DEBUGGING) {
 
 Vue.prototype.$axios = axiosInstance
 
-export { axiosInstance }
+export { axiosInstance, axios }
