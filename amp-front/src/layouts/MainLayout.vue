@@ -184,7 +184,8 @@ export default {
         {
           icon: 'label',
           text: 'Promos',
-          color: 'text-indigo-8'
+          color: 'text-indigo-8',
+          link: 'option_one'
         },
         {
           icon: 'forum',
