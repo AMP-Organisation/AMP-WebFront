@@ -1,5 +1,6 @@
 <template>
     <div>
+      <IconAndTitle :title="intro" :icon="'medication'" :color="'cyan-8'"/>
       <div class="q-ml-sm q-mt-md q-mb-md">
         <div class="row justify-between">
           <div class="col-1">
@@ -30,6 +31,7 @@
 <script>
 import { axiosInstance } from 'boot/axios'
 import Medicine from 'components/Medicine.vue'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'medicine_detail_page',
@@ -44,7 +46,8 @@ export default {
     }
   },
   components: {
-    Medicine
+    Medicine,
+    IconAndTitle
   },
   data  () {
     return {

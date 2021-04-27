@@ -16,7 +16,7 @@
         />
         <!-- Here we have the app name + welcom to the username -->
         <q-toolbar-title>
-          {{ appName }}.
+          {{ appName }}
         </q-toolbar-title>
         <!-- boutton deconnexion de nathan a mettre dans le menu -->
         <!-- This is the version of quasar. We rmeove it ? -->

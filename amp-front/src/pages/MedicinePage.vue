@@ -1,16 +1,7 @@
 <template>
   <div>
     <q-page>
-      <div class="q-ml-md q-mt-md q-mb-md">
-        <div class="row justify-left">
-          <div class="col-1">
-            <q-icon name="medication" color="cyan-8" :size="'xl'" />
-          </div>
-          <div class="col">
-            <div class="text-h4">{{ intro }}</div>
-          </div>
-        </div>
-      </div>
+      <IconAndTitle :title="intro" :icon="'medication'" :color="'cyan-8'"/>
 
       <div class="q-pa-md">
         <q-table
@@ -156,7 +147,7 @@
 <script>
 import { axiosInstance } from 'boot/axios'
 import Medicine from 'components/Medicine.vue'
-
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 export default {
   name: 'medicine_page',
   data () {
@@ -206,7 +197,8 @@ export default {
     }
   },
   components: {
-    Medicine
+    Medicine,
+    IconAndTitle
   },
   filters: {
     toUpCase (str) {

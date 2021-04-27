@@ -1,6 +1,7 @@
 <template lang="">
   <div>
     <q-page>
+      <IconAndTitle :title="title" :icon="'sick'" :color="'red-6'"/>
       <!-- the button to go back to the diseases page  -->
       <div class="row q-ml-md q-mt-md">
         <router-link :to="{name: 'disease'}">
@@ -73,6 +74,7 @@
 </template>
 <script>
 import { axiosInstance } from 'boot/axios'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'DeseasePageDetails',
@@ -86,6 +88,14 @@ export default {
     return {
       message: 'bonjour page de detail des maladie ',
       disease: undefined
+    }
+  },
+  components: {
+    IconAndTitle
+  },
+  computed: {
+    title () {
+      return `Information sur : ${this.disease.name_disease}`
     }
   },
   methods: {
