@@ -27,9 +27,9 @@
           <q-icon name="person" size="sm" />
           <q-menu >
             <div class="row no-wrap q-pa-md">
-              <div class="column">
+              <div class="col">
                 <div class="text-h6 q-mb-md">Menu</div>
-                <q-list style="min-width: 100px">
+                <q-list style="min-width: 90px">
                   <q-item v-ripple
                     :to="{name: 'profil_page'}" clickable v-close-popup>
                     <q-item-section
@@ -54,21 +54,29 @@
                 </q-list>
               </div>
               <q-separator vertical inset class="q-mx-lg" />
-              <div class="column items-center">
-                <q-avatar size="72px">
-                  <q-icon name="sick" size="xl" />
-                </q-avatar>
-                <div class="text-h6 q-mt-md q-mb-xs">{{ currentUser.last_name }}</div>
-                <div class="text-body1 q-mt-md q-mb-xs">{{ currentUser.first_name }}</div>
-                <q-btn
-                  class="q-mt-md"
-                  color="primary"
-                  label="Logout"
-                  v-on:click="logout"
-                  push
-                  size="sm"
-                  v-close-popup
-                />
+              <div class="col-auto">
+                <div class="row justify-center">
+                  <q-avatar class="q-mt-md">
+                    <q-icon name="sick" size="xl" />
+                  </q-avatar>
+                </div>
+                <div class="row justify-center">
+                  <div class="text-h6 q-mt-md q-mb-xs">{{ currentUser.last_name }}</div>
+                </div>
+                <div class="row justify-center">
+                  <div class="text-body1 q-mt-md q-mb-xs">{{ currentUser.first_name }}</div>
+                </div>
+                <div class="row justify-center">
+                  <q-btn
+                    class="q-mt-xl"
+                    color="primary"
+                    label="Logout"
+                    v-on:click="logout"
+                    push
+                    size="sm"
+                    v-close-popup
+                  />
+                  </div>
               </div>
             </div>
           </q-menu>
