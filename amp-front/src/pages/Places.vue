@@ -1,6 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
+      <IconAndTitle :title="'Page pour trouver un lieux'" :icon="'star'" :color="'blue-9'"/>
       <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
                placeholder="Hôpital de...">
         <template v-slot:prepend>
@@ -77,6 +78,7 @@
 
 <script>
 import { axiosInstance } from 'boot/axios'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'Place',
@@ -104,6 +106,9 @@ export default {
           this.options = response.data
         }
       )
+  },
+  components: {
+    IconAndTitle
   },
   computed: {
     getResults () {

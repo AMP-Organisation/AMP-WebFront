@@ -1,6 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
+      <IconAndTitle :title="'Page pour rechercher vos symptomes'" :icon="'coronavirus'" :color="'light-green-14'"/>
       <div class="q-ma-sm q-mt-md">
         <div class="row">
           <q-select
@@ -72,6 +73,7 @@
 
 <script>
 import { axiosInstance } from 'boot/axios'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'Symptoms',
@@ -101,6 +103,9 @@ export default {
     ).catch(
       err => console.log(err)
     )
+  },
+  components: {
+    IconAndTitle
   },
   methods: {
     filterFn (val, update) {
