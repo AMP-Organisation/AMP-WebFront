@@ -91,8 +91,9 @@
             v-ripple
             v-for="link in links1"
             :key="link.text"
-            :to="{ name: link.link }"
+            :to="{ name: link.link, params:{p_icon: link.icon, p_name_link: link.text} }"
           >
+          <!-- I tried to add props above  -->
             <q-item-section avatar>
               <q-icon :name="link.icon" />
             </q-item-section>

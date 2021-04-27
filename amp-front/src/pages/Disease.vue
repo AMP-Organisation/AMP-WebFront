@@ -1,35 +1,35 @@
 <template lang="">
   <div>
     <q-page>
-      <div class="q-ml-md q-mt-md q-mb-md">
-        <div class="row justify-left">
-          <div class="col-1">
-            <q-icon name="sick" color="red-6" :size="'xl'" />
-          </div>
-          <div class="col">
-            <div class="text-h4">{{ intro }}</div>
-          </div>
-        </div>
+      <IconAndTitle :title="intro" :icon="'sick'" :color="'red-6'"/>
+      <div class="row justify-center">
+
       </div>
       <div class="row q-ml-xl justify-center">
         <div class="col">
-          <q-select
+          <!-- <q-select
           class="col-6"
           outlined
           v-model="disease_selected"
           :options="disease"
           option-label="name_disease"
           label="Disease List"
-          />
+          /> -->
+          <q-input class="col-6" v-model="search" square outlined  type="search" hint="Search a disease">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
         </div>
-        <div class="col q-ml-xl justify-left">
+        <div class="col q-ml-xl q-mt-sm">
           <q-btn
           round
           color="primary"
           icon="playlist_add"
           v-on:click="newDisease = false"
-          v-show="newDisease"
-        />
+          v-show="newDisease">
+          <q-tooltip>Add a disease</q-tooltip>
+        </q-btn>
         </div>
       </div>
       <div class="row">
@@ -198,9 +198,20 @@
 <script>
 import DetailDisease from 'src/components/DetailsDisease'
 import { axiosInstance } from 'boot/axios'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'Disease',
+  props: {
+    p_icon: {
+      type: String,
+      default: 'settings'
+    },
+    p_name_link: {
+      type: String,
+      default: 'default name link'
+    }
+  },
   data () {
     return {
       intro: 'page pour les maladie',
@@ -213,6 +224,7 @@ export default {
       confirmDeleteDisease: false,
       showDetails: false,
       disease: [],
+      diseaseSave: [], // en fait Disease stocke la liste qui s'affiche, et DiseaseSave stocke vraiment tout si on change Disease
       diseaseType: [],
       diseasePages: [],
       // refacto a faire pour les variable de la nouvelle maladie à ajouter
@@ -224,6 +236,7 @@ export default {
       maxPages: 6,
       current: 1,
       value: '',
+      search: '',
       maxPerPage: 10,
       majDisease: {
         majName: undefined,
@@ -237,19 +250,36 @@ export default {
     }
   },
   components: {
-    DetailDisease
+    DetailDisease,
+    IconAndTitle
   },
   watch: {
     disease_selected () {
       this.editDisease = false
+    },
+    // may be improve with regex
+    search () {
+      console.log(`dans le watcher ${this.search}`)
+      this.disease = this.diseaseSave.filter(elem => {
+        return elem.name_disease.toLowerCase().match(this.search.toLowerCase())
+      })
+      this.pageDisease()
+      console.log(this.disease)
     }
   },
   methods: {
+    pageDisease () {
+      this.maxPages = this.disease.length / this.maxPerPage + 1
+      this.diseasePages = this.disease.slice(0, this.maxPerPage)
+    },
+    changePage (page) {
+      this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
+    },
     loadDiseases () {
       axiosInstance.get('diseases').then(elem => {
         this.disease = elem.data
-        this.maxPages = this.disease.length / this.maxPerPage + 1
-        this.diseasePages = this.disease.slice(0, this.maxPerPage)
+        this.diseaseSave = elem.data
+        this.pageDisease()
       })
       axiosInstance.get('diseases/type').then(elem => {
         this.diseaseType = elem.data
@@ -310,9 +340,6 @@ export default {
         this.resetData()
       })
     },
-    changePage (page) {
-      this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
-    },
     validateNewDisease () {
       const body = {
         name_disease: this.newDisName,
@@ -351,6 +378,8 @@ export default {
   },
   created () {
     this.loadDiseases()
+    console.log('creation de disease')
+    console.log(this.p_icon)
   }
 }
 </script>
