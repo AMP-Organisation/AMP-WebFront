@@ -5,7 +5,12 @@
         <div class="row items-center no-wrap">
 
           <div class="col">
-            <div class="text-h4">{{ name_display | nameWithFirstUpper }}</div>
+            <div v-if="!editMode">
+              <div class="text-h4">{{ name_display | nameWithFirstUpper }}</div>
+            </div>
+            <div v-else>
+              <q-input outlined v-model="medUpName" label="name" stack-label />
+            </div>
           </div>
 
           <!-- a ne pas supprimer, c'est un menu "burger en boutton" pour une amelioration future -->
@@ -33,17 +38,36 @@
       <q-card-section class="justify-between" >
         <div class="row">
           <div class="col-9">
-            <p class="text-body1">{{ description_display }}</p>
+            <div v-if="!editMode">
+              <p class="text-body1">{{ description_display }}</p>
+            </div>
+            <div v-else class="q-mr-md">
+              <q-input
+                v-model="medUpDescription"
+                filled
+                label="description"
+                type="textarea"/>
+            </div>
           </div>
+          <!-- part of the thumbnail/picture -->
           <div class="col-3">
-            <div v-if="thumbnail">
-              <q-img
-                :src="thumbnail.img_64"
-                spinner-color="white"
-              />
+            <div v-if="!editMode">
+              <div v-if="thumbnail">
+                <q-img
+                  :src="thumbnail.img_64"
+                  spinner-color="white"
+                />
+              </div>
+              <div v-else>
+                <p class="text-body1">No picture to display</p>
+              </div>
             </div>
             <div v-else>
-              <p class="text-body1">No picture to display</p>
+              <q-input
+                @input="val => { file = val[0] }"
+                filled
+                type="file"
+                hint="Thumbnail picture"/>
             </div>
           </div>
         </div>
@@ -51,7 +75,8 @@
 
       <q-separator />
       <q-card-actions class="justify-end" >
-        <q-btn v-if="this.fullCard == true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn v-if="this.fullCard == true && this.editMode == false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()" />
         <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
@@ -83,6 +108,17 @@ export default {
       default: false
     }
   },
+  data () {
+    return {
+      intro: 'bienvenu dans le composant medicament',
+      id_medicine: undefined,
+      thumbnail: undefined,
+      medicine: undefined,
+      editMode: false,
+      medUpName: '',
+      medUpDescription: ''
+    }
+  },
   filters: {
     nameWithFirstUpper: function (str) {
       return str.toUpperCase()
@@ -104,13 +140,6 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      intro: 'bienvenu dans le composant medicament',
-      thumbnail: undefined,
-      medicine: undefined
-    }
-  },
   methods: {
     getPicture () {
       if (this.med.thumbnail_id != null) {
@@ -130,15 +159,43 @@ export default {
         console.log('ERRRR:: ', error.response.data)
       })
     },
+    patchMedicine () {
+      axiosInstance({
+        method: 'patch',
+        url: 'medicine',
+        data: {
+          id: this.id_medicine,
+          name: this.medUpName,
+          description: this.medUpDescription
+        }
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      }).then(() => {
+        this.resetData()
+      })
+    },
+    resetData () {
+
+    },
     enterEdit () {
       console.log('enter in edit mode')
+      this.editMode = true
+      this.medUpName = this.name_display
+      this.medUpDescription = this.description_display
       // TODO : edition mode for an existing medicine
+    },
+    validateUpdate () {
+      console.log('validation de la mide a jour')
     }
   },
   created () {
     this.getPicture()
     if (this.med === undefined) {
       this.getMedicineFullInfo()
+      this.id_medicine = this.med.id
+    } else {
+      this.id_medicine = this.id
     }
   }
 }
