@@ -226,8 +226,9 @@ export default {
       })
     },
     resetData () {
-      this.getMedicineFullInfo()
-      this.editMode = false
+      this.$router.go()
+      // this.getMedicineFullInfo()
+      // this.editMode = false
     },
     enterEdit () {
       console.log('enter in edit mode')
