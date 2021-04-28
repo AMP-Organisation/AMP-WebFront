@@ -1,8 +1,7 @@
 <template>
   <div>
-    <q-page>
+    <q-page class="q-pb-xl">
       <IconAndTitle :title="intro" :icon="'medication'" :color="'cyan-8'"/>
-
       <div class="q-pa-md">
         <q-table
           class="my-sticky-column-table"
@@ -141,6 +140,7 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+
     </q-page>
   </div>
 </template>

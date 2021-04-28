@@ -37,7 +37,7 @@
       <q-separator />
       <q-card-section class="justify-between" >
         <div class="row">
-          <div class="col-9">
+          <div class="col-6">
             <div v-if="!editMode">
               <p class="text-body1">{{ description_display }}</p>
             </div>
@@ -48,6 +48,27 @@
                 label="description"
                 type="textarea"/>
             </div>
+          </div>
+          <div class="col-3">
+            <q-list bordered separator class="q-mr-sm">
+              <q-item>
+                <q-item-section v-if="!editMode">Dose : {{ this.med.dose }}</q-item-section>
+                <q-item-section v-else><q-input outlined v-model="medUpDose" label="Dose"  dense stack-label/></q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>
+                  <q-item-label v-if="!editMode">Dose Maximun : {{ this.med.dose_max }}</q-item-label>
+                  <q-item-section v-else><q-input outlined v-model="medUpDose" label="Dose Maximal"  dense stack-label/></q-item-section>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }}</q-item-label>
+                  <q-item-section v-else><q-input outlined v-model="medUpDose" label="Delay"  dense stack-label/></q-item-section>
+                </q-item-section>
+              </q-item>
+            </q-list>
           </div>
           <!-- part of the thumbnail/picture -->
           <div class="col-3">
@@ -75,8 +96,13 @@
 
       <q-separator />
       <q-card-actions class="justify-end" >
+        <q-btn v-if="this.fullCard == true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
+          <q-tooltip>Cancel</q-tooltip>
+        </q-btn>
         <q-btn v-if="this.fullCard == true && this.editMode == false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()" />
+        <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
+          <q-tooltip>Save</q-tooltip>
+        </q-btn>
         <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
@@ -162,7 +188,7 @@ export default {
     patchMedicine () {
       axiosInstance({
         method: 'patch',
-        url: 'medicine',
+        url: 'medicines',
         data: {
           id: this.id_medicine,
           name: this.medUpName,
@@ -176,7 +202,8 @@ export default {
       })
     },
     resetData () {
-
+      this.getMedicineFullInfo()
+      this.editMode = false
     },
     enterEdit () {
       console.log('enter in edit mode')
@@ -185,8 +212,12 @@ export default {
       this.medUpDescription = this.description_display
       // TODO : edition mode for an existing medicine
     },
+    cancelEdit () {
+
+    },
     validateUpdate () {
       console.log('validation de la mide a jour')
+      this.patchMedicine()
     }
   },
   created () {
