@@ -58,14 +58,14 @@
               <q-item>
                 <q-item-section>
                   <q-item-label v-if="!editMode">Dose Maximun : {{ this.med.dose_max }}</q-item-label>
-                  <q-item-section v-else><q-input outlined v-model="medUpDose" label="Dose Maximal"  dense stack-label/></q-item-section>
+                  <q-item-section v-else><q-input outlined v-model="medUpDoseMax" label="Dose Maximal"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
 
               <q-item>
                 <q-item-section>
                   <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }}</q-item-label>
-                  <q-item-section v-else><q-input outlined v-model="medUpDose" label="Delay"  dense stack-label/></q-item-section>
+                  <q-item-section v-else><q-input outlined v-model="medUpDelay" label="Delay"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -160,7 +160,10 @@ export default {
       confirmDeletion: false,
       editMode: false,
       medUpName: '',
-      medUpDescription: ''
+      medUpDescription: '',
+      medUpDose: 0,
+      medUpDoseMax: 0,
+      medUpDelay: 0
     }
   },
   filters: {
@@ -210,7 +213,10 @@ export default {
         data: {
           id: this.id_medicine,
           name: this.medUpName,
-          description: this.medUpDescription
+          description: this.medUpDescription,
+          dose: this.medUpDose,
+          dose_max: this.medUpDoseMax,
+          delay: this.medUpDelay
         }
       }).catch(function (error) {
         console.log(error)
@@ -228,6 +234,9 @@ export default {
       this.editMode = true
       this.medUpName = this.name_display
       this.medUpDescription = this.description_display
+      this.medUpDose = this.med.dose
+      this.medUpDoseMax = this.med.dose_max
+      this.medUpDelay = this.med.delay
       // TODO : edition mode for an existing medicine
     },
     deleteIt () {
