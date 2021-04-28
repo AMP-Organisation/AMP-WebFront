@@ -43,6 +43,7 @@
                <Treatment class="q-mb-md" v-for="tre in  pillbox.information_treatment"
                           :key="tre.id"
                           :name='tre.name'
+                          :id="tre.id"
                           :description="tre.description"
                           :dateBegin="convertDate(tre.beginning_date)"
                           :dateEnd="tre.ending_date"/>

@@ -12,8 +12,10 @@
         <Medicine
         class="q-mt-md q-mb-md"
         v-for="med in medicineLst"
-        v-bind:key="med.nom"
+        v-bind:key="med.id"
+        :med="med"
         :name="med.name"
+        :id="med.id"
         :description="med.description">
         </Medicine>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -29,6 +31,7 @@
 <script>
 import Medicine from 'src/components/Medicine.vue'
 import { date } from 'quasar'
+import { axiosInstance } from 'boot/axios'
 
 export default {
   name: 'Treatment',
@@ -66,19 +69,16 @@ export default {
   data () {
     return {
       // j'ai mis comme ca, car, je pense qu'on recuperera les medicament lié depuis un requete depuis ce composant
-      medicineLst: [
-        {
-          name: 'medicine One',
-          description: 'la description de la medicine one'
-        },
-        {
-          name: 'medicine two',
-          description: 'la description de la medicine two'
-        }
-      ]
+      medicineLst: []
     }
   },
   created () {
+    axiosInstance.post('treatment/medicineRelated',
+      { current_treatment: this.id }).then(
+      resp => {
+        this.medicineLst = resp.data
+      }
+    )
     /**
     * for futur improvment
     if (this.dateEnd == null) {
