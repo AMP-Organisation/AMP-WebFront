@@ -125,15 +125,16 @@
 
       <q-separator />
       <q-card-actions class="justify-end" >
-        <q-btn v-if="this.fullCard == true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
+        <q-btn v-if="this.fullCard === true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
           <q-tooltip>Cancel</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard == true && this.editMode == false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn v-if="this.fullCard == true && this.editMode == false" color="negative" icon="delete" v-on:click="confirmDeletion = true"  />
-        <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
+        <q-btn v-if="this.fullCard === true && this.editMode === false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn v-if="this.fullCard === true && this.editMode === false" color="negative" icon="delete" v-on:click="confirmDeletion = true"  />
+        <q-btn v-if="this.fullCard === true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
           <q-tooltip>Save</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.idMed)} }" />
+        <q-btn v-if="this.fullCard === true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
     </div>
