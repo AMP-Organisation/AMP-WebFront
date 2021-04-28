@@ -35,7 +35,7 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section class="justify-between" >
+      <q-card-section >
         <div class="row">
           <div class="col-6">
             <div v-if="!editMode">
@@ -94,12 +94,29 @@
         </div>
       </q-card-section>
 
+      <q-dialog v-model="confirmDeletion" persistent transition-show="scale">
+        <q-card style="width: 300px">
+          <q-card-section class="bg-negative text-white" >
+            <div class="text-h6">Persistent</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Are you sure to delete this medicine : {{ this.med.name }}
+          </q-card-section>
+
+          <q-card-actions align="right" >
+            <q-btn flat label="CONFIRM" style="background: #FF0000; color: white" v-on:click="deleteIt()" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
       <q-separator />
       <q-card-actions class="justify-end" >
         <q-btn v-if="this.fullCard == true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
           <q-tooltip>Cancel</q-tooltip>
         </q-btn>
         <q-btn v-if="this.fullCard == true && this.editMode == false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn v-if="this.fullCard == true && this.editMode == false" color="negative" icon="delete" v-on:click="confirmDeletion = true"  />
         <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
           <q-tooltip>Save</q-tooltip>
         </q-btn>
@@ -140,6 +157,7 @@ export default {
       id_medicine: undefined,
       thumbnail: undefined,
       medicine: undefined,
+      confirmDeletion: false,
       editMode: false,
       medUpName: '',
       medUpDescription: ''
@@ -212,8 +230,20 @@ export default {
       this.medUpDescription = this.description_display
       // TODO : edition mode for an existing medicine
     },
-    cancelEdit () {
-
+    deleteIt () {
+      axiosInstance({
+        method: 'delete',
+        url: 'medicines',
+        data: {
+          id: this.med.id
+        }
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      }).then(() => {
+        console.log(`on a bien efface : ${this.med.name} ${this.med.id}`)
+        this.$router.push({ path: '/medicine' })
+      })
     },
     validateUpdate () {
       console.log('validation de la mide a jour')
