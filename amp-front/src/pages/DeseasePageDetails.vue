@@ -52,10 +52,13 @@
                 <div class="text-body1">{{ disease.description }}</div>
               </div>
               <div class="row q-mb-sm">
-                <div class="text-body1">treatment ?</div>
+                <div class="text-body1 text-teal-9" v-if="disease.is_treatment">There is some treatment available</div>
+                <div class="text-body1 text-red-9" v-else>No treatment available</div>
+                <!-- v-if="disease.is_treatment"  -->
               </div>
               <div class="row">
-                <div class="text-body1">vaccine ?</div>
+                <div class="text-body1 text-teal-9" v-if="disease.is_vaccine">There is some vaccine available</div>
+                <div class="text-body1 text-red-9" v-else>No vaccine available</div>
               </div>
             </div>
             <div class="col-3 q-mr-sm">
