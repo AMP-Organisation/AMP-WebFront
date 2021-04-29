@@ -70,6 +70,17 @@
                 </q-item-section>
               </q-item>
             </q-list>
+            <p class="text-body1 q-mt-md ">Existe sous forme :</p>
+            <q-list  bordered separator>
+              <q-item
+              v-for="typemed in typeList"
+              v-bind:key="typemed.id"
+              >
+                <q-item-section>
+                  {{ typemed.id }}
+                </q-item-section>
+              </q-item>
+            </q-list>
           </div>
           <!-- part of the thumbnail/picture -->
           <div class="col-3">
@@ -160,6 +171,8 @@ export default {
       medicine: undefined,
       confirmDeletion: false,
       editMode: false,
+      // la liste des type de medcimanet : comprimé, gelules, suppositoire, etc...
+      typeList: [],
       medUpName: '',
       medUpDescription: '',
       medUpDose: 0,
@@ -201,6 +214,16 @@ export default {
           console.log('ERRRR:: ', error.response.data)
         })
       }
+    },
+    getTypeList () {
+      console.log('avant axios de get type list')
+      console.log(this.med.id)
+      axiosInstance.get(`medicines/type/${this.med.id}`).then(elem => {
+        this.typeList = elem.data
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
     },
     getMedicineFullInfo () {
       axiosInstance.get(`medicines/${this.id}`).then(elem => {
@@ -272,6 +295,7 @@ export default {
     } else {
       this.id_medicine = this.id
     }
+    this.getTypeList()
   }
 }
 </script>
