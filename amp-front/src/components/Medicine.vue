@@ -1,6 +1,6 @@
 <template>
     <div>
-      <q-card flat bordered class="my-card bg-grey-1">
+      <q-card flat bordered class="my-card ">
       <q-card-section>
         <div class="row items-center no-wrap">
 

@@ -1,66 +1,74 @@
 <template lang="">
   <div>
-    <q-page>
-      <IconAndTitle :title="title" :icon="'sick'" :color="'red-6'"/>
-      <!-- the button to go back to the diseases page  -->
-      <div class="row q-ml-md q-mt-md">
-        <router-link :to="{name: 'disease'}">
-          <q-btn color="warning" icon="keyboard_return">
-            <q-tooltip>Go back to diseases Page</q-tooltip>
-          </q-btn>
-        </router-link>
+    <q-page >
+      <div class="row justify-between">
+        <div class="col">
+          <IconAndTitle :title="title" :icon="'sick'" :color="'red-6'"/>
+        </div>
+        <div class="col-1">
+        <!-- the button to go back to the medicine page  -->
+        <div class="row q-ml-md q-mt-md">
+          <router-link :to="{name: 'disease'}">
+            <q-btn color="warning" icon="keyboard_return">
+              <q-tooltip>Go back to diseases Page</q-tooltip>
+            </q-btn>
+          </router-link>
+        </div>
       </div>
-      <!-- Begining of the data itselves  -->
-      <div v-if="disease">
-        <div class="row q-ml-md">
-          <!-- We have a first row with two columns  -->
-          <!-- first columns for the name, and first data... -->
-          <div class="col">
-            <div class="row">
-              <!-- Name of the disease  -->
-              <h2>{{ disease.name_disease }}</h2>
+      </div>
+    <!-- la carte refacto pour afficher une maladie -->
+    <div class="q-pb-xl">
+      <q-card class="my-card q-mr-md q-ml-md ">
+        <q-card-section>
+          <div class="row">
+            <div class="col">
+              <div class="text-h4">{{ disease.name_disease }}</div>
+              <div class="text-subtitle2 text-italic" v-if="disease.scientific_name">{{ disease.scientific_name }}</div>
+              <div class="text-weight-light" v-else>No scientific name</div>
+              </div>
+            <div class="col-1">
+              <q-icon v-if="disease.is_treatment" name="medication" :size="'xl'" :color="'teal-9'">
+                <q-tooltip>There is a treatment</q-tooltip>
+              </q-icon>
+              <q-icon v-else name="medication" :size="'xl'" :color="'red-9'">
+                <q-tooltip>No treatment available</q-tooltip>
+              </q-icon>
             </div>
-            <div class="row">
-              {{ disease.danger_level }}
-            </div>
-            <div class="row">
-              <div v-if="disease.is_treatment">
-                There is a treatment
-                <q-icon name="check" />
-              </div>
-              <div v-if="!disease.is_treatment">
-                There is NOT a treatment
-                <q-icon name="close" />
-              </div>
-            </div>
-            <div class="row">
-              <div v-if="disease.is_vaccine">
-                There is a vaccine
-                <q-icon name="check" />
-              </div>
-              <div v-if="!disease.is_vaccine">
-                There is NOT a vaccine
-                <q-icon name="close" />
-              </div>
+            <div class="col-1">
+              <q-icon v-if="disease.is_vaccine" name="local_pharmacy" :size="'xl'" :color="'teal-9'">
+                <q-tooltip>There is a vaccin</q-tooltip>
+              </q-icon>
+              <q-icon v-else name="local_pharmacy" :size="'xl'" :color="'red-9'">
+                <q-tooltip>No vaccine available</q-tooltip>
+              </q-icon>
             </div>
           </div>
-          <!--... and the second one is for the image  -->
-          <div class="col q-mr-xl">
-            <!-- <h2>image</h2> -->
-            <q-img src="../assets/virus_covid.jpg" :ratio="1" />
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <div class="row">
+            <div class="col-8">
+              <div class="row q-mb-md">
+                <div class="text-body1">{{ disease.description }}</div>
+              </div>
+              <div class="row q-mb-sm">
+                <div class="text-body1">treatment ?</div>
+              </div>
+              <div class="row">
+                <div class="text-body1">vaccine ?</div>
+              </div>
+            </div>
+            <div class="col-3 q-mr-sm">
+              <!-- <h2>image</h2> -->
+              <q-img src="../assets/virus_covid.jpg" :ratio="1" />
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="row q-ml-md q-mt-lg">
-        <div class="col">
-          <h4>Description :</h4>
-        </div>
-      </div>
-      <div class="row q-ml-md">
-        <div class="col">
-          {{ disease.description }}
-        </div>
-      </div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+        </q-card-section>
+      </q-card>
+    </div>
     <!-- Une barre de chargement qui ne focntionne pas encore -->
     <q-ajax-bar
       ref="bar"
@@ -87,7 +95,7 @@ export default {
   data () {
     return {
       message: 'bonjour page de detail des maladie ',
-      disease: undefined
+      disease: []
     }
   },
   components: {
