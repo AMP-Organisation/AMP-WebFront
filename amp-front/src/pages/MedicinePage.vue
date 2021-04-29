@@ -36,14 +36,14 @@
             </q-tr>
             <q-tr v-show="props.expand" :props="props">
               <q-td colspan="100%">
-                <div class row>
+                <q-card class="my-card">
                   <Medicine
                     :med="props.row"
                     :id="parseInt(props.row.id)"
                     :name="props.row.name"
                     :description="props.row.description">
                   </Medicine>
-                </div>
+                </q-card>
               </q-td>
             </q-tr>
           </template>
@@ -148,6 +148,7 @@
 import { axiosInstance } from 'boot/axios'
 import Medicine from 'components/Medicine.vue'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
+
 export default {
   name: 'medicine_page',
   data () {

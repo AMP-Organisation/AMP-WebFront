@@ -39,7 +39,8 @@
         <div class="row">
           <div class="col-6">
             <div v-if="!editMode">
-              <p class="text-body1">{{ description_display }}</p>
+              <p v-if="this.fullCard == false" class="text-body1 q-mr-md">{{ description_display| crop }}</p>
+              <p v-else class="text-body1 q-mr-md">{{ description_display }}</p>
             </div>
             <div v-else class="q-mr-md">
               <q-input
@@ -169,6 +170,9 @@ export default {
   filters: {
     nameWithFirstUpper: function (str) {
       return str.toUpperCase()
+    },
+    crop (str) {
+      return str.slice(0, 50) + '...'
     }
   },
   computed: {

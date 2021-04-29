@@ -36,8 +36,8 @@
                     >Profil</q-item-section>
                   </q-item>
                   <q-separator />
-                  <q-item :to="{name: 'option_one'}" clickable v-close-popup>
-                    <q-item-section>Menu 1</q-item-section>
+                  <q-item :to="{name: 'notifications_page'}" clickable v-close-popup>
+                    <q-item-section>Notifications</q-item-section>
                   </q-item>
                   <q-item :to="{name: 'option_two'}" clickable v-close-popup>
                     <q-item-section>Menu 2</q-item-section>

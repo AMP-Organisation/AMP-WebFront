@@ -48,7 +48,13 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: '/optionone',
+        path: '/notifications',
+        name: 'notifications_page',
+        component: () => import('pages/Notifications.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/notifications',
         name: 'option_one',
         component: () => import('pages/OptionOne.vue'),
         meta: { requiresAuth: true }
