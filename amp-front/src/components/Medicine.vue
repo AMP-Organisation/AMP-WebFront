@@ -106,10 +106,10 @@
         </div>
       </q-card-section>
 
-      <q-dialog v-model="confirmDeletion" persistent transition-show="scale">
+      <q-dialog v-model="confirmDeletion" persistent  transition-show="scale">
         <q-card style="width: 300px">
           <q-card-section class="bg-negative text-white" >
-            <div class="text-h6">Persistent</div>
+            <div class="text-h6">Delete {{ this.med.name }} </div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -117,7 +117,8 @@
           </q-card-section>
 
           <q-card-actions align="right" >
-            <q-btn flat label="CONFIRM" style="background: #FF0000; color: white" v-on:click="deleteIt()" v-close-popup />
+            <q-btn flat label="Cancel" color="warning" v-close-popup />
+            <q-btn flat label="CONFIRM" color="red-9"  v-on:click="deleteIt()" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -216,8 +217,6 @@ export default {
       }
     },
     getTypeList () {
-      console.log('avant axios de get type list')
-      console.log(this.med.id)
       axiosInstance.get(`medicines/type/${this.med.id}`).then(elem => {
         this.typeList = elem.data
       }).catch(function (error) {

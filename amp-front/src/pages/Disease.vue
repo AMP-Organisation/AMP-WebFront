@@ -265,7 +265,6 @@ export default {
     },
     // may be improve with regex
     search () {
-      console.log(`dans le watcher ${this.search}`)
       this.disease = this.diseaseSave.filter(elem => {
         return elem.name_disease.toLowerCase().match(this.search.toLowerCase())
       })
