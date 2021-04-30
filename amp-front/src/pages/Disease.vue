@@ -281,8 +281,6 @@ export default {
   },
   methods: {
     pageDisease () {
-      console.log('page disease')
-      console.log(this.disease)
       this.maxPages = this.disease.length / this.maxPerPage + 1
       this.diseasePages = this.disease.slice(0, this.maxPerPage)
     },
@@ -392,8 +390,6 @@ export default {
   },
   created () {
     this.loadDiseases()
-    console.log('creation de disease')
-    console.log(this.p_icon)
   }
 }
 </script>

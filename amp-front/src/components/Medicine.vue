@@ -77,7 +77,7 @@
               v-bind:key="typemed.id"
               >
                 <q-item-section>
-                  {{ typemed.id }}
+                  {{ typemed.type }}
                 </q-item-section>
               </q-item>
             </q-list>
@@ -258,7 +258,6 @@ export default {
       // this.editMode = false
     },
     enterEdit () {
-      console.log('enter in edit mode')
       this.editMode = true
       this.medUpName = this.name_display
       this.medUpDescription = this.description_display
