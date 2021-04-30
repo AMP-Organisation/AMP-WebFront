@@ -41,6 +41,7 @@
                     :med="props.row"
                     :idMed="parseInt(props.row.id)"
                     :name="props.row.name"
+                    :add-to-pillbox="true"
                     :description="props.row.description">
                   </Medicine>
                 </q-card>
@@ -87,7 +88,6 @@
             </q-btn>
         </div>
       </div>
-
       <!-- q-dialog pour ajouter une maladie, une deuxieme methode -->
       <q-dialog v-model="addNewMedDialog"  >
         <q-card >

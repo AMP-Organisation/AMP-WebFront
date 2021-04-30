@@ -134,13 +134,31 @@
           <q-tooltip>Save</q-tooltip>
         </q-btn>
         <q-btn v-if="this.fullCard === true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn
+          v-if="this.addToPillbox !== false"
+          color="secondary"
+          icon="add"
+          v-on:click="addNewTreatmentDialog = true"
+          >
+          <q-dialog v-model="addNewTreatmentDialog">
+            <AddTreatmentDialog
+            :current_med="med"
+            >
+            </AddTreatmentDialog>
+          </q-dialog>
+          <q-tooltip content-class="bg-cyan">
+              Assigné a un traitement
+          </q-tooltip>
+        </q-btn>
         <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
     </div>
 </template>
+
 <script>
 import { axiosInstance } from 'boot/axios'
+import AddTreatmentDialog from 'components/AddTreatmentDialog'
 
 export default {
   name: 'Medicine',
@@ -163,6 +181,10 @@ export default {
     fullCard: {
       type: Boolean,
       default: false
+    },
+    addToPillbox: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -179,8 +201,12 @@ export default {
       medUpDescription: '',
       medUpDose: 0,
       medUpDoseMax: 0,
-      medUpDelay: 0
+      medUpDelay: 0,
+      addNewTreatmentDialog: false
     }
+  },
+  components: {
+    AddTreatmentDialog
   },
   filters: {
     nameWithFirstUpper: function (str) {
