@@ -171,9 +171,10 @@ export default {
       ],
       links2: [
         {
-          icon: 'flag',
-          text: 'Updates',
-          color: 'text-orange'
+          icon: 'medical_services',
+          text: 'Pillulier',
+          color: 'text-orange',
+          link: 'pillbox'
         },
         {
           icon: 'face',
@@ -184,12 +185,19 @@ export default {
         {
           icon: 'label',
           text: 'Promos',
-          color: 'text-indigo-8'
+          color: 'text-indigo-8',
+          link: 'option_one'
         },
         {
           icon: 'forum',
           text: 'Forums',
           color: 'text-teal'
+        },
+        {
+          icon: 'feed',
+          text: 'Actualité covid',
+          color: 'text-red',
+          link: 'Covid'
         }
       ],
       currentUser: JSON.parse(localStorage.getItem('user'))
