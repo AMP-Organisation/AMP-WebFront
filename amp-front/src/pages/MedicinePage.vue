@@ -39,7 +39,7 @@
                 <q-card class="my-card">
                   <Medicine
                     :med="props.row"
-                    :id="parseInt(props.row.id)"
+                    :idMed="parseInt(props.row.id)"
                     :name="props.row.name"
                     :description="props.row.description">
                   </Medicine>

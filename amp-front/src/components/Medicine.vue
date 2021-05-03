@@ -133,7 +133,7 @@
         <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
           <q-tooltip>Save</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
+        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.idMed)} }" />
       </q-card-actions>
     </q-card>
     </div>
@@ -148,7 +148,7 @@ export default {
       type: Object,
       default: undefined
     },
-    id: {
+    idMed: {
       type: Number
     },
     name: {
@@ -217,7 +217,7 @@ export default {
       }
     },
     getTypeList () {
-      axiosInstance.get(`medicines/type/${this.med.id}`).then(elem => {
+      axiosInstance.get(`medicines/type/${this.med.idMed}`).then(elem => {
         this.typeList = elem.data
       }).catch(function (error) {
         console.log(error)
@@ -225,7 +225,7 @@ export default {
       })
     },
     getMedicineFullInfo () {
-      axiosInstance.get(`medicines/${this.id}`).then(elem => {
+      axiosInstance.get(`medicines/${this.idMed}`).then(elem => {
         this.medicine = elem.data
       }).catch(function (error) {
         console.log(error)
@@ -276,7 +276,6 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       }).then(() => {
-        console.log(`on a bien efface : ${this.med.name} ${this.med.id}`)
         this.$router.push({ path: '/medicine' })
       })
     },
@@ -291,7 +290,7 @@ export default {
       this.getMedicineFullInfo()
       this.id_medicine = this.med.id
     } else {
-      this.id_medicine = this.id
+      this.id_medicine = this.idMed
     }
     this.getTypeList()
   }

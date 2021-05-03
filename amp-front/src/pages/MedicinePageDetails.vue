@@ -17,7 +17,7 @@
       </div>
       <div class="col">
         <div class="q-mr-md q-ml-md">
-          <Medicine :med="this.medicineLoaded" :id="this.medicineLoaded.id" :fullCard="true"></Medicine>
+          <Medicine :med="this.medicineLoaded" :idMed="this.medicineLoaded.id" :fullCard="true"></Medicine>
         </div>
       </div>
     </div>
