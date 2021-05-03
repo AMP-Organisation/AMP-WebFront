@@ -1,35 +1,35 @@
 <template lang="">
   <div>
     <q-page>
-      <div class="q-ml-md q-mt-md q-mb-md">
-        <div class="row justify-left">
-          <div class="col-1">
-            <q-icon name="sick" color="red-6" :size="'xl'" />
-          </div>
-          <div class="col">
-            <div class="text-h4">{{ intro }}</div>
-          </div>
-        </div>
+      <IconAndTitle :title="intro" :icon="'sick'" :color="'red-6'"/>
+      <div class="row justify-center">
+
       </div>
       <div class="row q-ml-xl justify-center">
         <div class="col">
-          <q-select
+          <!-- <q-select
           class="col-6"
           outlined
           v-model="disease_selected"
           :options="disease"
           option-label="name_disease"
           label="Disease List"
-          />
+          /> -->
+          <q-input class="col-6" v-model="search" square outlined  type="search" hint="Search a disease">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
         </div>
-        <div class="col q-ml-xl justify-left">
+        <div class="col q-ml-xl q-mt-sm">
           <q-btn
           round
           color="primary"
           icon="playlist_add"
           v-on:click="newDisease = false"
-          v-show="newDisease"
-        />
+          v-show="newDisease">
+          <q-tooltip>Add a disease</q-tooltip>
+        </q-btn>
         </div>
       </div>
       <div class="row">
@@ -64,101 +64,103 @@
 
         <!-- it is the card which print the data of the disease  style="max-width: 500px"-->
         <div class="col q-ma-md q-mr-xl" >
-        <q-card bordered class="my-card col-4" v-if="disease_selected">
-          <q-card-section>
-            <div class="row">
-              <div class="col">
-                <div class="text-h6">{{ disease_selected.name_disease }}</div>
+          <q-card bordered class="my-card col-4" v-if="disease_selected">
+            <q-card-section>
+              <div class="row">
+                <div class="col">
+                  <div class="text-h6">{{ disease_selected.name_disease }}</div>
+                </div>
+                <div class="col-1">
+                    <q-btn class="justify-end" color="warning" icon="close" v-on:click="disease_selected = undefined" />
+                </div>
               </div>
-              <div class="col-1">
-                  <q-btn class="justify-end" color="warning" icon="close" v-on:click="disease_selected = undefined" />
-              </div>
-            </div>
-          </q-card-section>
-          <q-separator inset />
-          <q-card-section>
-            {{ disease_selected.description }}
-          </q-card-section>
-          <q-card-section>
-              <!-- This is the button to open a pop up tp print all the details in a pop up, but it is not finished yet. so that why I comented it
-              And it is redundance with the more detail page -->
-              <!-- <q-btn color="amber-6" icon="add"  v-on:click="showDetails = true">
-                <q-tooltip>More info pop up</q-tooltip>
-              </q-btn> -->
-              <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
-                <q-btn color="primary" icon="double_arrow" class="q-mr-md">
-                  <q-tooltip>More info page</q-tooltip>
+            </q-card-section>
+            <q-separator inset />
+            <q-card-section>
+              {{ disease_selected.description }}
+            </q-card-section>
+            <q-card-section>
+                <!-- This is the button to open a pop up tp print all the details in a pop up, but it is not finished yet. so that why I comented it
+                And it is redundance with the more detail page -->
+                <!-- <q-btn color="amber-6" icon="add"  v-on:click="showDetails = true">
+                  <q-tooltip>More info pop up</q-tooltip>
+                </q-btn> -->
+                <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
+                  <q-btn color="primary" icon="double_arrow" class="q-mr-md">
+                    <q-tooltip>More info page</q-tooltip>
+                  </q-btn>
+                </router-link>
+              <q-btn-group>
+                <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="startEdition">
+                  <q-tooltip>Edit data</q-tooltip>
                 </q-btn>
-              </router-link>
-            <q-btn-group>
-              <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="startEdition">
-                <q-tooltip>Edit data</q-tooltip>
-              </q-btn>
-              <q-btn color="warning" icon="keyboard_return" v-on:click="editDisease = false" v-show="editDisease">
-                <q-tooltip>Close details</q-tooltip>
-              </q-btn>
-              <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true">
-               <q-tooltip>Delete this desease card</q-tooltip>
-              </q-btn>
-            </q-btn-group>
-          </q-card-section>
+                <q-btn color="warning" icon="keyboard_return" v-on:click="editDisease = false" v-show="editDisease">
+                  <q-tooltip>Close details</q-tooltip>
+                </q-btn>
+                <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true">
+                <q-tooltip>Delete this desease card</q-tooltip>
+                </q-btn>
+              </q-btn-group>
+            </q-card-section>
 
-          <!-- The edition part of the card for the disease  -->
-          <q-card-section v-if="editDisease">
-            <q-input rounded outlined v-model="majDisease.majName" label="name" class=" q-mb-md"/>
-            <q-input rounded outlined v-model="majDisease.majDescription" filled type="textarea" label="description" class="q-mt-md q-mb-md min-width: 500px"/>
-            <q-btn color="green-9" icon="check"  v-if="isAdmin" v-on:click="validateDiseaseUpdate" >
-               <q-tooltip>Validate</q-tooltip>
-            </q-btn>
-          </q-card-section>
-        </q-card>
-        <!-- The card to add a new disease -->
-        <q-card class="my-card col-7 q-mt-sm" v-show="!newDisease">
-          <q-card-section>
-            <div class="row">
-              <div class="col">
-                <div class="text-h6">Add a new disease</div>
-                <div class="text-subtitle2"></div>
+            <!-- The edition part of the card for the disease  -->
+            <q-card-section v-if="editDisease">
+              <q-input rounded outlined v-model="majDisease.majName" label="name" class=" q-mb-md"/>
+              <q-input rounded outlined v-model="majDisease.majDescription" filled type="textarea" label="description" class="q-mt-md q-mb-md min-width: 500px"/>
+              <q-btn color="green-9" icon="check"  v-if="isAdmin" v-on:click="validateDiseaseUpdate" >
+                <q-tooltip>Validate</q-tooltip>
+              </q-btn>
+            </q-card-section>
+          </q-card>
+          <!-- The card to add a new disease -->
+          <q-card class="my-card col-7 q-mt-sm" v-show="!newDisease">
+            <q-card-section>
+              <div class="row">
+                <div class="col">
+                  <div class="text-h6">Add a new disease</div>
+                  <div class="text-subtitle2"></div>
+                </div>
+                <div class="col-1">
+                  <q-btn class="justify-end" color="warning" icon="close" v-on:click="newDisease = !newDisease" />
+                </div>
               </div>
-              <div class="col-1">
-                <q-btn class="justify-end" color="warning" icon="close" v-on:click="newDisease = !newDisease" />
+            </q-card-section>
+            <q-card-actions vertical>
+              <div class="row">
+                <div class="col">
+                <q-input rounded outlined v-model="newDisName" label="Name" />
+                <q-input rounded outlined v-model="newDisDescripption" class="q-mt-md" label="Description" type="textarea"/>
+                </div>
               </div>
-            </div>
-          </q-card-section>
-          <q-card-actions vertical>
-            <div class="row">
-              <div class="col">
-              <q-input rounded outlined v-model="newDisName" label="Name" />
-              <q-input rounded outlined v-model="newDisDescripption" class="q-mt-md" label="Description" type="textarea"/>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
+              <div class="row">
+                <div class="col-6">
+                  <q-card-actions vertical>
+                    <q-radio v-model="isVaccine" val="true" label="yes, there is a vaccine" />
+                    <q-radio v-model="isVaccine" val="false" label="There is no vaccine" />
+                  </q-card-actions>
+                <q-separator dark inset />
                 <q-card-actions vertical>
-                  <q-radio v-model="isVaccine" val="true" label="yes, there is a vaccine" />
-                  <q-radio v-model="isVaccine" val="false" label="There is no vaccine" />
+                  <q-radio v-model="isTreatment" val="true" label="yes, there is a treatment" />
+                  <q-radio v-model="isTreatment" val="false" label="There is no treatment" />
                 </q-card-actions>
-              <q-separator dark inset />
-              <q-card-actions vertical>
-                <q-radio v-model="isTreatment" val="true" label="yes, there is a treatment" />
-                <q-radio v-model="isTreatment" val="false" label="There is no treatment" />
-              </q-card-actions>
-              <q-input v-model.number="dangerLevel" type="number" filled />
+                <q-input v-model.number="dangerLevel" type="number" filled />
+                </div>
+                <div class="col-6">
+                  <q-card-actions vertical>
+                    <q-select class="q-mt-md" square outlined :disable="disableVaccineList"  :options="vaccineList" label="vaccine name" />
+                    <q-select class="q-mt-md" square outlined :disable="disableTreatmentList" :options="treatmentList" label="treatment name" />
+                    <q-select class="q-mt-md" rounded outlined v-model="disease_type_selected" :options="diseaseType" option-label="type_name" label="Type Disease" />
+                  </q-card-actions>
+                </div>
               </div>
-              <div class="col-6">
-                <q-card-actions vertical>
-                  <q-select class="q-mt-md" rounded outlined v-model="disease_type_selected" :options="diseaseType" option-label="type_name" label="Type Disease" />
-                </q-card-actions>
-              </div>
-            </div>
-            <q-btn
-              round
-              color="secondary"
-              icon="check_circle_outline"
-              v-on:click="validateNewDisease"
-            />
-          </q-card-actions>
-        </q-card>
+              <q-btn
+                round
+                color="secondary"
+                icon="check_circle_outline"
+                v-on:click="validateNewDisease"
+              />
+            </q-card-actions>
+          </q-card>
         </div>
       </div>
       <div>
@@ -198,9 +200,20 @@
 <script>
 import DetailDisease from 'src/components/DetailsDisease'
 import { axiosInstance } from 'boot/axios'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'Disease',
+  props: {
+    p_icon: {
+      type: String,
+      default: 'settings'
+    },
+    p_name_link: {
+      type: String,
+      default: 'default name link'
+    }
+  },
   data () {
     return {
       intro: 'page pour les maladie',
@@ -213,17 +226,23 @@ export default {
       confirmDeleteDisease: false,
       showDetails: false,
       disease: [],
+      diseaseSave: [], // en fait Disease stocke la liste qui s'affiche, et DiseaseSave stocke vraiment tout si on change Disease
       diseaseType: [],
       diseasePages: [],
+      vaccineList: ['vaccine 1', 'vaccine 2'],
+      treatmentList: ['treatment 1', 'treatment 2'],
       // refacto a faire pour les variable de la nouvelle maladie à ajouter
       newDisName: undefined,
       newDisDescripption: undefined,
       isVaccine: 'false',
+      disableVaccineList: true,
+      disableTreatmentList: true,
       isTreatment: 'false',
       dangerLevel: 0,
       maxPages: 6,
       current: 1,
       value: '',
+      search: '',
       maxPerPage: 10,
       majDisease: {
         majName: undefined,
@@ -237,19 +256,41 @@ export default {
     }
   },
   components: {
-    DetailDisease
+    DetailDisease,
+    IconAndTitle
   },
   watch: {
     disease_selected () {
       this.editDisease = false
+    },
+    // may be improve with regex
+    search () {
+      this.disease = this.diseaseSave.filter(elem => {
+        return elem.name_disease.toLowerCase().match(this.search.toLowerCase())
+      })
+      console.log(this.disease)
+      this.pageDisease()
+    },
+    isVaccine () {
+      this.disableVaccineList = !this.disableVaccineList
+    },
+    isTreatment () {
+      this.disableTreatmentList = !this.disableTreatmentList
     }
   },
   methods: {
+    pageDisease () {
+      this.maxPages = this.disease.length / this.maxPerPage + 1
+      this.diseasePages = this.disease.slice(0, this.maxPerPage)
+    },
+    changePage (page) {
+      this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
+    },
     loadDiseases () {
       axiosInstance.get('diseases').then(elem => {
         this.disease = elem.data
-        this.maxPages = this.disease.length / this.maxPerPage + 1
-        this.diseasePages = this.disease.slice(0, this.maxPerPage)
+        this.diseaseSave = elem.data
+        this.pageDisease()
       })
       axiosInstance.get('diseases/type').then(elem => {
         this.diseaseType = elem.data
@@ -309,9 +350,6 @@ export default {
       }).then(() => {
         this.resetData()
       })
-    },
-    changePage (page) {
-      this.diseasePages = this.disease.slice((this.maxPerPage * (page - 1)), this.maxPerPage * (page))
     },
     validateNewDisease () {
       const body = {

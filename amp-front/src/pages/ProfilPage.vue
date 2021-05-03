@@ -1,9 +1,6 @@
 <template lang="">
   <div>
-    <div class="row justify-left q-mt-md q-ml-md">
-            <q-icon name="face" color="green-6" :size="'xl'" />
-            <div class="text-h4 q-ml-md">{{ intro }}</div>
-    </div>
+    <IconAndTitle :title="intro" :icon="'face'" :color="'green-6'"/>
     <q-card class="q-ml-md q-mr-md q-mt-sm">
       <q-card-section class="bg-primary text-white">
         <div class="row">
@@ -72,6 +69,7 @@
 
 <script>
 import { axiosInstance } from 'boot/axios'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'profil_page',
@@ -90,6 +88,9 @@ export default {
         age: 42
       }
     }
+  },
+  components: {
+    IconAndTitle
   },
   methods: {
     startEdition () {

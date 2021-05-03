@@ -1,22 +1,17 @@
 <template>
     <div>
-      <div class="q-ml-sm q-mt-md q-mb-md">
-        <div class="row justify-between">
-          <div class="col-1">
-            <q-icon name="medication" color="cyan-8" :size="'xl'" />
-          </div>
-          <div class="col">
-            <div class="text-h5 q-mt-sm">{{ message }}</div>
-          </div>
-          <div class="col-1">
-          <!-- the button to go back to the medicine page  -->
+      <div class="row justify-between">
+        <div class="col">
+          <IconAndTitle :title="message" :icon="'medication'" :color="'cyan-8'"/>
+        </div>
+        <div class="col-1">
+        <!-- the button to go back to the medicine page  -->
           <div class="q-mt-md q-mb-md q-mr-md">
             <router-link :to="{name: 'medicine_page'}">
               <q-btn color="warning" icon="keyboard_return">
                 <q-tooltip>Go back to medicine Page</q-tooltip>
               </q-btn>
             </router-link>
-          </div>
           </div>
         </div>
       </div>
@@ -30,6 +25,7 @@
 <script>
 import { axiosInstance } from 'boot/axios'
 import Medicine from 'components/Medicine.vue'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'medicine_detail_page',
@@ -44,7 +40,8 @@ export default {
     }
   },
   components: {
-    Medicine
+    Medicine,
+    IconAndTitle
   },
   data  () {
     return {

@@ -1,17 +1,7 @@
 <template>
   <div>
-    <q-page>
-      <div class="q-ml-md q-mt-md q-mb-md">
-        <div class="row justify-left">
-          <div class="col-1">
-            <q-icon name="medication" color="cyan-8" :size="'xl'" />
-          </div>
-          <div class="col">
-            <div class="text-h4">{{ intro }}</div>
-          </div>
-        </div>
-      </div>
-
+    <q-page class="q-pb-xl">
+      <IconAndTitle :title="intro" :icon="'medication'" :color="'cyan-8'"/>
       <div class="q-pa-md">
         <q-table
           class="my-sticky-column-table"
@@ -46,14 +36,14 @@
             </q-tr>
             <q-tr v-show="props.expand" :props="props">
               <q-td colspan="100%">
-                <div class row>
+                <q-card class="my-card">
                   <Medicine
                     :med="props.row"
                     :id="parseInt(props.row.id)"
                     :name="props.row.name"
                     :description="props.row.description">
                   </Medicine>
-                </div>
+                </q-card>
               </q-td>
             </q-tr>
           </template>
@@ -150,12 +140,14 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+
     </q-page>
   </div>
 </template>
 <script>
 import { axiosInstance } from 'boot/axios'
 import Medicine from 'components/Medicine.vue'
+import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
   name: 'medicine_page',
@@ -206,7 +198,8 @@ export default {
     }
   },
   components: {
-    Medicine
+    Medicine,
+    IconAndTitle
   },
   filters: {
     toUpCase (str) {
