@@ -23,9 +23,12 @@ export default {
   props: ['pillbox'],
   methods: {
     deletePillbox (pillbox) {
-      console.log(pillbox.id)
-      axiosInstance.delete('pillbox/deletePillbox', {
-        id: pillbox.id
+      axiosInstance({
+        method: 'delete',
+        url: 'pillbox/deletePillbox',
+        data: {
+          id: pillbox.id
+        }
       }).then(
         response => {
           this.$q.notify({

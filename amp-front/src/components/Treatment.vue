@@ -16,7 +16,7 @@
         :med="med"
         :delete-from-pillbox="deleteFromPillbox"
         :name="med.name"
-        :id="med.id"
+        :id_medicine="med.id"
         :treatment_id="id"
         :description="med.description">
         </Medicine>
