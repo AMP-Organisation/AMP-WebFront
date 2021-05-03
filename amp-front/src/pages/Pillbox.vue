@@ -1,13 +1,29 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
-      <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
+      <div class="row">
+        <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
                placeholder="Traitement migraine...">
         <template v-slot:prepend>
           <q-icon v-if="search === ''" name="search"/>
           <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>
         </template>
       </q-input>
+        <q-btn
+          class="GNL__button"
+          color="secondary"
+          icon="add"
+          v-close-popup
+          v-on:click="addNewPillbox = true"
+        >
+          <q-dialog v-model="addNewPillbox">
+            <AddPillboxDialog/>
+          </q-dialog>
+          <q-tooltip content-class="bg-cyan">
+            modifications pillulier
+          </q-tooltip>
+        </q-btn>
+      </div>
       <div class="q-ma-sm q-mt-md">
         <q-list class="q-ma-sm q-mt-md">
           <q-expansion-item
@@ -35,9 +51,25 @@
             <q-separator/>
             <q-card>
               <!-- Introduction de la maladie -->
-              <q-card-section>
-                {{pillbox.description}}
-              </q-card-section>
+             <div class="row" style="align-items: center">
+               <div class="col">
+                 <q-card-section>
+                   {{pillbox.description}}
+                 </q-card-section>
+               </div>
+               <div class="col-1">
+                 <q-btn
+                   color="red-9"
+                   icon="clear"
+                   v-on:click="deletePillboxDialog = true">
+                 </q-btn>
+                 <q-dialog v-model="deletePillboxDialog">
+                   <DeletePillbox
+                     :pillbox="pillbox"
+                   ></DeletePillbox>
+                 </q-dialog>
+               </div>
+             </div>
               <!-- Lien la maladie -->
              <q-card-section>
                <Treatment class="q-mb-md" v-for="tre in  pillbox.information_treatment"
@@ -45,6 +77,7 @@
                           :name='tre.name'
                           :id="tre.id"
                           :description="tre.description"
+                          :delete-from-pillbox="true"
                           :dateBegin="convertDate(tre.beginning_date)"
                           :dateEnd="tre.ending_date"/>
              </q-card-section>
@@ -60,18 +93,24 @@
 import { axiosInstance } from 'boot/axios'
 import Treatment from 'components/Treatment'
 import { date } from 'quasar'
+import AddPillboxDialog from 'components/AddPillboxDialog'
+import DeletePillbox from 'components/DeletePillbox'
 
 export default {
   name: 'Pillbox',
   components: {
-    Treatment
+    Treatment,
+    DeletePillbox,
+    AddPillboxDialog
   },
   data () {
     return {
       current_treatment: [],
       currents_pillbox: [],
       search: '',
-      current_user: JSON.parse(localStorage.getItem('user'))
+      current_user: JSON.parse(localStorage.getItem('user')),
+      addNewPillbox: false,
+      deletePillboxDialog: false
     }
   },
   created () {
@@ -116,5 +155,10 @@ export default {
   margin-left: 20%;
   margin-top: 5%;
   display: flex;
+}
+
+.GNL__button {
+  margin-top: 5%;
+  margin-left: 2%;
 }
 </style>

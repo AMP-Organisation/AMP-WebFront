@@ -102,7 +102,7 @@ export default {
   props: ['current_med'],
   data () {
     return {
-      tab: 'treatment',
+      tab: 'existingTreatment',
       select_model: [],
       current_user: JSON.parse(localStorage.getItem('user')),
       optionsDefault: [],
@@ -156,7 +156,7 @@ export default {
         err => {
           this.$q.notify({
             message: err.response.data.detail,
-            icon: 'warning_ember'
+            icon: 'warning_amber'
           })
         }
       )
