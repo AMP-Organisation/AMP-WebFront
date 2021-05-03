@@ -196,7 +196,7 @@ export default {
         },
         {
           icon: 'label',
-          text: 'Promos',
+          text: 'Notifications',
           color: 'text-indigo-8',
           link: 'notifications_page'
         },
