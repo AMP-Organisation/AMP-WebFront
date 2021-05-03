@@ -34,7 +34,7 @@ export default {
       type: Object,
       default: undefined
     },
-    id: {
+    idMed: {
       type: Number,
       default: undefined
     }
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     loadTheMedicine () {
-      axiosInstance.get(`medicines/${this.id}`).then(elem => {
+      axiosInstance.get(`medicines/${this.idMed}`).then(elem => {
         this.medicineLoaded = elem.data
       }).catch(error => {
         console.log('ERROR: une erreur est survenue')
@@ -60,7 +60,7 @@ export default {
     }
   },
   created () {
-    if (this.medicine === undefined && this.id) {
+    if (this.medicine === undefined && this.idMed) {
       this.loadTheMedicine()
     }
   }

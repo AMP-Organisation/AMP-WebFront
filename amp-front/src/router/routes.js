@@ -23,6 +23,12 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: '/followup',
+        name: 'followup_page',
+        component: () => import('pages/FollowUp.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
         path: '/medicine',
         name: 'medicine_page',
         component: () => import('pages/MedicinePage.vue'),
@@ -33,7 +39,7 @@ const routes = [
         name: 'medicine_details',
         component: () => import('pages/MedicinePageDetails.vue'),
         meta: { requiresAuth: true },
-        props: r => ({ id: r.params.id })
+        props: r => ({ idMed: r.params.id })
       },
       {
         path: '/settings',

@@ -182,6 +182,13 @@
                   {{ this.information_user.disease }}
                 </q-item-section>
               </q-item>
+              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item-section>
+                  Votre poids :
+                  <br>
+                   {{ this.information_user.weight }}
+                </q-item-section>
+              </q-item>
             </q-list>
           </q-card-section>
           <q-card-actions align="right">

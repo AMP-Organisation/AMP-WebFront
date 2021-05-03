@@ -64,6 +64,18 @@
         />
       </q-card-actions>
     </q-card>
+    <q-card class="q-ml-md q-mr-md q-mt-sm">
+      <q-card-section class="bg-teal-3">
+        <p class="text-h6" >suivi</p>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <p>toto</p>
+        <div>
+          <q-btn color="teal" icon="local_hospital" icon-right="send" label="Suivi IMC" v-on:click="goToFollowUpPage()"/>
+        </div>
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
@@ -109,6 +121,10 @@ export default {
     },
     resetData () {
       this.getUserData()
+    },
+    goToFollowUpPage () {
+      console.log('dans le go to follow up page')
+      this.$router.push({ path: '/followup', params: { id: this.user.id } })
     },
     updateUser () {
       axiosInstance({

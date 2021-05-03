@@ -217,7 +217,7 @@ export default {
       }
     },
     getTypeList () {
-      axiosInstance.get(`medicines/type/${this.med.idMed}`).then(elem => {
+      axiosInstance.get(`medicines/type/${this.med.id}`).then(elem => {
         this.typeList = elem.data
       }).catch(function (error) {
         console.log(error)
