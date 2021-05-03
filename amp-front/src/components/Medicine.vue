@@ -52,7 +52,7 @@
       <q-separator />
       <q-card-actions class="justify-end" >
         <q-btn v-if="this.fullCard == true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
+        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.idMed)} }" />
       </q-card-actions>
     </q-card>
     </div>
@@ -67,7 +67,7 @@ export default {
       type: Object,
       default: undefined
     },
-    id: {
+    idMed: {
       type: Number
     },
     name: {
@@ -123,7 +123,7 @@ export default {
       }
     },
     getMedicineFullInfo () {
-      axiosInstance.get(`medicines/${this.id}`).then(elem => {
+      axiosInstance.get(`medicines/${this.idMed}`).then(elem => {
         this.medicine = elem.data
       }).catch(function (error) {
         console.log(error)
