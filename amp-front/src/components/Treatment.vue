@@ -14,8 +14,10 @@
         v-for="med in medicineLst"
         v-bind:key="med.id"
         :med="med"
+        :delete-from-pillbox="deleteFromPillbox"
         :name="med.name"
         :id="med.id"
+        :treatment_id="id"
         :description="med.description">
         </Medicine>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -58,6 +60,10 @@ export default {
     dateEnd: {
       type: Date,
       default: null
+    },
+    deleteFromPillbox: {
+      type: Boolean,
+      default: false
     }
   },
   filters: {

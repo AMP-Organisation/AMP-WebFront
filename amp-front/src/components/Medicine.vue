@@ -68,6 +68,31 @@
               Assigné a un traitement
           </q-tooltip>
         </q-btn>
+
+        <q-btn
+          v-if="this.deleteFromPillbox !== false"
+          color="red-9"
+          icon="clear"
+          v-on:click="deleteMedicamentDialog = true">
+
+          <q-dialog v-model="deleteMedicamentDialog">
+            <q-card class="dbg-teal text-black" style="width: 300px">
+              <q-card-section>
+                <div class="text-h6">Demande de validation</div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none">
+                Supprimer ce médicament ?
+              </q-card-section>
+
+              <q-card-actions align="center" class="bg-white text-teal">
+                <q-btn flat label="Non" v-close-popup />
+                <q-btn flat label="Oui" v-close-popup @click="deleteMedicine" />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+
+        </q-btn>
         <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
@@ -103,6 +128,13 @@ export default {
     addToPillbox: {
       type: Boolean,
       default: false
+    },
+    deleteFromPillbox: {
+      type: Boolean,
+      default: false
+    },
+    treatment_id: {
+      type: Number
     }
   },
   components: {
@@ -134,7 +166,8 @@ export default {
       intro: 'bienvenu dans le composant medicament',
       thumbnail: undefined,
       medicine: undefined,
-      addNewTreatmentDialog: false
+      addNewTreatmentDialog: false,
+      deleteMedicamentDialog: false
     }
   },
   methods: {
@@ -159,6 +192,28 @@ export default {
     enterEdit () {
       console.log('enter in edit mode')
       // TODO : edition mode for an existing medicine
+    },
+    deleteMedicine () {
+      axiosInstance.post('treatment/deleteMedicine',
+        {
+          id: this.treatment_id,
+          medicine_id: this.id
+        }).then(
+        response => {
+          this.$q.notify({
+            message: response.data.message,
+            icon: 'check'
+          })
+          this.$router.go(0)
+        }
+      ).catch(
+        err => {
+          this.$q.notify({
+            message: err.response.data.detail,
+            icon: 'warning_amber'
+          })
+        }
+      )
     }
   },
   created () {
