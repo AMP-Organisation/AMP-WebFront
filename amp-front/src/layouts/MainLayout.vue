@@ -39,6 +39,9 @@
                   <q-item :to="{name: 'notifications_page'}" clickable v-close-popup>
                     <q-item-section>Notifications</q-item-section>
                   </q-item>
+                  <q-item :to="{name: 'HealthCard'}" clickable v-close-popup>
+                    <q-item-section>Health Card</q-item-section>
+                  </q-item>
                   <q-item :to="{name: 'option_two'}" clickable v-close-popup>
                     <q-item-section>Menu 2</q-item-section>
                   </q-item>
@@ -195,7 +198,7 @@ export default {
           icon: 'label',
           text: 'Promos',
           color: 'text-indigo-8',
-          link: 'option_one'
+          link: 'notifications_page'
         },
         {
           icon: 'forum',

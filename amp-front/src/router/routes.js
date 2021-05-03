@@ -54,9 +54,9 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: '/notifications',
-        name: 'option_one',
-        component: () => import('pages/OptionOne.vue'),
+        path: '/healthCard',
+        name: 'HealthCard',
+        component: () => import('pages/HealthCard.vue'),
         meta: { requiresAuth: true }
       },
       {
