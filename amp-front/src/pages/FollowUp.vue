@@ -1,24 +1,43 @@
 <template>
   <div>
-    <IconAndTitle :title="intro" :color="'teal-4'"/>
+    <IconAndTitle :title="intro" :color="'teal-4'" />
     <div>
       <q-card class="q-ml-md q-mr-md ">
         <q-card-section>
           <p>toto</p>
         </q-card-section>
-        <q-separator/>
+        <q-separator />
         <q-card-section>
-          <q-list bordered separator  v-for="wdata in weekData" v-bind:key="wdata.date">
+          <q-list
+            bordered
+            separator
+            v-for="wdata in weekData"
+            v-bind:key="wdata.date"
+          >
             <q-item clickable v-ripple>
               <q-item-section>
-                <q-item-label>{{wdata.date}}</q-item-label>
+                <q-item-label
+                  >Le : {{ wdata.date | formatTheDate }}</q-item-label
+                >
               </q-item-section>
-              <q-item-section>le : {{ wdata.date }} weight {{ wdata.weight}} </q-item-section>
+              <q-item-section>Poids de : {{ wdata.weight }} </q-item-section>
             </q-item>
           </q-list>
         </q-card-section>
         <q-card-section>
-          <LineChart v-if="datatab" :chartData="dataChart" :options="dataOption" :which="true" :duration="'week'" :dataToCompute="dataTabdeci"/>
+          <LineChart
+            v-if="datatab"
+            :chartData="dataChart"
+            :options="dataOption"
+            :which="true"
+            :duration="'week'"
+            :dataToCompute="dataTabdeci"
+          />
+        </q-card-section>
+        <q-card-section>
+          <div>
+            <p>toto</p>
+          </div>
         </q-card-section>
       </q-card>
     </div>
@@ -28,6 +47,7 @@
 // import { axiosInstance } from 'boot/axios'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 import LineChart from 'components/LineChart.vue'
+import { date } from 'quasar'
 
 export default {
   name: 'followup_page',
@@ -37,35 +57,36 @@ export default {
       test: {
         toto: 'titi'
       },
+      charttest: undefined,
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       weekData: [
         {
           date: '2021-04-030T15:01:09.538Z',
-          weight: 75
+          weight: 75.1
         },
         {
           date: '2021-04-029T15:01:09.538Z',
-          weight: 74
+          weight: 75.2
         },
         {
           date: '2021-04-028T15:01:09.538Z',
-          weight: 74
+          weight: 75.1
         },
         {
           date: '2021-04-027T15:01:09.538Z',
-          weight: 74
+          weight: 74.3
         },
         {
           date: '2021-04-026T15:01:09.538Z',
-          weight: 74
+          weight: 74.8
         },
         {
           date: '2021-04-025T15:01:09.538Z',
-          weight: 74
+          weight: 75.1
         },
         {
           date: '2021-04-024T15:01:09.538Z',
-          weight: 74
+          weight: 75.4
         }
       ],
       monthData: [
@@ -133,6 +154,16 @@ export default {
     IconAndTitle,
     LineChart
   },
+  filters: {
+    formatTheDate: function (dt) {
+      dt = dt.replace('T', ' ')
+      dt = dt.replace('Z', ' ')
+      const finalDate = new Date(Date.parse(dt))
+      const formatedDate = date.formatDate(finalDate, 'DD MMMM YYYY')
+      console.log(`le jour : ${date.formatDate(finalDate, 'dddd')}`)
+      return formatedDate
+    }
+  },
   created () {
     console.log('dans la page follow up')
     console.log(this.test)
@@ -146,4 +177,5 @@ export default {
     console.log(this.dataChart)
   }
 }
+
 </script>

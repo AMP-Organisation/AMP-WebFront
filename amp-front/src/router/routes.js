@@ -66,6 +66,12 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: '/optionone',
+        name: 'option_one',
+        component: () => import('pages/OptionOne.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
         path: '/optiontwo',
         name: 'option_two',
         component: () => import('pages/OptionTwo.vue'),
