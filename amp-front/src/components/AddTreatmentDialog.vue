@@ -137,7 +137,7 @@ export default {
     addToTreatment () {
       this.select_model.medicine_id.push(this.current_med.id)
 
-      axiosInstance.post('treatment/updateTreatment',
+      axiosInstance.put('treatment/updateTreatment',
         {
           id: this.select_model.id,
           name: this.select_model.name,
