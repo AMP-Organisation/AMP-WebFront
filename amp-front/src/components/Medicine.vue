@@ -277,7 +277,7 @@ export default {
       }
     },
     getTypeList () {
-      axiosInstance.get(`medicines/type/${this.med.idMed}`).then(elem => {
+      axiosInstance.get(`medicines/type/${this.id_medicine}`).then(elem => {
         this.typeList = elem.data
       }).catch(function (error) {
         console.log(error)
@@ -344,11 +344,14 @@ export default {
       this.patchMedicine()
     },
     deleteMedicine () {
-      axiosInstance.post('treatment/deleteMedicine',
-        {
+      axiosInstance({
+        method: 'delete',
+        url: 'treatment/deleteMedicine',
+        data: {
           id: this.treatment_id,
-          medicine_id: this.id
-        }).then(
+          medicine_id: this.id_medicine
+        }
+      }).then(
         response => {
           this.$q.notify({
             message: response.data.message,
@@ -367,6 +370,7 @@ export default {
     }
   },
   created () {
+    console.log(this.med)
     this.getPicture()
     if (this.med === undefined) {
       this.getMedicineFullInfo()

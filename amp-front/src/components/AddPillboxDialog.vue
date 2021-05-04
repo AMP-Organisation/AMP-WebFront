@@ -197,9 +197,7 @@ export default {
     addToPillbox () {
       const idPillbox = this.selectModelPillbox.id
       const listTreatment = this.selectModeltreatment.id
-      console.log(idPillbox)
-      console.log(listTreatment)
-      axiosInstance.post('pillbox/updatePillbox',
+      axiosInstance.put('pillbox/updatePillbox',
         {
           id: idPillbox,
           name: this.selectModelPillbox.name,
