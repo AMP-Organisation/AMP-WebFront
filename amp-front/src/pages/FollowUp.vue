@@ -163,6 +163,12 @@
             </div>
             <!-- la liste -->
             <div class="col-6">
+              <q-btn
+                color="positive"
+                icon="add"
+                v-on:click="addNewData = !addNewData"
+                v-if="!addNewData"
+              />
               <q-list
                 bordered
                 separator
@@ -185,6 +191,32 @@
                   </q-item-section>
                 </q-item>
               </q-list>
+              <q-card class="q-mt-md" v-if="addNewData">
+                <q-card-section>
+                  <div class="text-h5">add new data</div>
+                </q-card-section>
+                <q-separator/>
+                <q-card-section>
+                  <q-form
+                    @submit="onSubmit"
+                    @reset="onReset"
+                    class="q-gutter-md"
+                  >
+                  <q-input
+                    filled
+                    v-model="currentWeight"
+                    label="Your current weight"
+                    hint="in kg"
+                  />
+                  <q-input
+                    filled
+                    v-model="currentWeight"
+                    label="Your current weight"
+                    hint="in kg"
+                  />
+                  </q-form>
+                </q-card-section>
+              </q-card>
             </div>
           </div>
         </q-card-section>
@@ -233,6 +265,7 @@ export default {
       // loseWeight est un booleen qui désigne le fait de vouloir perdre du poid, ou d'en gagner
       loseWeight: true,
       panel: 'month',
+      addNewData: false,
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       lastData: [
         {
