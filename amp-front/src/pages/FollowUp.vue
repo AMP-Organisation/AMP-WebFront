@@ -38,7 +38,7 @@
             <q-tab-panel name="week">
               <LineChart
                 v-if="datatab"
-                :chartData="dataChart"
+                :chartData="dataChartWeek"
                 :options="dataOption"
                 :which="true"
                 :duration="'week'"
@@ -48,10 +48,10 @@
             <q-tab-panel name="month">
               <LineChart
                 v-if="datatab"
-                :chartData="dataChart"
+                :chartData="dataChartMonth"
                 :options="dataOption"
                 :which="true"
-                :duration="'week'"
+                :duration="'month'"
                 :dataToCompute="dataTabdeci"
               />
             </q-tab-panel>
@@ -150,9 +150,30 @@
                       </q-tab-panel>
                       <!-- par semestre (enfin je ne sais pas si on le gardera celui ci) -->
                       <q-tab-panel name="semester">
-                        <div class="text-h6">Movies</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      </q-tab-panel>
+                        <div class="text-h6">Month</div>
+                        <q-list
+                            bordered
+                            separator
+                            v-for="elemData in gotData"
+                            v-bind:key="elemData.date">
+                            <q-item clickable v-ripple>
+                              <q-item-section class="col-1">
+                                <div v-if="loseWeight">
+                                  <q-icon v-if="progression(elemData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>You lost some weight</q-tooltip>
+                                  </q-icon>
+                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
+                                    <q-tooltip>You gain some weight</q-tooltip>
+                                  </q-icon>
+                                </div>
+                              </q-item-section>
+                              <q-item-section class="col">
+                                <q-item-label>Le : {{ elemData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ elemData.weight }} </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-tab-panel>
                       <q-tab-panel name="year">
                         <div class="text-h6">Movies</div>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -169,7 +190,13 @@
                 v-on:click="addNewData = !addNewData"
                 v-if="!addNewData"
               />
-              <q-list
+              <q-btn
+                color="amber-8"
+                icon="cancel"
+                v-on:click="addNewData = !addNewData"
+                v-if="addNewData"
+              />
+              <!-- <q-list
                 bordered
                 separator
                 v-for="wdata in weekData"
@@ -190,7 +217,7 @@
                     <q-item-label>Poids de : {{ wdata.weight }} </q-item-label>
                   </q-item-section>
                 </q-item>
-              </q-list>
+              </q-list> -->
               <q-card class="q-mt-md" v-if="addNewData">
                 <q-card-section>
                   <div class="text-h5">add new data</div>
@@ -202,18 +229,36 @@
                     @reset="onReset"
                     class="q-gutter-md"
                   >
-                  <q-input
-                    filled
-                    v-model="currentWeight"
-                    label="Your current weight"
-                    hint="in kg"
-                  />
-                  <q-input
-                    filled
-                    v-model="currentWeight"
-                    label="Your current weight"
-                    hint="in kg"
-                  />
+                    <q-input filled v-model="new_weight" label="Your current weight" hint="in kg" />
+                    <q-input filled v-model="imcComputation" label="Your IMC" hint="" readonly />
+                    <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" v-on:click="validatefollowUpIMC" />
+                    <q-input filled v-model="size" label="Your size in m" hint="" readonly />
+                    <q-input filled v-model="watched" label="test watch" hint="" readonly />
+                    <q-input filled v-model="formDate">
+                      <template v-slot:prepend>
+                        <q-icon name="event" class="cursor-pointer">
+                          <q-popup-proxy transition-show="scale" transition-hide="scale">
+                            <q-date v-model="formDate" mask="YYYY-MM-DD HH:mm">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                              </div>
+                            </q-date>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy transition-show="scale" transition-hide="scale">
+                            <q-time v-model="formDate" mask="YYYY-MM-DD HH:mm" format24h>
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                    <q-btn color="green-13 " icon="check" v-on:click="validatefollowUpIMC" :disable="this.new_weight === ''"/>
                   </q-form>
                 </q-card-section>
               </q-card>
@@ -248,6 +293,7 @@
 // import { axiosInstance } from 'boot/axios'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 import LineChart from 'components/LineChart.vue'
+import { axiosInstance } from 'boot/axios'
 import { date } from 'quasar'
 
 export default {
@@ -255,17 +301,27 @@ export default {
   data () {
     return {
       intro: 'Follow Up Page',
+      // données à charger differement
+      id_user: 12,
       expanded_imc: true,
-      test: {
-        toto: 'titi'
-      },
       charttest: undefined,
+      // la taille sera à récupérer depuis la fiche de santé
       size: 1.80,
       objective: 70,
       // loseWeight est un booleen qui désigne le fait de vouloir perdre du poid, ou d'en gagner
       loseWeight: true,
       panel: 'month',
       addNewData: false,
+      // il faudrait l'initialiser a la derniere valeur
+      new_weight: '',
+      watched: 0,
+      formDate: '2019-02-01 12:44',
+      newIMC: 0,
+      infoIMC: {
+        state: 'Normale',
+        color: 'positive',
+        icon: 'check'
+      },
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       lastData: [
         {
@@ -373,6 +429,7 @@ export default {
           imc: 0
         }
       ],
+      gotData: [],
       dataOption: {
         responsive: true,
         maintainAspectRatio: false,
@@ -382,7 +439,7 @@ export default {
         }
       },
       datatab: [],
-      dataChart: {
+      dataChartWeek: {
         labels: [
           'Lundi',
           'Mardi',
@@ -401,12 +458,58 @@ export default {
             pointBackgroundColor: 'rgba(171, 71, 188, 1)'
           }
         ]
+      },
+      dataChartMonth: {
+        labels: [
+          'Janvier',
+          'Février',
+          'Mars',
+          'Avril',
+          'Mai',
+          'Juin',
+          'Juillet',
+          'Aout',
+          'Septembre',
+          'Octobre',
+          'Novembre',
+          'Décembre'
+        ],
+        datasets: [
+          {
+            label: 'Data 1',
+            data: [42, 36, 76, 42, 36, 76, 42, 36, 76, 42, 36, 76],
+            backgroundColor: 'transparent',
+            borderColor: 'rgba(1, 116, 188, 0.50)',
+            pointBackgroundColor: 'rgba(171, 71, 188, 1)'
+          }
+        ]
       }
     }
   },
   components: {
     IconAndTitle,
     LineChart
+  },
+  watch: {
+    new_weight: function () {
+      console.log('mise a jour du poids')
+      console.log(this.newIMC)
+      this.watched = this.newIMC + 1
+    }
+  },
+  computed: {
+    imcComputation () {
+      this.triggerIMC()
+      let imcComputed = 0
+      if (this.new_weight === '') {
+        this.triggerIMC(imcComputed)
+        return imcComputed
+      } else {
+        imcComputed = parseInt(this.new_weight) / (this.size * this.size)
+      }
+      this.triggerIMC(imcComputed)
+      return imcComputed
+    }
   },
   filters: {
     formatTheDate: function (dt) {
@@ -419,6 +522,34 @@ export default {
     }
   },
   methods: {
+    triggerIMC (imc) {
+      console.log('triggered !!')
+      this.newIMC = imc
+      if (imc === 0) {
+        return null
+      }
+      if (imc >= 25 && imc < 30) {
+        this.infoIMC.state = 'Surpoids'
+        this.infoIMC.color = 'warning'
+        this.infoIMC.icon = 'warning'
+      } else if (imc < 18.5 && imc >= 16.5) {
+        this.infoIMC.state = 'Maigreur'
+        this.infoIMC.color = 'warning'
+        this.infoIMC.icon = 'warning'
+      } else if (imc < 16.5) {
+        this.infoIMC.state = 'Famine'
+        this.infoIMC.color = 'red-9'
+        this.infoIMC.icon = 'warning'
+      } else if (imc >= 30) {
+        this.infoIMC.state = 'Obésité'
+        this.infoIMC.color = 'red-9'
+        this.infoIMC.icon = 'warning'
+      } else {
+        this.infoIMC.state = 'Normale'
+        this.infoIMC.color = 'positive'
+        this.infoIMC.icon = 'check'
+      }
+    },
     hasReachedObjective () {
       if (this.lastData.weight <= this.objective) {
         return true
@@ -426,12 +557,45 @@ export default {
         return false
       }
     },
+    sendNewFollowUpData (data) {
+      // ici on post les nouvelles données
+      axiosInstance.post('/followup/imc/', data)
+        .then(elem => {
+          this.$router.go()
+        })
+        .catch(function (error) {
+          console.log(error)
+          console.log('ERRRR:: ', error.response.data)
+        })
+    },
+    getFollowUpData () {
+      axiosInstance.get(`/followup/imc/${this.id_user}`).then(elem => {
+        console.log('les données reçu ')
+        console.log(elem.data)
+        this.gotData = elem.data
+      })
+    },
+    validatefollowUpIMC () {
+      console.log('we are going to validate new data')
+      console.log(this.newIMC)
+      console.log(this.new_weight)
+      console.log(this.formDate)
+      const data = {
+        id_user: this.id_user,
+        imc: this.newIMC,
+        weight: this.new_weight,
+        date: new Date(this.formDate)
+      }
+      this.sendNewFollowUpData(data)
+    },
     progression () {
       return true
     }
   },
   created () {
     console.log('dans la page follow up')
+    this.getFollowUpData()
+    this.formDate = new Date()
     console.log(this.dataChart)
     this.weekData.filter(elem => {
       this.datatab.push(elem.weight)
