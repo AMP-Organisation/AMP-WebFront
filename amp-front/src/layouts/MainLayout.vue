@@ -134,7 +134,7 @@
       </q-scroll-area>
     </q-drawer>
     <q-page-container>
-      <router-view />
+      <router-view v-on:activateNotification="getValueNotification"/>
     </q-page-container>
   </q-layout>
 </template>
@@ -143,6 +143,8 @@
 import Vue from 'vue'
 
 import store from 'src/store/store'
+import schedule from 'node-schedule'
+import { axiosInstance } from 'boot/axios'
 
 export default {
   name: 'MainLayout',
@@ -225,6 +227,31 @@ export default {
         .then(() => {
           this.$router.push('/login')
         })
+    },
+    getValueNotification (value) {
+      if (value) {
+        let result = []
+        axiosInstance.post('/pillbox/', {
+          id: this.currentUser.id
+        }).then(
+          resp => {
+            result = resp.data
+            result.forEach(pillbox => {
+              if (pillbox.ending_date === null) {
+                schedule.scheduleJob('0 12 * * *', () => {
+                  this.$notification.show('Rappel pillulier', {
+                    body: 'Avez-vous bien pensé à prendres le pillulier : ' + pillbox.name
+                  }, {})
+                })
+              }
+            })
+          }
+        ).catch(
+          err => {
+            console.log(err)
+          }
+        )
+      }
     }
   },
   computed: {

@@ -3,8 +3,12 @@ import VueRouter from 'vue-router'
 
 import routes from './routes'
 import store from 'src/store/store'
+import VueNativeNotification from 'vue-native-notification'
 
 Vue.use(VueRouter)
+Vue.use(VueNativeNotification, {
+  requestOnNotify: true
+})
 /**
  * global string and variable
  */
