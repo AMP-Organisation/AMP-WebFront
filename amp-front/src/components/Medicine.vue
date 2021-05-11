@@ -370,7 +370,6 @@ export default {
     }
   },
   created () {
-    console.log(this.med)
     this.getPicture()
     if (this.med === undefined) {
       this.getMedicineFullInfo()
