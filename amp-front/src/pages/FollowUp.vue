@@ -55,6 +55,9 @@
                 :dataToCompute="dataTabdeci"
               />
             </q-tab-panel>
+            <q-tab-panel name="year">
+              <FacadeLineChartComponent :duration="7" ></FacadeLineChartComponent>
+            </q-tab-panel>
           </q-tab-panels>
         </q-card-section>
         <q-card-section >
@@ -293,7 +296,10 @@
 // import { axiosInstance } from 'boot/axios'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 import LineChart from 'components/LineChart.vue'
+import FacadeLineChartComponent from 'components/FacadeLineChartComponent.vue'
+
 import { axiosInstance } from 'boot/axios'
+import { month, week } from 'boot/env_str'
 import { date } from 'quasar'
 
 export default {
@@ -317,11 +323,16 @@ export default {
       watched: 0,
       formDate: '2019-02-01 12:44',
       newIMC: 0,
+      // pour afficher des détails sur la valeur de l'imc avec des options d'UI
       infoIMC: {
         state: 'Normale',
         color: 'positive',
         icon: 'check'
       },
+      // ces 3 variables, pour stocker les données provenant de l'api
+      lastWeekData: [],
+      lastMonthData: [],
+      lastYearData: [],
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       lastData: [
         {
@@ -488,6 +499,7 @@ export default {
   },
   components: {
     IconAndTitle,
+    FacadeLineChartComponent,
     LineChart
   },
   watch: {
@@ -575,6 +587,34 @@ export default {
         this.gotData = elem.data
       })
     },
+    // si j'utilise un async await, ce sera pour afficher une barre de chargement
+    async getLastWeekData () {
+      const ret = await axiosInstance.get(`/followup/imc/lastweek/${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      console.log('les données reçu pour le last week')
+      console.log(ret.data)
+      this.lastWeekData = ret.data
+    },
+    async getLastMonthData () {
+      const ret = await axiosInstance.get(`/followup/imc/lastmonth/${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      console.log('les données reçu pour le last week')
+      console.log(ret.data)
+      this.lastWeekData = ret.data
+    },
+    async getLastYearData () {
+      const ret = await axiosInstance.get(`/followup/imc/lastyear${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      console.log('les données reçu pour le last week')
+      console.log(ret.data)
+      this.lastWeekData = ret.data
+    },
     validatefollowUpIMC () {
       console.log('we are going to validate new data')
       console.log(this.newIMC)
@@ -604,6 +644,10 @@ export default {
     // this.dataChart.datasets[0].label = 'Toto'
     // this.dataChart.datasets[0].data = this.datatab
     console.log(this.dataChart)
+    console.log(month)
+    console.log(week)
+    this.getLastWeekData()
+    console.log('**FIN du created**')
   }
 }
 

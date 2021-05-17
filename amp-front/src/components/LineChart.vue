@@ -4,9 +4,11 @@ import { Line } from 'vue-chartjs'
 export default {
   extends: Line,
   props: {
+    // le chartData nécessaire pour le line chart
     chartData: {
       type: Object
     },
+    // le chartOption nécessaire pour le line chart
     options: {
       type: Object
     },
@@ -18,6 +20,7 @@ export default {
       type: String,
       default: 'week'
     },
+    // insere les données dans le chart dataset
     dataToCompute: {
       type: Array
     }
@@ -80,26 +83,26 @@ export default {
     }
   },
   mounted () {
-    console.log('le mounted du line chart ')
-    console.log(this.chartData)
-    console.log(this.dataChartRaw)
-    console.log(this.options)
-    console.log(this.optionRaw)
+    // console.log('le mounted du line chart ')
+    // console.log(this.chartData)
+    // console.log(this.dataChartRaw)
+    // console.log(this.options)
+    // console.log(this.optionRaw)
     this.datachrt = this.chartData
     this.opt = this.options
-    console.log(this.datachrt)
+    // console.log(this.datachrt)
     if (this.which && this.duration === 'week') {
-      console.log('option 1')
+      // console.log('option 1')
       this.dataChartRaw.labels = this.labelWeek
       this.dataChartRaw.datasets[0].data = this.dataToCompute
       // this.dataChartRaw.labels = 'custom char line'
-      console.log(this.dataChartRaw)
+      // console.log(this.dataChartRaw)
       this.renderChart(this.dataChartRaw, this.optionRaw)
     } else if (this.which) {
-      console.log('option 2')
+      // console.log('option 2')
       this.renderChart(this.datachrt, this.opt)
     } else {
-      console.log('option 3')
+      // console.log('option 3')
       this.renderChart(this.dataChartRaw, this.optionRaw)
     }
   }
