@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-page class="q-pb-xl">
-      <IconAndTitle :title="intro" :icon="'medication'" :color="'cyan-8'"/>
+      <IconAndTitle :title="this.$t('medicine')" :icon="'medication'" :color="'cyan-8'"/>
       <div class="q-pa-md">
         <q-table
           class="my-sticky-column-table"
@@ -14,7 +14,7 @@
             <q-tr :props="props">
               <q-th auto-width />
               <q-th v-for="col in props.cols" :key="col.name" :props="props">
-                {{ col.label | toUpCase }}
+                {{ $t('medicine' + col.label) | toUpCase }}
               </q-th>
             </q-tr>
           </template>
@@ -154,7 +154,6 @@ export default {
   name: 'medicine_page',
   data () {
     return {
-      intro: 'la page de medicament',
       addNewMed: false,
       addNewMedDialog: false,
       medicine: [],
@@ -171,7 +170,7 @@ export default {
       active_principle: null,
       columnsTab: [
         {
-          label: 'Name',
+          label: '0',
           name: 'name',
           required: true,
           align: 'left',
@@ -180,19 +179,19 @@ export default {
           sortable: true
         },
         {
-          label: 'Dose',
+          label: '1',
           name: 'Dose',
           required: true,
           field: 'dose'
         },
         {
-          label: 'Dose Maximal',
+          label: '2',
           name: 'Dose Maximal',
           required: true,
           field: 'dose_max'
         },
         {
-          label: 'Delay',
+          label: '3',
           name: 'Delay',
           required: true,
           field: 'delay'

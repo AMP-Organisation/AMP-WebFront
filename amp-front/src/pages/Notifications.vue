@@ -1,6 +1,6 @@
 <template>
   <div>
-    <IconAndTitle :title="intro" :icon="'notifications'"/>
+    <IconAndTitle :title="this.$t('notification_title')" :icon="'notifications'"/>
     <q-toggle
       :label="`Activer les notifications windows de suivi`"
       v-model="activateNotification"
