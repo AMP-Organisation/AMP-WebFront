@@ -36,22 +36,57 @@
             </q-tr>
             <q-tr v-show="props.expand" :props="props">
               <q-td colspan="100%">
-                <q-card class="my-card">
+                  <q-card>
+                    <q-card-section>
+                    <div class="row justify-between">
+                    <div class="col q-ml-md q-mt-md">
+                      <p class="text-h4">{{props.row.name | toUpCase }}</p>
+                      <p class="text-body1">{{props.row.description | crop }}</p>
+                    </div>
+                    <div class="col-auto q-ml-md q-mt-md">
+                      <q-list bordered separator class="q-mr-sm">
+                        <q-item>
+                          <q-item-section >Dose : {{ props.row.dose }} mg</q-item-section>
+                        </q-item>
+                        <q-item>
+                          <q-item-section>
+                            <q-item-label >Dose Maximum : {{ props.row.dose_max }} mg</q-item-label>
+                          </q-item-section>
+                        </q-item>
+
+                        <q-item>
+                          <q-item-section>
+                            <q-item-label >Temps entre deux dose : {{ props.row.delay }} h</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </div>
+                    </div>
+                    </q-card-section>
+                  <q-separator/>
+                  <q-card-actions class="justify-end" >
+                    <q-btn color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(props.row.id)} }">
+                      <q-tooltip content-class="bg-secondary">More details</q-tooltip>
+                    </q-btn>
+                  </q-card-actions>
+                </q-card>
+                  <!-- <div class="row">
                   <Medicine
                     :med="props.row"
                     :idMed="parseInt(props.row.id)"
                     :name="props.row.name"
                     :add-to-pillbox="true"
                     :active_principle="active_principle"
-                    :description="props.row.description">
+                    :description="props.row.description"
+                    >
                   </Medicine>
-                </q-card>
+                  </div> -->
               </q-td>
             </q-tr>
           </template>
         </q-table>
       </div>
-      <!-- carte pour ajouter un medicament -->
+      <!-- bouton pour ajouter un medicament -->
       <q-card class="my-card q-mt-sm q-mr-md q-ml-md" v-show="addNewMed">
         <q-card-section>
           <div class="row">
@@ -89,7 +124,7 @@
             </q-btn>
         </div>
       </div>
-      <!-- q-dialog pour ajouter une maladie, une deuxieme methode -->
+      <!-- q-dialog pour ajouter une medicament -->
       <q-dialog v-model="addNewMedDialog"  >
         <q-card >
           <q-card-section class="justify-between">
@@ -147,7 +182,7 @@
 </template>
 <script>
 import { axiosInstance } from 'boot/axios'
-import Medicine from 'components/Medicine.vue'
+// import Medicine from 'components/Medicine.vue'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
@@ -169,6 +204,7 @@ export default {
       bolleanToTest: true,
       current_user: JSON.parse(localStorage.getItem('user')),
       active_principle: null,
+      addNewTreatmentDialog: false,
       columnsTab: [
         {
           label: 'Name',
@@ -201,16 +237,19 @@ export default {
     }
   },
   components: {
-    Medicine,
+    // Medicine,
     IconAndTitle
   },
   filters: {
     toUpCase (str) {
       return str.toUpperCase()
+    },
+    crop (str) {
+      return str.slice(0, 50) + '...'
     }
   },
   methods: {
-    loadDiseases () {
+    loadMedicine () {
       // may be improve :I dont know if it is better to get all or not
       // but the tab is done to print all
       axiosInstance.get('medicines').then(elem => {
@@ -224,7 +263,7 @@ export default {
       this.newMedDoseMax = 0
       this.newMedDelay = 0
       this.addNewMedDialog = false
-      this.loadDiseases()
+      this.loadMedicine()
     },
     async postNewMedicine (newMed) {
       await axiosInstance.post('medicines', newMed)
@@ -250,7 +289,7 @@ export default {
     }
   },
   created () {
-    this.loadDiseases()
+    this.loadMedicine()
     axiosInstance.post('/health_card/', {
       user_id: this.current_user.id
     }).then(
