@@ -3,7 +3,7 @@
     <q-page-container class="container-fluid">
       <div class="row">
         <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
-               placeholder="Traitement migraine...">
+               v-bind:label="this.$t('pillbox_search')">
         <template v-slot:prepend>
           <q-icon v-if="search === ''" name="search"/>
           <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>

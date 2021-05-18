@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ message }}
+    {{ $t('messageAccueil') }}
     <div class="q-pa-md">
       <q-carousel
         v-model="slide"
@@ -43,7 +43,7 @@
         <q-carousel-slide name="style" class="column no-wrap flex-center">
           <q-icon name="style" size="56px" />
           <div class="q-mt-md text-center">
-            {{ introduction }}
+            {{ $t('welcomeMsg') }}
           </div>
         </q-carousel-slide>
         <q-carousel-slide name="tv" class="column no-wrap flex-center">
@@ -70,7 +70,7 @@
         </q-carousel-slide>
       </q-carousel>
       <div class="column q-mt-md">
-        <h4 class="text-center">{{ introduction }}</h4>
+        <h4 class="text-center">{{ $t('welcomeMsg') }}</h4>
         <p class="text-body1 text-center">
           {{ message }}
         </p>
@@ -80,12 +80,11 @@
 </template>
 
 <script>
+
 export default {
   name: 'Info',
   data () {
     return {
-      introduction: 'Bienvenu dans l\'Assistant Médical Personel',
-      message: 'Ceci est la page d\'accueil de notre application assistant medical personnel',
       slide: 'style',
       lorem:
         'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque voluptatem totam, architecto cupiditate officia rerum, error dignissimos praesentium libero ab nemo.'

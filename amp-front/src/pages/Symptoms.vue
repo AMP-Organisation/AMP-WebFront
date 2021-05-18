@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
-      <IconAndTitle :title="'Page pour rechercher vos symptomes'" :icon="'coronavirus'" :color="'light-green-14'"/>
+      <IconAndTitle :title="this.$t('symptoms')" :icon="'coronavirus'" :color="'light-green-14'"/>
       <div class="q-ma-sm q-mt-md">
         <div class="row">
           <q-select
@@ -11,7 +11,7 @@
             color="green"
             v-model="select_model"
             use-input
-            label="fièvres, maux de ventres, ..."
+            v-bind:label="this.$t('symptoms_exemple')"
             :options="options"
             option-value="id"
             option-label="name"
