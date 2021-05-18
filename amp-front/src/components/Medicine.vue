@@ -183,7 +183,7 @@
           </q-dialog>
 
         </q-btn>
-        <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
+        <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.idMed)} }" />
       </q-card-actions>
     </q-card>
     </div>
@@ -234,9 +234,11 @@ export default {
   data () {
     return {
       intro: 'bienvenu dans le composant medicament',
+      // l'id principale qu'on init via props si il faut
       id_medicine: undefined,
-      thumbnail: undefined,
+      // l'objet pricipal qui stocke les données
       medicine: undefined,
+      thumbnail: undefined,
       confirmDeletion: false,
       editMode: false,
       // la liste des type de medcimanet : comprimé, gelules, suppositoire, etc...
@@ -325,9 +327,8 @@ export default {
       })
     },
     resetData () {
+      // on recharge la page pour avoir les nouvelles infos
       this.$router.go(0)
-      // this.getMedicineFullInfo()
-      // this.editMode = false
     },
     enterEdit () {
       this.editMode = true
@@ -353,7 +354,6 @@ export default {
       })
     },
     validateUpdate () {
-      console.log('validation de la mide a jour')
       this.patchMedicine()
     },
     deleteMedicine () {
@@ -392,13 +392,16 @@ export default {
         })
       }
     }
-    this.getPicture()
+    // soit on recupere quelques info du composant parent
+    // soit on recupere tout depuis l'api this il n'y a pas de props 'med'
+    // et on recupere tout ca depuis l'id de l'url
     if (this.med === undefined) {
       this.getMedicineFullInfo()
-      this.id_medicine = this.med.id
+      this.id_medicine = this.medicine.id
     } else {
       this.id_medicine = this.idMed
     }
+    this.getPicture()
     this.getTypeList()
   }
 }

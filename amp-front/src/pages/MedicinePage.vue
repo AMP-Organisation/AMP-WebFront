@@ -227,7 +227,6 @@ export default {
       this.loadDiseases()
     },
     async postNewMedicine (newMed) {
-      console.log(newMed)
       await axiosInstance.post('medicines', newMed)
         .catch(function (error) {
           console.log(error)
@@ -251,7 +250,6 @@ export default {
     }
   },
   created () {
-    console.log('medicine page created')
     this.loadDiseases()
     axiosInstance.post('/health_card/', {
       user_id: this.current_user.id
@@ -263,4 +261,3 @@ export default {
   }
 }
 </script>
-<style lang=""></style>
