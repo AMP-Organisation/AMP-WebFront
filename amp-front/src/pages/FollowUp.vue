@@ -56,7 +56,8 @@
               />
             </q-tab-panel>
             <q-tab-panel name="year">
-              <FacadeLineChartComponent :duration="7" ></FacadeLineChartComponent>
+              <FacadeLineChartComponent :duration="7" >
+              </FacadeLineChartComponent>
             </q-tab-panel>
           </q-tab-panels>
         </q-card-section>
@@ -316,7 +317,7 @@ export default {
       objective: 70,
       // loseWeight est un booleen qui désigne le fait de vouloir perdre du poid, ou d'en gagner
       loseWeight: true,
-      panel: 'month',
+      panel: 'year',
       addNewData: false,
       // il faudrait l'initialiser a la derniere valeur
       new_weight: '',
