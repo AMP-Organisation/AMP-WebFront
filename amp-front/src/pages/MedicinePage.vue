@@ -42,6 +42,7 @@
                     :idMed="parseInt(props.row.id)"
                     :name="props.row.name"
                     :add-to-pillbox="true"
+                    :active_principle="active_principle"
                     :description="props.row.description">
                   </Medicine>
                 </q-card>
@@ -166,6 +167,8 @@ export default {
       newMedDelay: 0,
       isComprime: true,
       bolleanToTest: true,
+      current_user: JSON.parse(localStorage.getItem('user')),
+      active_principle: null,
       columnsTab: [
         {
           label: 'Name',
@@ -250,6 +253,13 @@ export default {
   created () {
     console.log('medicine page created')
     this.loadDiseases()
+    axiosInstance.post('/health_card/', {
+      user_id: this.current_user.id
+    }).then(
+      resp => {
+        this.active_principle = resp.data
+      }
+    )
   }
 }
 </script>

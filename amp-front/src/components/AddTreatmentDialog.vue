@@ -1,5 +1,22 @@
 <template>
   <div class="q-pa-md">
+    <div v-if="allergy">
+      <q-dialog v-model="allergy">
+        <q-card class="bg-teal text-white" style="width: 300px">
+          <q-card-section>
+            <div class="text-h6">Avertissement</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Attention, vous voulez ajouter un médicament auquel vous êtes allergique
+          </q-card-section>
+
+          <q-card-actions align="center" class="bg-white text-teal">
+            <q-btn flat label="Ok" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </div>
     <div class="q-gutter-y-md" style="max-width: 600px">
       <q-card>
         <q-tabs
@@ -99,7 +116,7 @@ import moment from 'moment'
 
 export default {
   name: 'AddTreatmentDialog',
-  props: ['current_med'],
+  props: ['current_med', 'allergy'],
   data () {
     return {
       tab: 'existingTreatment',

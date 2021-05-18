@@ -6,7 +6,14 @@
 
           <div class="col">
             <div v-if="!editMode">
-              <div class="text-h4">{{ name_display | nameWithFirstUpper }}</div>
+              <div class="text-h4" v-if="enable_warning">
+
+                {{ name_display | nameWithFirstUpper }}
+                <q-icon name="warning" color="red">
+                  <q-tooltip content-class="bg-red">Ce médicament contient un élément auquel vous êtes allergique</q-tooltip>
+                </q-icon>
+              </div>
+              <div class="text-h4" v-else>{{ name_display | nameWithFirstUpper }}</div>
             </div>
             <div v-else>
               <q-input outlined v-model="medUpName" label="name" stack-label />
@@ -53,19 +60,19 @@
           <div class="col-3">
             <q-list bordered separator class="q-mr-sm">
               <q-item>
-                <q-item-section v-if="!editMode">Dose : {{ this.med.dose }}</q-item-section>
+                <q-item-section v-if="!editMode">Dose : {{ this.med.dose }} mg</q-item-section>
                 <q-item-section v-else><q-input outlined v-model="medUpDose" label="Dose"  dense stack-label/></q-item-section>
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Dose Maximun : {{ this.med.dose_max }}</q-item-label>
+                  <q-item-label v-if="!editMode">Dose Maximum : {{ this.med.dose_max }} mg</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDoseMax" label="Dose Maximal"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
 
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }}</q-item-label>
+                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }} h</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDelay" label="Delay"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
@@ -143,6 +150,7 @@
           <q-dialog v-model="addNewTreatmentDialog">
             <AddTreatmentDialog
             :current_med="med"
+            :allergy="enable_warning"
             >
             </AddTreatmentDialog>
           </q-dialog>
@@ -217,6 +225,10 @@ export default {
     },
     treatment_id: {
       type: Number
+    },
+    active_principle: {
+      type: Object,
+      default: undefined
     }
   },
   data () {
@@ -235,7 +247,8 @@ export default {
       medUpDoseMax: 0,
       medUpDelay: 0,
       addNewTreatmentDialog: false,
-      deleteMedicamentDialog: false
+      deleteMedicamentDialog: false,
+      enable_warning: false
     }
   },
   components: {
@@ -312,7 +325,7 @@ export default {
       })
     },
     resetData () {
-      this.$router.go()
+      this.$router.go(0)
       // this.getMedicineFullInfo()
       // this.editMode = false
     },
@@ -370,6 +383,15 @@ export default {
     }
   },
   created () {
+    if (this.active_principle !== null) {
+      if (this.active_principle.allergy.length > 0) {
+        this.active_principle.allergy.forEach(element => {
+          if (this.med.active_principle.indexOf(element) !== -1) {
+            this.enable_warning = true
+          }
+        })
+      }
+    }
     this.getPicture()
     if (this.med === undefined) {
       this.getMedicineFullInfo()
