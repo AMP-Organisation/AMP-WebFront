@@ -16,8 +16,9 @@
         </div>
       </div>
       <div class="col">
-        <div class="q-mr-md q-ml-md">
-          <Medicine :med="this.medicineLoaded" :idMed="this.medicineLoaded.id" :fullCard="true"></Medicine>
+        <div class="q-mr-md q-ml-md" v-if="this.medicineLoaded !== undefined">
+          <!-- :idMed="parseInt(this.medicineLoaded.id)"  -->
+          <Medicine :med="this.medicineLoaded" :fullCard="true"></Medicine>
         </div>
       </div>
     </div>
@@ -35,7 +36,7 @@ export default {
       default: undefined
     },
     id: {
-      type: Number,
+      type: String,
       default: undefined
     }
   },
