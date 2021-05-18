@@ -1,9 +1,9 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
-      <IconAndTitle :title="'Page pour trouver un lieux'" :icon="'star'" :color="'blue-9'"/>
+      <IconAndTitle :title="this.$t('place')" :icon="'star'" :color="'blue-9'"/>
       <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
-               placeholder="Hôpital de...">
+               v-bind:label="this.$t('places_search')">
         <template v-slot:prepend>
           <q-icon v-if="search === ''" name="search"/>
           <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>
@@ -16,7 +16,7 @@
             class="GNL__select"
             v-model="select_model"
             use-input
-            label="Hôpital, pharmacie, ..."
+            v-bind:label="this.$t('places_type')"
             :options="options"
             option-value="id"
             option-label="type"
