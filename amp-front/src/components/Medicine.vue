@@ -6,7 +6,14 @@
 
           <div class="col">
             <div v-if="!editMode">
-              <div class="text-h4">{{ name_display | nameWithFirstUpper }}</div>
+              <div class="text-h4" v-if="enable_warning">
+
+                {{ name_display | nameWithFirstUpper }}
+                <q-icon name="warning" color="red">
+                  <q-tooltip content-class="bg-red">Ce médicament contient un élément auquel vous êtes allergique</q-tooltip>
+                </q-icon>
+              </div>
+              <div class="text-h4" v-else>{{ name_display | nameWithFirstUpper }}</div>
             </div>
             <div v-else>
               <q-input outlined v-model="medUpName" label="name" stack-label />
@@ -53,19 +60,19 @@
           <div class="col-3">
             <q-list bordered separator class="q-mr-sm">
               <q-item>
-                <q-item-section v-if="!editMode">Dose : {{ this.med.dose }}</q-item-section>
+                <q-item-section v-if="!editMode">Dose : {{ this.med.dose }} mg</q-item-section>
                 <q-item-section v-else><q-input outlined v-model="medUpDose" label="Dose"  dense stack-label/></q-item-section>
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Dose Maximun : {{ this.med.dose_max }}</q-item-label>
+                  <q-item-label v-if="!editMode">Dose Maximum : {{ this.med.dose_max }} mg</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDoseMax" label="Dose Maximal"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
 
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }}</q-item-label>
+                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }} h</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDelay" label="Delay"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
@@ -125,21 +132,66 @@
 
       <q-separator />
       <q-card-actions class="justify-end" >
-        <q-btn v-if="this.fullCard == true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
+        <q-btn v-if="this.fullCard === true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
           <q-tooltip>Cancel</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard == true && this.editMode == false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn v-if="this.fullCard == true && this.editMode == false" color="negative" icon="delete" v-on:click="confirmDeletion = true"  />
-        <q-btn v-if="this.fullCard == true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
+        <q-btn v-if="this.fullCard === true && this.editMode === false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn v-if="this.fullCard === true && this.editMode === false" color="negative" icon="delete" v-on:click="confirmDeletion = true"  />
+        <q-btn v-if="this.fullCard === true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
           <q-tooltip>Save</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard == false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.idMed)} }" />
+        <q-btn v-if="this.fullCard === true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
+        <q-btn
+          v-if="this.addToPillbox !== false"
+          color="secondary"
+          icon="add"
+          v-on:click="addNewTreatmentDialog = true"
+          >
+          <q-dialog v-model="addNewTreatmentDialog">
+            <AddTreatmentDialog
+            :current_med="med"
+            :allergy="enable_warning"
+            >
+            </AddTreatmentDialog>
+          </q-dialog>
+          <q-tooltip content-class="bg-cyan">
+              Assigné a un traitement
+          </q-tooltip>
+        </q-btn>
+
+        <q-btn
+          v-if="this.deleteFromPillbox !== false"
+          color="red-9"
+          icon="clear"
+          v-on:click="deleteMedicamentDialog = true">
+
+          <q-dialog v-model="deleteMedicamentDialog">
+            <q-card class="dbg-teal text-black" style="width: 300px">
+              <q-card-section>
+                <div class="text-h6">Demande de validation</div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none">
+                Supprimer ce médicament ?
+              </q-card-section>
+
+              <q-card-actions align="center" class="bg-white text-teal">
+                <q-btn flat label="Non" v-close-popup />
+                <q-btn flat label="Oui" v-close-popup @click="deleteMedicine" />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+
+        </q-btn>
+        <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
       </q-card-actions>
     </q-card>
     </div>
 </template>
+
 <script>
 import { axiosInstance } from 'boot/axios'
+import AddTreatmentDialog from 'components/AddTreatmentDialog'
 
 export default {
   name: 'Medicine',
@@ -162,6 +214,21 @@ export default {
     fullCard: {
       type: Boolean,
       default: false
+    },
+    addToPillbox: {
+      type: Boolean,
+      default: false
+    },
+    deleteFromPillbox: {
+      type: Boolean,
+      default: false
+    },
+    treatment_id: {
+      type: Number
+    },
+    active_principle: {
+      type: Object,
+      default: undefined
     }
   },
   data () {
@@ -178,8 +245,14 @@ export default {
       medUpDescription: '',
       medUpDose: 0,
       medUpDoseMax: 0,
-      medUpDelay: 0
+      medUpDelay: 0,
+      addNewTreatmentDialog: false,
+      deleteMedicamentDialog: false,
+      enable_warning: false
     }
+  },
+  components: {
+    AddTreatmentDialog
   },
   filters: {
     nameWithFirstUpper: function (str) {
@@ -217,7 +290,11 @@ export default {
       }
     },
     getTypeList () {
+<<<<<<< HEAD
       axiosInstance.get(`medicines/type/${this.med.id}`).then(elem => {
+=======
+      axiosInstance.get(`medicines/type/${this.id_medicine}`).then(elem => {
+>>>>>>> develop
         this.typeList = elem.data
       }).catch(function (error) {
         console.log(error)
@@ -252,7 +329,7 @@ export default {
       })
     },
     resetData () {
-      this.$router.go()
+      this.$router.go(0)
       // this.getMedicineFullInfo()
       // this.editMode = false
     },
@@ -282,9 +359,43 @@ export default {
     validateUpdate () {
       console.log('validation de la mide a jour')
       this.patchMedicine()
+    },
+    deleteMedicine () {
+      axiosInstance({
+        method: 'delete',
+        url: 'treatment/deleteMedicine',
+        data: {
+          id: this.treatment_id,
+          medicine_id: this.id_medicine
+        }
+      }).then(
+        response => {
+          this.$q.notify({
+            message: response.data.message,
+            icon: 'check'
+          })
+          this.$router.go(0)
+        }
+      ).catch(
+        err => {
+          this.$q.notify({
+            message: err.response.data.detail,
+            icon: 'warning_amber'
+          })
+        }
+      )
     }
   },
   created () {
+    if (this.active_principle !== null) {
+      if (this.active_principle.allergy.length > 0) {
+        this.active_principle.allergy.forEach(element => {
+          if (this.med.active_principle.indexOf(element) !== -1) {
+            this.enable_warning = true
+          }
+        })
+      }
+    }
     this.getPicture()
     if (this.med === undefined) {
       this.getMedicineFullInfo()
