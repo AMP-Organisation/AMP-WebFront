@@ -83,28 +83,36 @@ export default {
     }
   },
   mounted () {
-    // console.log('le mounted du line chart ')
-    // console.log(this.chartData)
-    // console.log(this.dataChartRaw)
-    // console.log(this.options)
-    // console.log(this.optionRaw)
+    console.log('le mounted du line chart ')
+    console.log('*les props*')
+    console.log(this.chartData)
+    console.log(this.options)
+    console.log(this.dataToCompute)
+    this.dataChartRaw.datasets[0].data = this.dataToCompute
+
+    console.log('*les auyres données*')
+    console.log(this.dataChartRaw)
+    console.log(this.optionRaw)
     this.datachrt = this.chartData
     this.opt = this.options
-    // console.log(this.datachrt)
-    if (this.which && this.duration === 'week') {
-      // console.log('option 1')
-      this.dataChartRaw.labels = this.labelWeek
-      this.dataChartRaw.datasets[0].data = this.dataToCompute
-      // this.dataChartRaw.labels = 'custom char line'
-      // console.log(this.dataChartRaw)
-      this.renderChart(this.dataChartRaw, this.optionRaw)
-    } else if (this.which) {
-      // console.log('option 2')
-      this.renderChart(this.datachrt, this.opt)
-    } else {
-      // console.log('option 3')
-      this.renderChart(this.dataChartRaw, this.optionRaw)
-    }
+    console.log(this.datachrt)
+    /** on eleve le fi, on gerera ca en amont */
+    // if (this.which && this.duration === 'week') {
+    //   console.log('option 1')
+    //   this.dataChartRaw.labels = this.labelWeek
+    //   this.dataChartRaw.datasets[0].data = this.dataToCompute
+    //   // this.dataChartRaw.labels = 'custom char line'
+    //   // console.log(this.dataChartRaw)
+    //   this.renderChart(this.dataChartRaw, this.optionRaw)
+    // } else if (this.which) {
+    //   // console.log('option 2')
+    //   this.renderChart(this.datachrt, this.opt)
+    // } else {
+    //   // console.log('option 3')
+    //   this.renderChart(this.dataChartRaw, this.optionRaw)
+    // }
+
+    this.renderChart(this.chartData, this.options)
   }
 }
 </script>

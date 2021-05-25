@@ -7,10 +7,12 @@
           :chartData="dataChart"
           :options="dataOption"
           :which="true"
+          :duration="'week'"
+          :dataToCompute="dataTestTab"
         />
       </q-card-section>
       <q-card-section>
-        <q-btn :icon="'check'" :color="'amber-5'" v-on:click="totoFunction()"/>
+        <q-btn label="DEBUG" :color="'amber-5'" v-on:click="totoFunction()"/>
       </q-card-section>
     </q-card>
   </div>
@@ -22,10 +24,6 @@ import { month, week } from 'boot/env_str'
 export default {
   name: 'FacadeLineChartComponent',
   props: {
-    today: {
-      type: Date,
-      default: undefined
-    },
     duration: {
       type: Number
     },
@@ -35,7 +33,7 @@ export default {
       default: 'week'
     },
     // on recoit la list des données reçu
-    dataForChart: {
+    dataToCompute: {
       type: Array
     }
   },
@@ -44,19 +42,23 @@ export default {
   },
   data () {
     return {
+      // la date maintenant
+      today: new Date(),
       intro: 'component facade to use line chart',
       // et c'est bien mardi car le 0 c'est dimanche
-      dayToday: 2,
+      dayToday: 4,
       // c'est Mai pour le 4 car Janvier = 0
-      monthToday: 4,
+      monthToday: 2,
       yearToday: 2021,
       preLabels: [],
+      toto: {},
+      dataTestTab: [73.4, 75.1, 82.8, 74.3, 75.1, 76.2, 77.1],
       dataChart: {
         // le label de l'abscisse
         labels: [],
         datasets: [
           {
-            label: 'Data 1',
+            label: 'Donnée de la facade',
             // les données
             data: [],
             backgroundColor: 'transparent',
@@ -99,10 +101,37 @@ export default {
             this.preLabels.push(week[i + this.dayToday])
           }
         }
+        this.dataChart.labels = this.preLabels
         console.log('***FIN du for***')
       } else if (this.durationType === 'month') {
         console.log('c\'est en mois qu\'on genere ')
+      } else if (this.durationType === 'year') {
+        console.log('c\'est en semestre qu\'on genere ')
+        console.log(month.length)
+        console.log(month)
+        for (let i = 0; i < month.length; i++) {
+          if (i + this.monthToday >= month.length) {
+            console.log('if')
+            console.log(month[i - (12 - this.monthToday)])
+            this.preLabels.push(month[i - (12 - this.monthToday)])
+          } else {
+            console.log('else')
+            console.log(this.monthToday)
+            console.log(month[i + this.monthToday])
+            this.preLabels.push(month[i + this.monthToday])
+          }
+        }
+        this.dataChart.labels = this.preLabels
+        console.log('***FIN du for year***')
       }
+    },
+    // we have to, because if for the same day/month we have several data, we do a moyenne of the day
+    generateData () {
+      this.dataChart.datasets[0].data = this.dataTestTab
+    },
+    loadData () {
+      this.dayToday = this.today.getDay()
+      this.monthToday = this.today.getMonth()
     }
   },
   created () {
@@ -111,7 +140,14 @@ export default {
     console.log(week)
     console.log(this.duration)
     console.log(this.data)
+    console.log(this.dataToCompute)
+    console.log('-la date-')
+    console.log(this.today)
+    console.log(this.today.getDay())
+    console.log(this.today.getMonth())
+    this.loadData()
     this.generateLabel()
+    this.generateData()
     console.log('fin creation de la facade pour le line chart')
   }
 }

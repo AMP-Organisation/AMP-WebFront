@@ -36,28 +36,51 @@
         <q-card-section>
           <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
             <q-tab-panel name="week">
-              <LineChart
+              <!-- <LineChart
                 v-if="datatab"
                 :chartData="dataChartWeek"
                 :options="dataOption"
                 :which="true"
                 :duration="'week'"
                 :dataToCompute="dataTabdeci"
-              />
+              /> -->
             </q-tab-panel>
             <q-tab-panel name="month">
-              <LineChart
+              <!-- <LineChart
                 v-if="datatab"
                 :chartData="dataChartMonth"
                 :options="dataOption"
                 :which="true"
                 :duration="'month'"
                 :dataToCompute="dataTabdeci"
-              />
+              /> -->
+            </q-tab-panel>
+            <q-tab-panel name="semester">
+              <FacadeLineChartComponent
+                v-if="loadedYearTwo"
+                :duration="12"
+                :dataToCompute="[]"
+                :durationType="'year'">
+                </FacadeLineChartComponent>
+                <q-btn v-show="!loadedYearTwo" round color="primary" icon="check" v-on:click="loadedYearTwo = true">
+                <q-tooltip>load data</q-tooltip>
+                </q-btn>
             </q-tab-panel>
             <q-tab-panel name="year">
-              <FacadeLineChartComponent :duration="7" >
-              </FacadeLineChartComponent>
+              <FacadeLineChartComponent
+                v-if="loadedYear"
+                :duration="7"
+                :dataToCompute="lastWeekData">
+                </FacadeLineChartComponent>
+                <q-btn
+                v-show="!loadedYear"
+                round
+                color="primary"
+                icon="check"
+                v-on:click="loadedYear = true"
+                >
+              <q-tooltip>load data</q-tooltip>
+            </q-btn>
             </q-tab-panel>
           </q-tab-panels>
         </q-card-section>
@@ -284,9 +307,6 @@
         icon="shuffle"
         label="Follow-up je ne sais pas quoi">
         <q-card-section>
-          <q-label>
-            toto
-          </q-label>
         </q-card-section>
         </q-expansion-item>
       </q-card>
@@ -296,7 +316,7 @@
 <script>
 // import { axiosInstance } from 'boot/axios'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
-import LineChart from 'components/LineChart.vue'
+// import LineChart from 'components/LineChart.vue'
 import FacadeLineChartComponent from 'components/FacadeLineChartComponent.vue'
 
 import { axiosInstance } from 'boot/axios'
@@ -308,6 +328,8 @@ export default {
   data () {
     return {
       intro: 'Follow Up Page',
+      // maintenant
+      today: new Date(),
       // données à charger differement
       id_user: 12,
       expanded_imc: true,
@@ -330,6 +352,8 @@ export default {
         color: 'positive',
         icon: 'check'
       },
+      loadedYear: false,
+      loadedYearTwo: false,
       // ces 3 variables, pour stocker les données provenant de l'api
       lastWeekData: [],
       lastMonthData: [],
@@ -500,8 +524,8 @@ export default {
   },
   components: {
     IconAndTitle,
-    FacadeLineChartComponent,
-    LineChart
+    FacadeLineChartComponent
+    // LineChart
   },
   watch: {
     new_weight: function () {
@@ -530,11 +554,12 @@ export default {
       dt = dt.replace('Z', ' ')
       const finalDate = new Date(Date.parse(dt))
       const formatedDate = date.formatDate(finalDate, 'DD MMMM YYYY')
-      console.log(`le jour : ${date.formatDate(finalDate, 'dddd')}`)
+      // console.log(`le jour : ${date.formatDate(finalDate, 'dddd')}`)
       return formatedDate
     }
   },
   methods: {
+    // c'est pour afficher une icone differentes en focntion du calcul IMC
     triggerIMC (imc) {
       console.log('triggered !!')
       this.newIMC = imc
@@ -594,7 +619,7 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      console.log('les données reçu pour le last week')
+      console.log('FlU les données reçu pour le last week')
       console.log(ret.data)
       this.lastWeekData = ret.data
     },
@@ -615,6 +640,7 @@ export default {
       console.log('les données reçu pour le last week')
       console.log(ret.data)
       this.lastWeekData = ret.data
+      this.loadedYearTwo = true
     },
     validatefollowUpIMC () {
       console.log('we are going to validate new data')
@@ -642,8 +668,10 @@ export default {
       this.datatab.push(elem.weight)
     })
     console.log(this.datatab)
+
     // this.dataChart.datasets[0].label = 'Toto'
     // this.dataChart.datasets[0].data = this.datatab
+
     console.log(this.dataChart)
     console.log(month)
     console.log(week)
