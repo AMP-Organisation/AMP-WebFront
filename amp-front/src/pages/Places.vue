@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
-      <IconAndTitle :title="this.$t('place')" :icon="'star'" :color="'blue-9'"/>
+      <IconAndTitle v-bind:title="this.$t('place')" :icon="'star'" :color="'blue-9'"/>
       <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
                v-bind:label="this.$t('places_search')">
         <template v-slot:prepend>
@@ -64,9 +64,11 @@
               </q-card-section>
               <!-- Lien la maladie -->
               <q-card-section>
-                <q-btn color="primary" icon="more" label="Plus d'informations sur le lieu"
+                <q-btn color="primary" icon="more"
                        v-on:click="$router.push({name:'details_places', params: { current_place: place.id }})"
-                />
+                >
+                  {{ $t('place_more_information')}}
+                </q-btn>
               </q-card-section>
             </q-card>
           </q-expansion-item>
