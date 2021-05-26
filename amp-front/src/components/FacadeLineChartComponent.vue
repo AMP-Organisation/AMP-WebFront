@@ -64,6 +64,16 @@ export default {
             backgroundColor: 'transparent',
             borderColor: 'rgba(1, 116, 188, 0.50)',
             pointBackgroundColor: 'rgba(171, 71, 188, 1)'
+          },
+          {
+            label: 'Donnée bis',
+            // les données
+            data: [22, 23, 24, 32, 23, 21, 20],
+            backgroundColor: 'transparent',
+            borderColor: 'rgba(1, 255, 0, 255)',
+            pointBackgroundColor: 'rgba(100, 25, 255, 1)',
+            pointBorderColor: 'rgba(42, 42, 42, 1)',
+            pointStyle: 'cross'
           }
         ]
       },
@@ -72,7 +82,17 @@ export default {
         maintainAspectRatio: false,
         title: {
           display: true,
-          text: 'My Data bis'
+          text: 'my double line chart'
+        },
+        scales: {
+          y: {
+            display: true,
+            position: 'left'
+          },
+          y1: {
+            display: true,
+            position: 'right'
+          }
         }
       }
     }

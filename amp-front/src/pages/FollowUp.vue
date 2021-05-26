@@ -44,6 +44,11 @@
                 :duration="'week'"
                 :dataToCompute="dataTabdeci"
               /> -->
+              <FacadeLineChartComponent
+                :duration="7"
+                :dataToCompute="[]"
+                :durationType="'week'">
+                </FacadeLineChartComponent>
             </q-tab-panel>
             <q-tab-panel name="month">
               <!-- <LineChart
@@ -55,7 +60,7 @@
                 :dataToCompute="dataTabdeci"
               /> -->
             </q-tab-panel>
-            <q-tab-panel name="semester">
+            <q-tab-panel name="yeardeux">
               <FacadeLineChartComponent
                 v-if="loadedYearTwo"
                 :duration="12"
@@ -63,10 +68,10 @@
                 :durationType="'year'">
                 </FacadeLineChartComponent>
                 <q-btn v-show="!loadedYearTwo" round color="primary" icon="check" v-on:click="loadedYearTwo = true">
-                <q-tooltip>load data</q-tooltip>
+                  <q-tooltip>load data</q-tooltip>
                 </q-btn>
             </q-tab-panel>
-            <q-tab-panel name="year">
+            <q-tab-panel name="weekdeux">
               <FacadeLineChartComponent
                 v-if="loadedYear"
                 :duration="7"
@@ -94,7 +99,9 @@
                         { label: 'Week', value: 'week' },
                         { label: 'Month', value: 'month' },
                         { label: 'Semester', value: 'semester' },
-                        { label: 'Year', value: 'year' }
+                        { label: 'Year', value: 'year' },
+                        { label: 'Year', value: 'yeardeux' },
+                        { label: 'week', value: 'weekdeux' }
                       ]"
                     />
                     </div>
@@ -357,6 +364,8 @@ export default {
       // ces 3 variables, pour stocker les données provenant de l'api
       lastWeekData: [],
       lastMonthData: [],
+      lastTrimesterData: [],
+      lastSemestersData: [],
       lastYearData: [],
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       lastData: [
@@ -613,7 +622,11 @@ export default {
         this.gotData = elem.data
       })
     },
-    // si j'utilise un async await, ce sera pour afficher une barre de chargement
+    // for dev and debug to load data like I would like them to be
+    loadFakeData () {
+      console.log('$$$load fake data$$$')
+    },
+    //, si j'utilise un async await, ce sera pour afficher une barre de chargement
     async getLastWeekData () {
       const ret = await axiosInstance.get(`/followup/imc/lastweek/${this.id_user}`).catch(function (error) {
         console.log(error)
