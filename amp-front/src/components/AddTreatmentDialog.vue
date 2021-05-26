@@ -4,7 +4,7 @@
       <q-dialog v-model="allergy">
         <q-card class="bg-teal text-white" style="width: 300px">
           <q-card-section>
-            <div class="text-h6">Avertissement</div>
+            <div class="text-h6">{{ $t('dialog_warning') }}</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
