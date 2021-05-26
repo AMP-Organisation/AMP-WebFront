@@ -10,15 +10,15 @@
               <div class="text-overline">{{ this.place.address }}</div>
               <div class="text-h5 q-mt-sm q-mb-xs">{{ this.place.region }}, {{ this.place.department }}</div>
               <div class="text-caption text-black">
-                Ville : {{ this.place.city }}
+                {{ $t('city') }} {{ this.place.city }}
                 <q-space/>
-                Réputation : (a venir)
+                {{ $t('reputation') }}
                 <q-space/>
-                Type de lieu : (a venir)
+                {{ $t('type_place') }}
               </div>
               <div class="text-caption text-black" v-if="this.place.tags != null">
                 <q-space/>
-                Service pris en charge par l'hôpital :
+                {{ $t('hospital_service') }}
                 <q-space/>
                 <q-list v-for="(place, index)  in this.tags" :key="index" >
                   <q-item clickable v-ripple>

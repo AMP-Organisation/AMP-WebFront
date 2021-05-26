@@ -18,7 +18,7 @@
       <div class="col">
         <div class="q-mr-md q-ml-md" v-if="this.medicineLoaded !== undefined">
           <!-- :idMed="parseInt(this.medicineLoaded.id)"  -->
-          <Medicine :med="this.medicineLoaded" :fullCard="true"></Medicine>
+          <Medicine :med="this.medicineLoaded" :fullCard="true" :active_principle="this.active_principle" add-to-pillbox="True" ></Medicine>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@ export default {
       type: Object,
       default: undefined
     },
-    id: {
+    medicine_id: {
       type: String,
       default: undefined
     }
@@ -47,12 +47,14 @@ export default {
   data  () {
     return {
       medicineLoaded: undefined,
-      message: 'page de detail du medicament'
+      message: 'page de detail du medicament',
+      active_principle: null,
+      current_user: JSON.parse(localStorage.getItem('user'))
     }
   },
   methods: {
     loadTheMedicine () {
-      axiosInstance.get(`medicines/${this.id}`).then(elem => {
+      axiosInstance.get(`medicines/${this.medicine_id}`).then(elem => {
         this.medicineLoaded = elem.data
       }).catch(error => {
         console.log('ERROR: une erreur est survenue')
@@ -61,9 +63,16 @@ export default {
     }
   },
   created () {
-    if (this.medicine === undefined && this.id) {
+    if (this.medicine === undefined && this.medicine_id) {
       this.loadTheMedicine()
     }
+    axiosInstance.post('/health_card/', {
+      user_id: this.current_user.id
+    }).then(
+      resp => {
+        this.active_principle = resp.data
+      }
+    )
   }
 }
 </script>

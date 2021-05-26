@@ -1,16 +1,16 @@
 <template>
   <q-card class="dbg-teal text-black" style="width: 300px">
     <q-card-section>
-      <div class="text-h6">Demande de validation</div>
+      <div class="text-h6">{{ $t('validation') }}</div>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
-      Supprimer ce pillulier ?
+      {{ $t('delete_pillbox') }}
     </q-card-section>
 
     <q-card-actions align="center" class="bg-white text-teal">
-      <q-btn flat label="Non" v-close-popup />
-      <q-btn flat label="Oui" v-close-popup v-on:click="deletePillbox(pillbox)" />
+      <q-btn flat v-bind:label="this.$t('yes')" v-close-popup />
+      <q-btn flat v-bind:label="this.$t('non')" v-close-popup v-on:click="deletePillbox(pillbox)" />
     </q-card-actions>
   </q-card>
 </template>

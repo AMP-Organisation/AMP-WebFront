@@ -8,7 +8,7 @@
               <div class="text-h4" v-if="enable_warning">
                 {{ name_display | nameWithFirstUpper }}
                 <q-icon name="warning" color="red">
-                  <q-tooltip content-class="bg-red">Ce médicament contient un élément auquel vous êtes allergique</q-tooltip>
+                  <q-tooltip content-class="bg-red">{{ $t('allergy') }}</q-tooltip>
                 </q-icon>
               </div>
               <div class="text-h4" v-else>{{ name_display | nameWithFirstUpper }}</div>
@@ -19,7 +19,7 @@
           </div>
           <div class="col-1">
             <q-btn
-              v-if="this.addToPillbox !== false"
+              v-if="this.addToPillbox !== false || this.deleteFromPillbox !== true"
               color="secondary"
               icon="add"
               v-on:click="addNewTreatmentDialog = true"
@@ -32,7 +32,7 @@
                 </AddTreatmentDialog>
               </q-dialog>
               <q-tooltip content-class="bg-cyan">
-                  <p>Assigné a un traitement</p>
+                  <p>{{ $t('assign_to_treatment') }}</p>
               </q-tooltip>
             </q-btn>
             <q-btn
@@ -44,11 +44,11 @@
               <q-dialog v-model="deleteMedicamentDialog">
                 <q-card class="dbg-teal text-black" style="width: 300px">
                   <q-card-section>
-                    <div class="text-h6">Demande de validation</div>
+                    <div class="text-h6">{{ $t('validation') }}</div>
                   </q-card-section>
 
                   <q-card-section class="q-pt-none">
-                    Supprimer ce médicament ?
+                    {{ $t('delete_medicine') }}
                   </q-card-section>
 
                   <q-card-actions align="center" class="bg-white text-teal">
@@ -85,7 +85,7 @@
         <div class="row">
           <div class="col-6">
             <div v-if="!editMode">
-              <p v-if="this.fullCard == false" class="text-body1 q-mr-md">{{ description_display| crop }}</p>
+              <p v-if="this.fullCard === false" class="text-body1 q-mr-md">{{ description_display| crop }}</p>
               <p v-else class="text-body1 q-mr-md">{{ description_display }}</p>
             </div>
             <div v-else class="q-mr-md">
@@ -104,19 +104,19 @@
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Dose Maximum : {{ this.med.dose_max }} mg</q-item-label>
+                  <q-item-label v-if="!editMode">{{ $t('max_dose') }} : {{ this.med.dose_max }} mg</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDoseMax" label="Dose Maximal"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
 
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }} h</q-item-label>
+                  <q-item-label v-if="!editMode">{{ $t('time') }} {{ this.med.delay }} h</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDelay" label="Delay"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
             </q-list>
-            <p class="text-body1 q-mt-md ">Existe sous forme :</p>
+            <p class="text-body1 q-mt-md ">{{ $t('exist_in') }}</p>
             <q-list  bordered separator>
               <q-item
               v-for="typemed in typeList"
@@ -155,11 +155,11 @@
       <q-dialog v-model="confirmDeletion" persistent  transition-show="scale">
         <q-card style="width: 300px">
           <q-card-section class="bg-negative text-white" >
-            <div class="text-h6">Delete {{ this.med.name }} </div>
+            <div class="text-h6">{{$t('delete')}} {{ this.med.name }} </div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            Are you sure to delete this medicine : {{ this.med.name }}
+            {{ $t('delete_request') }} {{ this.med.name }}
           </q-card-section>
 
           <q-card-actions align="right" >
@@ -397,7 +397,6 @@ export default {
     }
   },
   created () {
-    this.addToPillbox = true
     this.id_medicine = this.med.id
     this.getMedicineFullInfo()
     this.getPicture()

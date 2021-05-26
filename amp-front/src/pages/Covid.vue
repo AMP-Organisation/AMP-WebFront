@@ -3,10 +3,9 @@
     <div class="row mt-5 mb-5">
       <div class="col">
         <p style="text-align: justify">
-          Bienvenue sur cette page d'information sur l'évolution de la covid en France, ci-dessous, vous trouverez les
-          Information journalière quotidienne.
+          {{ $t('covid_information') }}
         </p>
-        <h3 class="text-center">Données globale en France :</h3>
+        <h3 class="text-center"> {{ $t('data_in_france') }}</h3>
         <Doughnut
           v-if="this.dataCollection"
           :chartData="dataCollection"
@@ -16,9 +15,9 @@
         <br>
         <br>
         <p style="text-align: justify">
-          Pour plus d'information, vous pouvez également rechercher votre département afin de pouvoir constater son état actuel.
+          {{ $t('more_information') }}
         </p>
-        <h3 class="text-center">Informations par département :</h3>
+        <h3 class="text-center">{{ $t('department_search') }}</h3>
         <q-select
           class="GNL__select"
           color="green"
@@ -89,8 +88,8 @@ export default {
           this.dataCollection = {
             hoverBackgroundColor: 'red',
             hoverBorderWidth: 10,
-            labels: ['Nombre de personne au total décédé', 'Nombre de personne au total guéris', 'Actuellement hospitalisé',
-              'Actuellement en réanimation'],
+            labels: [this.$t('total_death'), this.$t('total_cured'), this.$t('hospitalized'),
+              this.$t('reanimation')],
             datasets: [
               {
                 label: 'Covid en France',

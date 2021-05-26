@@ -20,8 +20,6 @@
         :treatment_id="id"
         :description="med.description">
         </Medicine>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
       </q-card-section>
       <q-separator inset />
       <q-card-actions vertical align="right">
