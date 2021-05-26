@@ -5,8 +5,8 @@
       <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
         <q-card class="card-bg bg-teal-6 text-white">
           <q-card-section class="text-h6 ">
-            <div class="text-h6">Fiche de santé</div>
-            <div class="text-subtitle2">Compléter vos informations</div>
+            <div class="text-h6">{{ $t('health_card') }}</div>
+            <div class="text-subtitle2">{{ $t('complete_information') }}</div>
           </q-card-section>
           <q-card-section class="q-pa-sm">
             <div class="column">
@@ -21,7 +21,7 @@
                       color="green"
                       v-model="allergies_model"
                       use-input
-                      label="allergie(s) principe actif"
+                      v-bind:label="this.$t('allergy_options')"
                       :options="allergies_options"
                       option-value="id"
                       option-label="name"
@@ -47,7 +47,7 @@
                       color="green"
                       v-model="disease_model"
                       use-input
-                      label="maladie(s) chronique"
+                      v-bind:label="this.$t('disease_options')"
                       :options="disease_options"
                       option-value="id"
                       option-label="name"
@@ -73,7 +73,7 @@
                       color="green"
                       v-model="blood_model"
                       use-input
-                      label="groupe sanguin"
+                      v-bind:label="this.$t('blood_group')"
                       :options="blood_option"
                       option-value="id"
                       option-label="name"
@@ -93,20 +93,20 @@
             </div>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white" @click="persistent_validation = true">Enregistrer</q-btn>
+            <q-btn class="text-capitalize bg-info text-white" @click="persistent_validation = true">{{ $t('save') }}</q-btn>
             <q-dialog v-model="persistent_validation" persistent transition-show="scale" transition-hide="scale">
               <q-card class="bg-teal text-white" style="width: 300px">
                 <q-card-section>
-                  <div class="text-h6">Demande de validation</div>
+                  <div class="text-h6">{{ $t('validation') }}</div>
                 </q-card-section>
 
                 <q-card-section class="q-pt-none">
-                  En validant cette fiche, vous acceptez que vos informations soit enregistré, souhaitez-vous continué ?
+                  {{ $t('health_card_detail') }}
                 </q-card-section>
 
                 <q-card-actions align="center" class="bg-white text-teal">
-                  <q-btn flat label="Non" v-close-popup />
-                  <q-btn flat label="Oui" v-close-popup @click="saveInformations" />
+                  <q-btn flat v-bind:label="this.$t('no')" v-close-popup />
+                  <q-btn flat v-bind:label="this.$t('yes')" v-close-popup @click="saveInformations" />
                 </q-card-actions>
               </q-card>
             </q-dialog>
@@ -123,13 +123,12 @@
           </q-card-section>
           <q-card-section>
             <div class="text-body2 text-justify">
-              Bonjour, bienvenu sur votre fiche de santé, vous pouvez renseigner vos informations personnelle si vous le souhaitez,
-              affin que nous puissions vous aider du mieux que possible.
+              {{ $t('welcome_health_card1') }}
               <br>
               <br>
-              Cordialement,
+              {{ $t('welcome_health_card2') }}
               <br>
-              AMP team.
+              {{ $t('welcome_health_card3') }}
             </div>
           </q-card-section>
         </q-card>
@@ -139,31 +138,31 @@
       <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12" v-if="this.information_user !== null">
         <q-card class="card-bg bg-teal-6 text-white">
           <q-card-section class="text-h6 ">
-            <div class="text-h6">Vos informations</div>
-            <div class="text-subtitle2">Ci-dessous, vos informations actuelles</div>
+            <div class="text-h6">{{ $t('informations_user_health_card') }}</div>
+            <div class="text-subtitle2">{{ $t('actual_information_health') }}</div>
           </q-card-section>
           <q-card-section class="q-pa-sm">
             <q-list class="row">
               <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <q-item-section v-if="this.information_user.blood_group == null">
-                  Groupe sanguin :
+                  {{ $t('blood_group') }}
                   <br>
-                  Vous n'avez pas indiqué votre groupe sanguin
+                  {{ $t('blood_missing') }}
                 </q-item-section>
                 <q-item-section v-else>
-                  Groupe sanguin :
+                  {{ $t('blood_group') }}
                   <br>
                   {{ this.information_user.blood_group }}
                 </q-item-section>
               </q-item>
               <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <q-item-section v-if="this.information_user.allergy == null">
-                  Allergie(s) :
+                  {{ $t('allergy_title') }}
                   <br>
-                  Vous n'avez aucune allergie
+                  {{ $t('no_allergy') }}
                 </q-item-section>
                 <q-item-section class="row" v-else>
-                  Allergie(s) :
+                  {{ $t('allergy_title') }}
                   <br>
                 <div v-for="(element, index) in this.information_user.allergy" :key="index">
                   {{ element }}
@@ -172,12 +171,12 @@
               </q-item>
               <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 <q-item-section v-if="this.information_user.disease == null">
-                  Maladie(s) chronique :
+                  {{ $t('chronical_disease')}}
                   <br>
-                  Vous n'avez aucune maladie
+                  {{ $t('no_disease') }}
                 </q-item-section>
                 <q-item-section v-else>
-                  Maladie(s) chronique :
+                  {{ $t('chronical_disease')}}
                   <br>
                   {{ this.information_user.disease }}
                 </q-item-section>
@@ -185,7 +184,7 @@
             </q-list>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white" @click="persistent_delete = true">Supprimer</q-btn>
+            <q-btn class="text-capitalize bg-info text-white" @click="persistent_delete = true">{{ $t('delete') }}</q-btn>
             <q-dialog v-model="persistent_delete" persistent transition-show="scale" transition-hide="scale">
               <q-card class="bg-teal text-white" style="width: 300px">
                 <q-card-section>

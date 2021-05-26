@@ -8,8 +8,7 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            Attention, vous voulez ajouter un médicament auquel vous êtes allergique
-          </q-card-section>
+            {{ $t('allergy_warning') }}</q-card-section>
 
           <q-card-actions align="center" class="bg-white text-teal">
             <q-btn flat label="Ok" v-close-popup />
@@ -28,23 +27,23 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="existingTreatment" label="Traitement existant" />
-          <q-tab name="newTreatment" label="Nouveau traitement" />
+          <q-tab name="existingTreatment" v-bind:label="this.$t('existing_treatment')" />
+          <q-tab name="newTreatment" v-bind:label="this.$t('new_treatment')" />
         </q-tabs>
 
         <q-separator />
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="existingTreatment">
-            <div class="text-h6">Traitement existant</div>
-            <p>Sélectionner le traitement à associer :</p>
+            <div class="text-h6">{{ $t('existing_treatment') }}</div>
+            <p>{{ $t('select_treatment') }}</p>
             <div class="row q-gutter-y-xl">
               <q-select
                 class="GNL__select"
                 color="green"
                 v-model="select_model"
                 use-input
-                label="fièvres, maux de ventres, ..."
+                v-bind:label="this.$t('options_treatment')"
                 :options="options"
                 option-value="id"
                 option-label="name"
@@ -66,7 +65,7 @@
                 v-on:click="addToTreatment"
                 >
                 <q-tooltip content-class="bg-cyan">
-                  Assigné au traitement
+                  {{ $t('assign_treatment') }}
                 </q-tooltip>
               </q-btn>
             </div >
@@ -74,21 +73,21 @@
           </q-tab-panel>
 
           <q-tab-panel name="newTreatment">
-            <div class="text-h6">Nouveau Traitement</div>
-            <p>Indiqué les information du nouveau traitement :</p>
+            <div class="text-h6">{{ $t('new_treatment') }}</div>
+            <p>{{ $t('specify_treatment') }}</p>
             <q-input
               v-model="input.name"
               ref="text"
-              label="Le nom de votre traitement"
-              hint="Maux de tête..."
-              :rules="[ val => val && val.length > 5 || 'Votre nom doit comporter plus de 5 caractères...']"
+              v-bind:label="this.$t('treatment_name')"
+              v-bind:hint="this.$t('options_treatment')"
+              v-bind:rules="[ val => val && val.length > 5 || this.$t('rules_treatment')]"
             />
             <q-input
               v-model="input.description"
               ref="text"
-              label="La description de votre traitement"
-              hint="Pour de faibles migraines.."
-              :rules="[ val => val && val.length > 8 || 'Votre nom doit comporter plus de 8 caractères...']"
+              v-bind:label="this.$t('description_treatment')"
+              v-bind:hint="this.$t('options_treatment')"
+              v-bind:rules="[ val => val && val.length > 5 || this.$t('rules_treatment')]"
             />
             <br>
             <div class="column" style="align-items: center">
@@ -99,7 +98,7 @@
               v-on:click="createTreatment"
             >
               <q-tooltip content-class="bg-cyan">
-                Créé ce traitement
+                {{ $t('create_treatment') }}
               </q-tooltip>
             </q-btn>
             </div>

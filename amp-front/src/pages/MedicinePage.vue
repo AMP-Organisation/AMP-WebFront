@@ -57,6 +57,7 @@
                         <q-item>
                           <q-item-section>
                             <q-item-label >Temps entre deux dose : {{ props.row.delay }} h</q-item-label>
+                           <p>{{  }}</p>
                           </q-item-section>
                         </q-item>
                       </q-list>
@@ -65,7 +66,7 @@
                     </q-card-section>
                   <q-separator/>
                   <q-card-actions class="justify-end" >
-                    <q-btn color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(props.row.id)} }">
+                    <q-btn color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{medicine_id: parseInt(props.row.id)} }">
                       <q-tooltip content-class="bg-secondary">More details</q-tooltip>
                     </q-btn>
                   </q-card-actions>
@@ -201,8 +202,6 @@ export default {
       newMedDelay: 0,
       isComprime: true,
       bolleanToTest: true,
-      current_user: JSON.parse(localStorage.getItem('user')),
-      active_principle: null,
       addNewTreatmentDialog: false,
       columnsTab: [
         {
@@ -289,13 +288,6 @@ export default {
   },
   created () {
     this.loadMedicine()
-    axiosInstance.post('/health_card/', {
-      user_id: this.current_user.id
-    }).then(
-      resp => {
-        this.active_principle = resp.data
-      }
-    )
   }
 }
 </script>
