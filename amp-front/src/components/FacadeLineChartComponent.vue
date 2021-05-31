@@ -6,9 +6,6 @@
         <LineChart
           :chartData="dataChart"
           :options="dataOption"
-          :which="true"
-          :duration="'week'"
-          :dataToCompute="dataTestTab"
         />
       </q-card-section>
       <q-card-section>
@@ -28,13 +25,19 @@ export default {
       type: Number
     },
     // si ce sont des jours ou des mois
+    // et si c'est custom, faut mettre custom
     durationType: {
       type: String,
-      default: 'week'
+      default: 'week',
+      required: true
     },
     // on recoit la list des données reçu
     dataToCompute: {
       type: Array
+    },
+    customTitle: {
+      type: String,
+      default: null
     }
   },
   components: {
@@ -102,31 +105,44 @@ export default {
       console.log('salut')
       console.log(this.preLabels)
     },
+    generateLabelForDuration (period) {
+      for (let i = period + 1; i > 0; i--) {
+        // const strDate = antes.toDateString()
+        const temp = new Date(this.today)
+        temp.setDate(temp.getDate() - i)
+        this.preLabels.push(temp.toDateString())
+        // antes = antes.setDate(antes.getDate() + 1)
+      }
+      console.log('les labels custom')
+      console.log(this.preLabels)
+    },
     generateLabel () {
       console.log('generate label')
       if (this.durationType === 'week') {
         console.log('c\'est en semaine qu\'on genere ')
-        console.log(week.length)
-        console.log(week)
         for (let i = 0; i < week.length; i++) {
-          console.log(week[i])
           if (i + this.dayToday >= week.length) {
-            console.log('if')
-            console.log(week[i - (7 - this.dayToday)])
             this.preLabels.push(week[i - (7 - this.dayToday)])
           } else {
-            console.log('else')
-            console.log(this.dayToday)
-            console.log(week[i + this.dayToday])
             this.preLabels.push(week[i + this.dayToday])
           }
         }
-        this.dataChart.labels = this.preLabels
         console.log('***FIN du for***')
       } else if (this.durationType === 'month') {
         console.log('c\'est en mois qu\'on genere ')
-      } else if (this.durationType === 'year') {
+        this.generateLabelForDuration(30)
+      } else if (this.durationType === 'semester') {
         console.log('c\'est en semestre qu\'on genere ')
+        for (let i = 6; i < month.length; i++) {
+          if (i + this.monthToday >= month.length) {
+            this.preLabels.push(month[i - (12 - this.monthToday)])
+          } else {
+            this.preLabels.push(month[i + this.monthToday])
+          }
+        }
+        console.log('***FIN du for semestre ***')
+      } else if (this.durationType === 'year') {
+        console.log('c\'est en année qu\'on genere ')
         console.log(month.length)
         console.log(month)
         for (let i = 0; i < month.length; i++) {
@@ -141,17 +157,32 @@ export default {
             this.preLabels.push(month[i + this.monthToday])
           }
         }
-        this.dataChart.labels = this.preLabels
         console.log('***FIN du for year***')
+      } else if (this.durationType === 'custom') {
+        // attention, duration n'est pas requis donc pb eventuel
+        this.generateLabelForDuration(this.duration)
       }
+      this.dataChart.labels = this.preLabels
     },
     // we have to, because if for the same day/month we have several data, we do a moyenne of the day
     generateData () {
-      this.dataChart.datasets[0].data = this.dataTestTab
+      if (this.durationType === 'custom') {
+        this.preLabels.map(() => {
+          this.dataChart.datasets[0].data.push(Math.round(Math.random() * 25))
+        })
+      } else {
+        this.dataChart.datasets[0].data = this.dataTestTab
+      }
+      console.log(this.dataChart.datasets[0].data)
     },
     loadData () {
       this.dayToday = this.today.getDay()
       this.monthToday = this.today.getMonth()
+    },
+    checkOtherCustomProps () {
+      if (this.customTitle != null) {
+        this.dataOption.title.text = this.customTitle
+      }
     }
   },
   created () {
@@ -168,6 +199,7 @@ export default {
     this.loadData()
     this.generateLabel()
     this.generateData()
+    this.checkOtherCustomProps()
     console.log('fin creation de la facade pour le line chart')
   }
 }

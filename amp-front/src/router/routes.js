@@ -23,6 +23,13 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: '/testlinechart',
+        name: 'page_de_test_line_chart',
+        component: () => import('pages/TestChartLine.vue'),
+        meta: { requiresAuth: true }
+      },
+      // a supprimer car c'est juste une page de test
+      {
         path: '/followup',
         name: 'followup_page',
         component: () => import('pages/FollowUp.vue'),

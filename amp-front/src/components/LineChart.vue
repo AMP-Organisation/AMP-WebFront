@@ -11,19 +11,19 @@ export default {
     // le chartOption nécessaire pour le line chart
     options: {
       type: Object
-    },
-    which: {
-      type: Boolean,
-      default: false
-    },
-    duration: {
-      type: String,
-      default: 'week'
-    },
-    // insere les données dans le chart dataset
-    dataToCompute: {
-      type: Array
     }
+    // which: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    // duration: {
+    //   type: String,
+    //   default: 'week'
+    // },
+    // // insere les données dans le chart dataset
+    // dataToCompute: {
+    //   type: Array
+    // }
   },
   data () {
     return {
@@ -38,48 +38,48 @@ export default {
       ],
       key: 'value',
       datachrt: {},
-      opt: {},
-      dataChartRaw: {
-        labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July'
-        ],
-        datasets: [
-          {
-            label: 'Poids',
-            data: [2, 10, 5, 9, 0, 6, 20],
-            fill: true,
-            borderColor: 'rgba(1, 116, 188, 0.50)',
-            pointBackgroundColor: 'rgba(255, 0, 255, 1)',
-            scales: {
-              y: {
-                suggestedMin: 50,
-                suggestedMax: 110
-              }
-            }
-          }
-        ]
-      },
-      optionRaw: {
-        reverse: true,
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'My Data'
-        },
-        scales: {
-          y: {
-            suggestedMin: 50,
-            suggestedMax: 110
-          }
-        }
-      }
+      opt: {}
+      // dataChartRaw: {
+      //   labels: [
+      //     'January',
+      //     'February',
+      //     'March',
+      //     'April',
+      //     'May',
+      //     'June',
+      //     'July'
+      //   ],
+      //   datasets: [
+      //     {
+      //       label: 'Poids',
+      //       data: [2, 10, 5, 9, 0, 6, 20],
+      //       fill: true,
+      //       borderColor: 'rgba(1, 116, 188, 0.50)',
+      //       pointBackgroundColor: 'rgba(255, 0, 255, 1)',
+      //       scales: {
+      //         y: {
+      //           suggestedMin: 50,
+      //           suggestedMax: 110
+      //         }
+      //       }
+      //     }
+      //   ]
+      // },
+      // optionRaw: {
+      //   reverse: true,
+      //   responsive: true,
+      //   maintainAspectRatio: false,
+      //   title: {
+      //     display: true,
+      //     text: 'My Data'
+      //   },
+      //   scales: {
+      //     y: {
+      //       suggestedMin: 50,
+      //       suggestedMax: 110
+      //     }
+      //   }
+      // }
     }
   },
   mounted () {
@@ -87,15 +87,15 @@ export default {
     console.log('*les props*')
     console.log(this.chartData)
     console.log(this.options)
-    console.log(this.dataToCompute)
-    this.dataChartRaw.datasets[0].data = this.dataToCompute
+    // console.log(this.dataToCompute)
+    // this.dataChartRaw.datasets[0].data = this.dataToCompute
 
-    console.log('*les auyres données*')
-    console.log(this.dataChartRaw)
-    console.log(this.optionRaw)
-    this.datachrt = this.chartData
-    this.opt = this.options
-    console.log(this.datachrt)
+    // console.log('*les auyres données*')
+    // console.log(this.dataChartRaw)
+    // console.log(this.optionRaw)
+    // this.datachrt = this.chartData
+    // this.opt = this.options
+    // console.log(this.datachrt)
     /** on eleve le fi, on gerera ca en amont */
     // if (this.which && this.duration === 'week') {
     //   console.log('option 1')

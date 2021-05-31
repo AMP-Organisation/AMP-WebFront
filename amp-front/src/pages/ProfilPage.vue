@@ -76,6 +76,7 @@
         </div>
       </q-card-section>
     </q-card>
+    <q-btn class="q-mt-md q-ml-md q-mr-md q-mb-xl" v-on:click="goToTestPage()" color="red-5" icon="add" label="page de test du line chart seul"/>
   </div>
 </template>
 
@@ -125,6 +126,10 @@ export default {
     goToFollowUpPage () {
       console.log('dans le go to follow up page')
       this.$router.push({ path: '/followup', params: { id: this.user.id } })
+    },
+    goToTestPage () {
+      console.log('dans le go to test page')
+      this.$router.push({ path: '/testlinechart', params: { id: this.user.id } })
     },
     updateUser () {
       axiosInstance({
