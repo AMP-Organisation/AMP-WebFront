@@ -3,7 +3,12 @@
     <IconAndTitle :title="intro" :color="'teal-4'" :icon="'add'" />
     <FacadeLineChartComponent :durationType="'week'"/>
     <FacadeLineChartComponent :durationType="'semester'" :customTitle="'par semestre'"/>
+    <FacadeLineChartComponent :durationType="'year'" :customTitle="'par année'"/>
+    <FacadeLineChartComponent :durationType="'month'" :customTitle="'par mois'"/>
     <FacadeLineChartComponent :durationType="'custom'" :duration="14" :customTitle="'14 jours'"/>
+    <FacadeLineChartComponent :durationType="'custom'" :duration="31" :customTitle="'14 jours'"/>
+    <FacadeLineChartComponent :durationType="'custom'" :duration="42" :customTitle="'14 jours'"/>
+    <FacadeLineChartComponent :durationType="'custom'" :duration="100" :customTitle="'14 jours'"/>
   </div>
 </template>
 <script>

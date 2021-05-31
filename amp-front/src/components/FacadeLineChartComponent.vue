@@ -3,10 +3,12 @@
     {{ intro }}
     <q-card>
       <q-card-section>
-        <LineChart
-          :chartData="dataChart"
-          :options="dataOption"
-        />
+        <div class="mysmall">
+          <LineChart
+            :chartData="dataChart"
+            :options="dataOption"
+          />
+        </div>
       </q-card-section>
       <q-card-section>
         <q-btn label="DEBUG" :color="'amber-5'" v-on:click="totoFunction()"/>
@@ -66,7 +68,8 @@ export default {
             data: [],
             backgroundColor: 'transparent',
             borderColor: 'rgba(1, 116, 188, 0.50)',
-            pointBackgroundColor: 'rgba(171, 71, 188, 1)'
+            pointBackgroundColor: 'rgba(171, 71, 188, 1)',
+            yAxisID: 'y'
           },
           {
             label: 'Donnée bis',
@@ -76,26 +79,54 @@ export default {
             borderColor: 'rgba(1, 255, 0, 255)',
             pointBackgroundColor: 'rgba(100, 25, 255, 1)',
             pointBorderColor: 'rgba(42, 42, 42, 1)',
-            pointStyle: 'cross'
+            pointStyle: 'cross',
+            yAxisID: 'y1'
           }
         ]
       },
       dataOption: {
+        type: 'line',
         responsive: true,
         maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
         title: {
           display: true,
           text: 'my double line chart'
         },
+        // scales: {
+        //   y: {
+        //     type: 'linear',
+        //     display: true,
+        //     position: 'left'
+        //   },
+        //   y1: {
+        //     type: 'linear',
+        //     display: true,
+        //     position: 'right'
+        //   }
+        // }
         scales: {
-          y: {
+          yAxes: [{
+            id: 'y',
+            type: 'linear',
             display: true,
             position: 'left'
-          },
-          y1: {
+          }, {
+            id: 'y1',
+            type: 'linear',
             display: true,
-            position: 'right'
-          }
+            position: 'right',
+            grid: {
+              drawOnChartArea: true // only want the grid lines for one axis to show up
+            },
+            ticks: {
+              max: 15,
+              min: 42
+            }
+          }]
         }
       }
     }
@@ -204,3 +235,11 @@ export default {
   }
 }
 </script>
+
+<style>
+  /* ne serait-ce pas mieux que ce soit une autre unité que le pixel ?
+  mais je ne les connais pas toute ^^ */
+  .mysmall {
+    max-height: 700px;
+  }
+</style>
