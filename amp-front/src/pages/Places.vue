@@ -149,7 +149,6 @@ export default {
     },
     reset () {
       if (this.search === '') {
-        console.log('success')
         this.select_model = ''
         this.search = ''
         axiosInstance.get('place/getAll')
