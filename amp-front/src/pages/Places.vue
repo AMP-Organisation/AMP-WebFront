@@ -2,21 +2,23 @@
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-page-container class="container-fluid">
       <IconAndTitle v-bind:title="this.$t('place')" :icon="'star'" :color="'blue-9'"/>
-      <q-input class="GNL__toolbar-input" outlined dense v-model="search" color="bg-grey-7 shadow-1"
-               v-bind:label="this.$t('places_search')">
+      <q-input class="GNL__toolbar-input" dense filled outlined v-model="search" color="bg-grey-7 shadow-1"
+               v-bind:label="this.$t('places_search')"
+               v-on:change="reset"
+      >
         <template v-slot:prepend>
           <q-icon v-if="search === ''" name="search"/>
           <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''"/>
         </template>
-      </q-input>
-      <div class="q-ma-sm q-mt-md">
-        <div class="row">
+        <template v-slot:after>
           <q-select
-            filled
             class="GNL__select"
             v-model="select_model"
+            dense
+            outlined
+            color="bg-grey-7 shadow-1"
+            label="Type"
             use-input
-            v-bind:label="this.$t('places_type')"
             :options="options"
             option-value="id"
             option-label="type"
@@ -31,8 +33,9 @@
               </q-item>
             </template>
           </q-select>
-          <q-btn class="GNL__btn_reset" color="secondary" icon-right="restart_alt" label="reset" v-on:click="reset"/>
-        </div>
+        </template>
+      </q-input>
+      <div class="q-ma-sm q-mt-md">
         <q-list class="q-ma-sm q-mt-md">
           <q-expansion-item
             v-for=" (place, index) in getResults" :key="index"
@@ -52,7 +55,7 @@
               <!-- Nom de la maladie, niveau de danger -->
               <q-item-section>
                 <q-item-label>{{place.address}}</q-item-label>
-                <q-item-label caption>{{place.city}}</q-item-label>
+                <q-item-label caption>{{place.city}}, {{place.department}}</q-item-label>
               </q-item-section>
             </template>
 
@@ -60,14 +63,16 @@
             <q-card>
               <!-- Introduction de la maladie -->
               <q-card-section>
-                {{place.department}}
+                région : {{place.region}}
+                <br>
+                code postal : {{place.zip_code}}
               </q-card-section>
               <!-- Lien la maladie -->
               <q-card-section>
                 <q-btn color="primary" icon="more"
+                       label="Détails"
                        v-on:click="$router.push({name:'details_places', params: { current_place: place.id }})"
                 >
-                  {{ $t('place_more_information')}}
                 </q-btn>
               </q-card-section>
             </q-card>
@@ -116,7 +121,7 @@ export default {
     getResults () {
       if (this.search === '') { return this.place_selected } else {
         return this.place_selected.filter((result) => {
-          return result.address.toLowerCase().includes(this.search.toLowerCase())
+          return result.city.toLowerCase().includes(this.search.toLowerCase())
         })
       }
     }
@@ -143,14 +148,16 @@ export default {
         )
     },
     reset () {
-      this.select_model = ''
-      this.search = ''
-      axiosInstance.get('place/getAll')
-        .then(
-          response => {
-            this.place_selected = response.data
-          }
-        )
+      if (this.search === '') {
+        this.select_model = ''
+        this.search = ''
+        axiosInstance.get('place/getAll')
+          .then(
+            response => {
+              this.place_selected = response.data
+            }
+          )
+      }
     }
   }
 }
@@ -158,17 +165,11 @@ export default {
 
 <style>
 .GNL__toolbar-input {
-  width: 55%;
+  width: 52%;
   margin-left: 20%;
   margin-top: 5%;
-  display: flex;
 }
 .GNL__select {
-  width: 55%;
-  margin-left: 20%;
-}
-
-.GNL__btn_reset {
-  margin-left: 2%;
+  alignment: right;
 }
 </style>
