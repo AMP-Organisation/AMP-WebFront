@@ -11,23 +11,23 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="existingPillbox" label="Pillulier existant" />
-          <q-tab name="newPillbox" label="Nouveau pillulier" />
+          <q-tab name="existingPillbox" v-bind:label="this.$t('existing_pillbox')" />
+          <q-tab name="newPillbox" v-bind:label="this.$t('new_pillbox')" />
         </q-tabs>
 
         <q-separator />
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="existingPillbox">
-            <div class="text-h6">Pillulier existant</div>
-            <p>Sélectionner un traitement à associer à un pillulier :</p>
+            <div class="text-h6">{{ $t('existing_pillbox') }}</div>
+            <p>{{ $t('select_pillbox') }}</p>
             <div class="row q-gutter-y-xl">
               <q-select
                 class="GNL__select"
                 color="green"
                 v-model="selectModelPillbox"
                 use-input
-                label="pillulier disponibles"
+                v-bind:label="this.$t('pillbox_available')"
                 :options="optionsPillbox"
                 option-value="id"
                 option-label="name"
@@ -46,7 +46,7 @@
                 color="green"
                 v-model="selectModeltreatment"
                 use-input
-                label="traitements disponibles"
+                v-bind:label="this.$t('treatment_available')"
                 :options="optionsTreatment"
                 option-value="id"
                 option-label="name"
@@ -68,7 +68,7 @@
                 v-on:click="addToPillbox"
               >
                 <q-tooltip content-class="bg-cyan">
-                  Assigné au pillulier
+                  {{ $t('assign_pillbox') }}
                 </q-tooltip>
               </q-btn>
             </div >
@@ -76,28 +76,28 @@
           </q-tab-panel>
 
           <q-tab-panel name="newPillbox">
-            <div class="text-h6">Nouveau pillulier</div>
-            <p>Indiqué les informations du nouveau pillulier :</p>
+            <div class="text-h6">{{ $t('new_pillbox') }}</div>
+            <p> {{ $t('new_pillbox_information') }}</p>
             <q-input
               v-model="input.name"
               ref="text"
-              label="Le nom de votre pillulier"
-              hint="Maux de tête..."
-              :rules="[ val => val && val.length > 5 || 'Votre nom doit comporter plus de 5 caractères...']"
+              v-bind:label="this.$t('pillbox_name')"
+              v-bind:hint="this.$t('options_treatment')"
+              v-bind:rules="[ val => val && val.length > 5 || this.$t('rules_treatment')]"
             />
             <q-input
               v-model="input.description"
               ref="text"
-              label="La description de votre pillulier"
-              hint="Pour de faibles migraines.."
-              :rules="[ val => val && val.length > 8 || 'Votre nom doit comporter plus de 8 caractères...']"
+              v-bind:label="this.$t('pillbox_description')"
+              v-bind:hint="this.$t('options_treatment')"
+              v-bind::rules="[ val => val && val.length > 8 || this.$t('rules_description')]"
             />
             <q-select
               class="GNL__select"
               color="green"
               v-model="selectModeltreatment"
               use-input
-              label="traitements disponibles"
+              v-bind:label="this.$t('treatment_available')"
               :options="optionsTreatment"
               option-value="id"
               option-label="name"
@@ -120,7 +120,7 @@
                 v-on:click="createPillbox"
               >
                 <q-tooltip content-class="bg-cyan">
-                  Créé ce pillulier
+                  {{ $t('create_pillbox') }}
                 </q-tooltip>
               </q-btn>
             </div>

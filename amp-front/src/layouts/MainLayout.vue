@@ -16,11 +16,11 @@
         />
         <!-- Here we have the app name + welcom to the username -->
         <q-toolbar-title>
-          {{ appName }}
+          {{ $t('appName') }}
         </q-toolbar-title>
         <!-- boutton deconnexion de nathan a mettre dans le menu -->
         <!-- This is the version of quasar. We rmeove it ? -->
-        <div class="q-mr-md">Bienvenue {{ currentUser.username }}</div>
+        <div class="q-mr-md">{{ $t('messageNickname') }} {{ currentUser.username }}</div>
         <!-- This is the menu we ca open from the top rigth buton -->
         <q-btn round style="background: transparent"
         unelevated >
@@ -33,14 +33,14 @@
                   <q-item v-ripple
                     :to="{name: 'profil_page'}" clickable v-close-popup>
                     <q-item-section
-                    >Profil</q-item-section>
+                    >{{ $t('profile') }}</q-item-section>
                   </q-item>
                   <q-separator />
                   <q-item :to="{name: 'notifications_page'}" clickable v-close-popup>
                     <q-item-section>Notifications</q-item-section>
                   </q-item>
                   <q-item :to="{name: 'HealthCard'}" clickable v-close-popup>
-                    <q-item-section>Health Card</q-item-section>
+                    <q-item-section>{{ $t('health_card') }}</q-item-section>
                   </q-item>
                   <q-item :to="{name: 'option_two'}" clickable v-close-popup>
                     <q-item-section>Menu 2</q-item-section>
@@ -48,15 +48,21 @@
                   <q-separator />
                   <q-item v-ripple
                     :to="{name: 'settings_page'}" clickable v-close-popup>
-                    <q-item-section>Settings</q-item-section>
+                    <q-item-section>{{ $t('settings') }}</q-item-section>
                   </q-item>
                   <q-separator />
                   <q-item :to="{name: 'help_page'}" clickable v-close-popup>
-                    <q-item-section>Help &amp; Feedback</q-item-section>
+                    <q-item-section>{{ $t('help_feedback') }}</q-item-section>
+                  </q-item>
+                  <q-item>
+                    <div>  </div>
+                    <q-btn color="primary" v-for="entry in languages" :key="entry.title" class="GNL__button" @click="changeLocale(entry.language)">
+                      {{entry.title}}
+                    </q-btn>
                   </q-item>
                 </q-list>
               </div>
-              <q-separator vertical inset class="q-mx-lg" />
+              <q-separator vertical inset="" class="q-mx-lg" />
               <div class="col-auto">
                 <div class="row justify-center">
                   <q-avatar class="q-mt-md">
@@ -109,7 +115,7 @@
               <q-icon :name="link.icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>{{ $t('link' + link.position) }}</q-item-label>
             </q-item-section>
           </q-item>
 
@@ -127,7 +133,7 @@
               <q-icon :name="link.icon" :class="link.color" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>{{ $t('link' + link.position) }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -145,6 +151,7 @@ import Vue from 'vue'
 import store from 'src/store/store'
 import schedule from 'node-schedule'
 import { axiosInstance } from 'boot/axios'
+import { i18n } from 'boot/i18n'
 
 export default {
   name: 'MainLayout',
@@ -158,27 +165,27 @@ export default {
       links1: [
         {
           icon: 'home',
-          text: 'Info',
+          position: 0,
           link: 'info'
         },
         {
           icon: 'star',
-          text: 'Places',
+          position: 1,
           link: 'places'
         },
         {
           icon: 'medication',
-          text: 'Medicine',
+          position: 2,
           link: 'medicine_page'
         },
         {
           icon: 'coronavirus',
-          text: 'Symptoms',
+          position: 3,
           link: 'symptoms'
         },
         {
           icon: 'sick',
-          text: 'Diseases',
+          position: 4,
           link: 'disease',
           color: 'red-8'
         }
@@ -186,35 +193,39 @@ export default {
       links2: [
         {
           icon: 'medical_services',
-          text: 'Pillulier',
+          position: 5,
           color: 'text-orange',
           link: 'pillbox'
         },
         {
           icon: 'face',
-          text: 'Profile',
+          position: 6,
           color: 'text-red',
           link: 'profil_page'
         },
         {
           icon: 'label',
-          text: 'Notifications',
+          position: 7,
           color: 'text-indigo-8',
           link: 'notifications_page'
         },
         {
           icon: 'forum',
-          text: 'Forums',
+          position: 8,
           color: 'text-teal'
         },
         {
           icon: 'feed',
-          text: 'Actualité covid',
+          position: 9,
           color: 'text-red',
           link: 'Covid'
         }
       ],
-      currentUser: JSON.parse(localStorage.getItem('user'))
+      currentUser: JSON.parse(localStorage.getItem('user')),
+      languages: [
+        { language: 'en', title: 'English' },
+        { language: 'fr', title: 'Français' }
+      ]
     }
   },
   methods: {
@@ -252,6 +263,9 @@ export default {
           }
         )
       }
+    },
+    changeLocale (locale) {
+      i18n.locale = locale
     }
   },
   computed: {
@@ -261,3 +275,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.GNL__button {
+  margin: 5%;
+}
+</style>

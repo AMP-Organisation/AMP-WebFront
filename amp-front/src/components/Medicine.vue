@@ -2,15 +2,13 @@
     <div>
       <q-card flat bordered class="my-card ">
       <q-card-section>
-        <div class="row items-center no-wrap">
-
+        <div class="row justify-between">
           <div class="col">
             <div v-if="!editMode">
               <div class="text-h4" v-if="enable_warning">
-
                 {{ name_display | nameWithFirstUpper }}
                 <q-icon name="warning" color="red">
-                  <q-tooltip content-class="bg-red">Ce médicament contient un élément auquel vous êtes allergique</q-tooltip>
+                  <q-tooltip content-class="bg-red">{{ $t('allergy') }}</q-tooltip>
                 </q-icon>
               </div>
               <div class="text-h4" v-else>{{ name_display | nameWithFirstUpper }}</div>
@@ -19,7 +17,48 @@
               <q-input outlined v-model="medUpName" label="name" stack-label />
             </div>
           </div>
+          <div class="col-1">
+            <q-btn
+              v-if="this.addToPillbox !== false || this.deleteFromPillbox !== true"
+              color="secondary"
+              icon="add"
+              v-on:click="addNewTreatmentDialog = true"
+              >
+              <q-dialog v-model="addNewTreatmentDialog">
+                <AddTreatmentDialog
+                :current_med="med"
+                :allergy="enable_warning"
+                >
+                </AddTreatmentDialog>
+              </q-dialog>
+              <q-tooltip content-class="bg-cyan">
+                  <p>{{ $t('assign_to_treatment') }}</p>
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              v-if="this.deleteFromPillbox !== false"
+              color="red-9"
+              icon="clear"
+              v-on:click="deleteMedicamentDialog = true">
 
+              <q-dialog v-model="deleteMedicamentDialog">
+                <q-card class="dbg-teal text-black" style="width: 300px">
+                  <q-card-section>
+                    <div class="text-h6">{{ $t('validation') }}</div>
+                  </q-card-section>
+
+                  <q-card-section class="q-pt-none">
+                    {{ $t('delete_medicine') }}
+                  </q-card-section>
+
+                  <q-card-actions align="center" class="bg-white text-teal">
+                    <q-btn flat label="Non" v-close-popup />
+                    <q-btn flat label="Oui" v-close-popup @click="deleteMedicine" />
+                  </q-card-actions>
+                </q-card>
+              </q-dialog>
+            </q-btn>
+          </div>
           <!-- a ne pas supprimer, c'est un menu "burger en boutton" pour une amelioration future -->
           <!-- <div class="col-auto">
             <q-btn color="grey-7" round flat icon="more_vert">
@@ -46,7 +85,7 @@
         <div class="row">
           <div class="col-6">
             <div v-if="!editMode">
-              <p v-if="this.fullCard == false" class="text-body1 q-mr-md">{{ description_display| crop }}</p>
+              <p v-if="this.fullCard === false" class="text-body1 q-mr-md">{{ description_display| crop }}</p>
               <p v-else class="text-body1 q-mr-md">{{ description_display }}</p>
             </div>
             <div v-else class="q-mr-md">
@@ -65,19 +104,19 @@
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Dose Maximum : {{ this.med.dose_max }} mg</q-item-label>
+                  <q-item-label v-if="!editMode">{{ $t('max_dose') }} : {{ this.med.dose_max }} mg</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDoseMax" label="Dose Maximal"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
 
               <q-item>
                 <q-item-section>
-                  <q-item-label v-if="!editMode">Temps entre deux dose : {{ this.med.delay }} h</q-item-label>
+                  <q-item-label v-if="!editMode">{{ $t('time') }} {{ this.med.delay }} h</q-item-label>
                   <q-item-section v-else><q-input outlined v-model="medUpDelay" label="Delay"  dense stack-label/></q-item-section>
                 </q-item-section>
               </q-item>
             </q-list>
-            <p class="text-body1 q-mt-md ">Existe sous forme :</p>
+            <p class="text-body1 q-mt-md ">{{ $t('exist_in') }}</p>
             <q-list  bordered separator>
               <q-item
               v-for="typemed in typeList"
@@ -116,11 +155,11 @@
       <q-dialog v-model="confirmDeletion" persistent  transition-show="scale">
         <q-card style="width: 300px">
           <q-card-section class="bg-negative text-white" >
-            <div class="text-h6">Delete {{ this.med.name }} </div>
+            <div class="text-h6">{{$t('delete')}} {{ this.med.name }} </div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            Are you sure to delete this medicine : {{ this.med.name }}
+            {{ $t('delete_request') }} {{ this.med.name }}
           </q-card-section>
 
           <q-card-actions align="right" >
@@ -135,55 +174,18 @@
         <q-btn v-if="this.fullCard === true && this.editMode" color="warning" icon="cancel" v-on:click="editMode = false">
           <q-tooltip>Cancel</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard === true && this.editMode === false" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn v-if="this.fullCard === true && this.editMode === false" color="negative" icon="delete" v-on:click="confirmDeletion = true"  />
+        <q-btn v-if="this.fullCard === true && this.editMode === false" color="teal-7 " icon="edit" v-on:click="enterEdit()">
+          <q-tooltip>Edit</q-tooltip>
+        </q-btn>
+        <q-btn v-if="this.fullCard === true && this.editMode === false" color="negative" icon="delete" v-on:click="confirmDeletion = true">
+          <q-tooltip>Delete</q-tooltip>
+        </q-btn>
         <q-btn v-if="this.fullCard === true && this.editMode" color="teal-9 " icon="save" v-on:click="validateUpdate()">
           <q-tooltip>Save</q-tooltip>
         </q-btn>
-        <q-btn v-if="this.fullCard === true" color="teal-7 " icon="edit" v-on:click="enterEdit()" />
-        <q-btn
-          v-if="this.addToPillbox !== false"
-          color="secondary"
-          icon="add"
-          v-on:click="addNewTreatmentDialog = true"
-          >
-          <q-dialog v-model="addNewTreatmentDialog">
-            <AddTreatmentDialog
-            :current_med="med"
-            :allergy="enable_warning"
-            >
-            </AddTreatmentDialog>
-          </q-dialog>
-          <q-tooltip content-class="bg-cyan">
-              Assigné a un traitement
-          </q-tooltip>
-        </q-btn>
+        <!-- <q-btn v-if="this.fullCard === true" color="teal-7 " icon="edit" v-on:click="enterEdit()" /> -->
 
-        <q-btn
-          v-if="this.deleteFromPillbox !== false"
-          color="red-9"
-          icon="clear"
-          v-on:click="deleteMedicamentDialog = true">
-
-          <q-dialog v-model="deleteMedicamentDialog">
-            <q-card class="dbg-teal text-black" style="width: 300px">
-              <q-card-section>
-                <div class="text-h6">Demande de validation</div>
-              </q-card-section>
-
-              <q-card-section class="q-pt-none">
-                Supprimer ce médicament ?
-              </q-card-section>
-
-              <q-card-actions align="center" class="bg-white text-teal">
-                <q-btn flat label="Non" v-close-popup />
-                <q-btn flat label="Oui" v-close-popup @click="deleteMedicine" />
-              </q-card-actions>
-            </q-card>
-          </q-dialog>
-
-        </q-btn>
-        <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.id)} }" />
+        <q-btn v-if="this.fullCard === false" color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{id: parseInt(this.med.id)} }" />
       </q-card-actions>
     </q-card>
     </div>
@@ -234,9 +236,11 @@ export default {
   data () {
     return {
       intro: 'bienvenu dans le composant medicament',
+      // l'id principale qu'on init via props si il faut
       id_medicine: undefined,
-      thumbnail: undefined,
+      // l'objet pricipal qui stocke les données
       medicine: undefined,
+      thumbnail: undefined,
       confirmDeletion: false,
       editMode: false,
       // la liste des type de medcimanet : comprimé, gelules, suppositoire, etc...
@@ -298,7 +302,7 @@ export default {
       })
     },
     getMedicineFullInfo () {
-      axiosInstance.get(`medicines/${this.idMed}`).then(elem => {
+      axiosInstance.get(`medicines/${this.id_medicine}`).then(elem => {
         this.medicine = elem.data
       }).catch(function (error) {
         console.log(error)
@@ -325,9 +329,8 @@ export default {
       })
     },
     resetData () {
+      // on recharge la page pour avoir les nouvelles infos
       this.$router.go(0)
-      // this.getMedicineFullInfo()
-      // this.editMode = false
     },
     enterEdit () {
       this.editMode = true
@@ -353,7 +356,6 @@ export default {
       })
     },
     validateUpdate () {
-      console.log('validation de la mide a jour')
       this.patchMedicine()
     },
     deleteMedicine () {
@@ -380,9 +382,25 @@ export default {
           })
         }
       )
+    },
+    printData () {
+      console.log('print data')
+      console.log(this.med)
+      console.log(this.medicine)
+      if (this.medicine !== undefined) {
+        console.log(this.medicine.id)
+      }
+      console.log(this.idMed)
+      console.log(this.id_medicine)
+      console.log(this.med.thumbnail_id)
+      console.log('fin de print data')
     }
   },
   created () {
+    this.id_medicine = this.med.id
+    this.getMedicineFullInfo()
+    this.getPicture()
+    this.getTypeList()
     if (this.active_principle !== null) {
       if (this.active_principle.allergy.length > 0) {
         this.active_principle.allergy.forEach(element => {
@@ -392,14 +410,6 @@ export default {
         })
       }
     }
-    this.getPicture()
-    if (this.med === undefined) {
-      this.getMedicineFullInfo()
-      this.id_medicine = this.med.id
-    } else {
-      this.id_medicine = this.idMed
-    }
-    this.getTypeList()
   }
 }
 </script>

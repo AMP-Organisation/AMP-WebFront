@@ -42,11 +42,11 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: '/medicine/:id',
+        path: '/medicine/:medicine_id',
         name: 'medicine_details',
         component: () => import('pages/MedicinePageDetails.vue'),
         meta: { requiresAuth: true },
-        props: r => ({ idMed: r.params.id })
+        props: r => ({ medicine_id: r.params.medicine_id })
       },
       {
         path: '/settings',

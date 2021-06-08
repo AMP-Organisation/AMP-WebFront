@@ -1,7 +1,7 @@
-<template lang="">
+<template>
   <div>
     <q-page>
-      <IconAndTitle :title="intro" :icon="'sick'" :color="'red-6'"/>
+      <IconAndTitle :title="this.$t('disease')" :icon="'sick'" :color="'red-6'"/>
       <div class="row justify-center">
 
       </div>
@@ -15,7 +15,7 @@
           option-label="name_disease"
           label="Disease List"
           /> -->
-          <q-input class="col-6" v-model="search" square outlined  type="search" hint="Search a disease">
+          <q-input class="col-6" v-model="search" square outlined  type="search" v-bind:hint=" this.$t('find_disease')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -216,7 +216,6 @@ export default {
   },
   data () {
     return {
-      intro: 'page pour les maladie',
       disease_selected: undefined,
       disease_type_selected: undefined,
       copy_disease: [],
