@@ -64,6 +64,19 @@
         />
       </q-card-actions>
     </q-card>
+    <q-card class="q-ml-md q-mr-md q-mt-sm">
+      <q-card-section class="bg-teal-3">
+        <p class="text-h6" >suivi</p>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <p>toto</p>
+        <div>
+          <q-btn color="teal" icon="local_hospital" icon-right="send" label="Suivi IMC" v-on:click="goToFollowUpPage()"/>
+        </div>
+      </q-card-section>
+    </q-card>
+    <q-btn class="q-mt-md q-ml-md q-mr-md q-mb-xl" v-on:click="goToTestPage()" color="red-5" icon="add" label="page de test du line chart seul"/>
   </div>
 </template>
 
@@ -108,6 +121,12 @@ export default {
     },
     resetData () {
       this.getUserData()
+    },
+    goToFollowUpPage () {
+      this.$router.push({ path: '/followup', params: { id: this.user.id } })
+    },
+    goToTestPage () {
+      this.$router.push({ path: '/testlinechart', params: { id: this.user.id } })
     },
     updateUser () {
       axiosInstance({

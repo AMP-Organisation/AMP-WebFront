@@ -23,6 +23,19 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: '/testlinechart',
+        name: 'page_de_test_line_chart',
+        component: () => import('pages/TestChartLine.vue'),
+        meta: { requiresAuth: true }
+      },
+      // a supprimer car c'est juste une page de test
+      {
+        path: '/followup',
+        name: 'followup_page',
+        component: () => import('pages/FollowUp.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
         path: '/medicine',
         name: 'medicine_page',
         component: () => import('pages/MedicinePage.vue'),
@@ -57,6 +70,12 @@ const routes = [
         path: '/healthCard',
         name: 'HealthCard',
         component: () => import('pages/HealthCard.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/optionone',
+        name: 'option_one',
+        component: () => import('pages/OptionOne.vue'),
         meta: { requiresAuth: true }
       },
       {

@@ -70,8 +70,8 @@
                 <div class="col">
                   <div class="text-h6">{{ disease_selected.name_disease }}</div>
                 </div>
-                <div class="col-1">
-                    <q-btn class="justify-end" color="warning" icon="close" v-on:click="disease_selected = undefined" />
+                <div class="col-1 q-mr-md">
+                    <q-btn class="justify-end" color="red-9" icon="close" v-on:click="disease_selected = undefined" />
                 </div>
               </div>
             </q-card-section>

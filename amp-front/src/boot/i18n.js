@@ -94,6 +94,8 @@ const messages = {
     reputation: 'Reputation :',
     type_place: 'Type',
     hospital_service: 'Service supported by the hospital :',
+    // page de follow up
+    follow_up_title_page: 'Follow up Page',
     link0: 'Informations',
     link1: 'Places',
     link2: 'Medicines',
@@ -198,6 +200,8 @@ const messages = {
     reputation: 'Réputation :',
     type_place: 'Type de lieux',
     hospital_service: 'Service pris en charge par l\'hôpital :',
+    // page follow up
+    follow_up_title_page: 'Page de suivi',
     link0: 'Informations',
     link1: 'Lieux',
     link2: 'Médicaments',
