@@ -1,6 +1,6 @@
 <template>
   <div>
-    <IconAndTitle :title="intro" :color="'teal-4'" :icon="'moving'" />
+    <IconAndTitle :title="this.$t('follow_up_title_page')" :color="'teal-4'" :icon="'moving'" />
     <div class=" q-pb-xl">
       <q-card class="q-ml-md q-mr-md q-mb-md">
         <q-expansion-item
@@ -35,7 +35,7 @@
         <!-- le line chart CAD le graphique -->
         <q-card-section>
           <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
-            <q-tab-panel name="week">
+            <q-tab-panel name="week" v-model="weekTabObject">
               <!-- <LineChart
                 v-if="datatab"
                 :chartData="dataChartWeek"
@@ -46,8 +46,8 @@
               /> -->
               <FacadeLineChartComponent
               :durationType="'week'"
-              :firstData="lastWeekData"
-              :secondData="lastWeekDataIMC"
+              :firstData="weekDataTabWeight"
+              :secondData="weekDataTabImc"
               />
               <!-- <FacadeLineChartComponent
                 :duration="7"
@@ -117,13 +117,13 @@
                         { label: 'Week', value: 'week' },
                         { label: 'Month', value: 'month' },
                         { label: 'Semester', value: 'semester' },
-                        { label: 'Year', value: 'year' },
-                        { label: 'Year', value: 'yeardeux' },
-                        { label: 'week', value: 'weekdeux' }
+                        { label: 'Year', value: 'year' }
                       ]"
                     />
-                    </div>
+            </div>
           </div>
+          <!-- { label: 'Year', value: 'yeardeux' },
+          { label: 'week', value: 'weekdeux' } -->
         </q-card-section>
         <!-- la deuxieme partie avec la liste et la carte a coté -->
         <q-card-section>
@@ -135,7 +135,7 @@
               </q-card> -->
                 <div class="q-pa-md">
                   <div class="" >
-                    <q-option-group
+                    <!-- <q-option-group
                       v-model="panel"
                       inline
                       :options="[
@@ -144,7 +144,7 @@
                         { label: 'Semester', value: 'semester' },
                         { label: 'Year', value: 'year' }
                       ]"
-                    />
+                    /> -->
                     <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
                       <!-- par semaine -->
                       <q-tab-panel name="week">
@@ -154,7 +154,7 @@
                         <q-list
                           bordered
                           separator
-                          v-for="wdata in weekData"
+                          v-for="wdata in weekTabObject"
                           v-on:click="weightWeekSelected = wdata"
                           v-bind:key="wdata.date">
                           <q-item clickable v-ripple>
@@ -235,7 +235,8 @@
                   </div>
                 </div>
             </div>
-            <!-- la liste -->
+
+            <!-- le bouton d'ajout de donnée suivi de la carte d'ajout de donnée -->
             <div class="col-6">
               <q-btn
                 color="positive"
@@ -271,6 +272,7 @@
                   </q-item-section>
                 </q-item>
               </q-list> -->
+              <!-- la carte pour ajouter une donnée de suivi d'imc -->
               <q-card class="q-mt-md" v-if="addNewData">
                 <q-card-section>
                   <div class="text-h5">add new data</div>
@@ -315,10 +317,23 @@
                   </q-form>
                 </q-card-section>
               </q-card>
+              <q-tab-panels v-model="panel" v-if="weightWeekSelected" animated class="shadow-2 q-mt-md">
+                <q-tab-panel name="week">
+                  <q-card class="q-mt-md" :bordered="false">
+                    <div class="q-ml-md">
+                      <!-- {{weightWeekSelected}} -->
+                      <h3>{{weightWeekSelected.date | formatTheDate }}</h3>
+                      <h5>pour un poid de : {{weightWeekSelected.weight}}</h5>
+                      <h5>un imc de : {{weightWeekSelected.imc_computed}}</h5>
+                    </div>
+                  </q-card>
+                </q-tab-panel>
+              </q-tab-panels>
             </div>
           </div>
         </q-card-section>
 
+        <!-- toto -->
         <q-card-section>
           <div>
             <p>toto</p>
@@ -346,7 +361,6 @@ import IconAndTitle from 'components/IconAndTitleHeader.vue'
 import FacadeLineChartComponent from 'components/FacadeLineChartComponent.vue'
 
 import { axiosInstance } from 'boot/axios'
-import { month, week } from 'boot/env_str'
 import { date } from 'quasar'
 
 export default {
@@ -356,8 +370,9 @@ export default {
       intro: 'Follow Up Page',
       // maintenant
       today: new Date(),
+      userToFollow: undefined,
       // données à charger differement
-      id_user: 15,
+      id_user: 42,
       expanded_imc: true,
       charttest: undefined,
       // la taille sera à récupérer depuis la fiche de santé
@@ -365,7 +380,7 @@ export default {
       objective: 70,
       // loseWeight est un booleen qui désigne le fait de vouloir perdre du poid, ou d'en gagner
       loseWeight: true,
-      panel: 'week',
+      panel: '',
       addNewData: false,
       // il faudrait l'initialiser a la derniere valeur
       new_weight: '',
@@ -385,7 +400,7 @@ export default {
       loadedYear: false,
       loadedYearTwo: false,
       // ces 3 variables, pour stocker les données provenant de l'api
-      lastWeekData: [75, 76, 78, 74, 72, 71, 70],
+      lastWeekData: [],
       lastWeekDataIMC: [23.15, 23.46, 24.07, 22.84, 22.22, 21.91, 21.60],
       lastMonthData: [],
       lastTrimesterData: [],
@@ -399,6 +414,10 @@ export default {
           imc: 0
         }
       ],
+      // les données stocké differement et plusieurs fois ...
+      weekTabObject: [],
+      weekDataTabWeight: [],
+      weekDataTabImc: [],
       weekData: [
         {
           date: '2021-04-030T15:01:09.538Z',
@@ -562,8 +581,6 @@ export default {
   },
   watch: {
     new_weight: function () {
-      console.log('mise a jour du poids')
-      console.log(this.newIMC)
       this.watched = this.newIMC + 1
     }
   },
@@ -587,14 +604,12 @@ export default {
       dt = dt.replace('Z', ' ')
       const finalDate = new Date(Date.parse(dt))
       const formatedDate = date.formatDate(finalDate, 'DD MMMM YYYY')
-      // console.log(`le jour : ${date.formatDate(finalDate, 'dddd')}`)
       return formatedDate
     }
   },
   methods: {
     // c'est pour afficher une icone differentes en focntion du calcul IMC
     triggerIMC (imc) {
-      console.log('triggered !!')
       this.newIMC = imc
       if (imc === 0) {
         return null
@@ -641,14 +656,8 @@ export default {
     },
     getFollowUpData () {
       axiosInstance.get(`/followup/imc/${this.id_user}`).then(elem => {
-        console.log('les données reçu ')
-        console.log(elem.data)
         this.gotData = elem.data
       })
-    },
-    // for dev and debug to load data like I would like them to be
-    loadFakeData () {
-      console.log('$$$load fake data$$$')
     },
     //, si j'utilise un async await, ce sera pour afficher une barre de chargement
     async getLastWeekData () {
@@ -656,8 +665,13 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      console.log('FlU les données reçu pour le last week')
-      console.log(ret.data)
+      ret.data.filter(elem => {
+        this.weekDataTabWeight.push(elem.weight)
+        this.weekDataTabImc.push(elem.imc_computed)
+      })
+      this.weekDataTabWeight = this.weekDataTabWeight.reverse()
+      this.weekDataTabImc = this.weekDataTabImc.reverse()
+      this.weekTabObject = ret.data
       this.lastWeekData = ret.data
     },
     async getLastMonthData () {
@@ -665,8 +679,6 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      console.log('les données reçu pour le last week')
-      console.log(ret.data)
       this.lastWeekData = ret.data
     },
     async getLastYearData () {
@@ -674,16 +686,10 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      console.log('les données reçu pour le last week')
-      console.log(ret.data)
       this.lastWeekData = ret.data
       this.loadedYearTwo = true
     },
     validatefollowUpIMC () {
-      console.log('we are going to validate new data')
-      console.log(this.newIMC)
-      console.log(this.new_weight)
-      console.log(this.formDate)
       const data = {
         id_user: this.id_user,
         imc: this.newIMC,
@@ -697,23 +703,16 @@ export default {
     }
   },
   created () {
-    console.log('dans la page follow up')
+    this.userToFollow = JSON.parse(localStorage.getItem('user'))
+    console.log('dans el created le user :')
+    console.log(this.userToFollow)
+    this.id_user = this.userToFollow.id
     this.getFollowUpData()
     this.formDate = new Date()
-    console.log(this.dataChart)
     this.weekData.filter(elem => {
       this.datatab.push(elem.weight)
     })
-    console.log(this.datatab)
-
-    // this.dataChart.datasets[0].label = 'Toto'
-    // this.dataChart.datasets[0].data = this.datatab
-
-    console.log(this.dataChart)
-    console.log(month)
-    console.log(week)
     this.getLastWeekData()
-    console.log('**FIN du created**')
   }
 }
 

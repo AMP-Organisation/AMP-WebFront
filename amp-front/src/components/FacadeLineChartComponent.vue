@@ -214,8 +214,6 @@ export default {
       } else {
         this.dataChart.datasets[1].data = this.secondData
       }
-      console.log(this.dataChart.datasets[0].data)
-      console.log(this.dataChart.datasets[1].data)
     },
     loadData () {
       this.dayToday = this.today.getDay()
@@ -228,21 +226,10 @@ export default {
     }
   },
   created () {
-    console.log('création de la facade')
-    console.log(month)
-    console.log(week)
-    console.log(this.duration)
-    console.log(this.data)
-    console.log(this.firstData)
-    console.log('-la date-')
-    console.log(this.today)
-    console.log(this.today.getDay())
-    console.log(this.today.getMonth())
     this.loadData()
     this.generateLabel()
     this.generateData()
     this.checkOtherCustomProps()
-    console.log('fin creation de la facade pour le line chart')
   }
 }
 </script>
