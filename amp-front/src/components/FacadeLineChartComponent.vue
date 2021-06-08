@@ -27,15 +27,20 @@ export default {
       type: Number
     },
     // si ce sont des jours ou des mois
-    // et si c'est custom, faut mettre custom
+    // et si c'est "custom", faut mettre "custom"
     durationType: {
       type: String,
       default: 'week',
       required: true
     },
     // on recoit la list des données reçu
-    dataToCompute: {
-      type: Array
+    firstData: {
+      type: Array,
+      default: null
+    },
+    secondData: {
+      type: Array,
+      default: null
     },
     customTitle: {
       type: String,
@@ -121,10 +126,6 @@ export default {
             position: 'right',
             grid: {
               drawOnChartArea: true // only want the grid lines for one axis to show up
-            },
-            ticks: {
-              max: 15,
-              min: 42
             }
           }]
         }
@@ -197,14 +198,24 @@ export default {
     },
     // we have to, because if for the same day/month we have several data, we do a moyenne of the day
     generateData () {
-      if (this.durationType === 'custom') {
+      if (this.firstData === null) {
+        // I dont change anything inside preLabels, it is just to create the same number of data
         this.preLabels.map(() => {
-          this.dataChart.datasets[0].data.push(Math.round(Math.random() * 25))
+          this.dataChart.datasets[0].data.push(Math.round(Math.random() * 92))
         })
       } else {
-        this.dataChart.datasets[0].data = this.dataTestTab
+        this.dataChart.datasets[0].data = this.firstData
+      }
+      if (this.secondData === null) {
+        // I dont change anything inside preLabels, it is just to create the same number of data
+        this.preLabels.map(() => {
+          this.dataChart.datasets[1].data.push(Math.round(Math.random() * 25))
+        })
+      } else {
+        this.dataChart.datasets[1].data = this.secondData
       }
       console.log(this.dataChart.datasets[0].data)
+      console.log(this.dataChart.datasets[1].data)
     },
     loadData () {
       this.dayToday = this.today.getDay()
@@ -222,7 +233,7 @@ export default {
     console.log(week)
     console.log(this.duration)
     console.log(this.data)
-    console.log(this.dataToCompute)
+    console.log(this.firstData)
     console.log('-la date-')
     console.log(this.today)
     console.log(this.today.getDay())

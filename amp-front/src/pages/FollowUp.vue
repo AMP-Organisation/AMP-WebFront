@@ -45,12 +45,20 @@
                 :dataToCompute="dataTabdeci"
               /> -->
               <FacadeLineChartComponent
+              :durationType="'week'"
+              :firstData="lastWeekData"
+              :secondData="lastWeekDataIMC"
+              />
+              <!-- <FacadeLineChartComponent
                 :duration="7"
                 :dataToCompute="[]"
                 :durationType="'week'">
-                </FacadeLineChartComponent>
+                </FacadeLineChartComponent> -->
             </q-tab-panel>
             <q-tab-panel name="month">
+              <FacadeLineChartComponent
+              :durationType="'month'"
+              />
               <!-- <LineChart
                 v-if="datatab"
                 :chartData="dataChartMonth"
@@ -59,6 +67,16 @@
                 :duration="'month'"
                 :dataToCompute="dataTabdeci"
               /> -->
+            </q-tab-panel>
+            <q-tab-panel name="semester">
+              <FacadeLineChartComponent
+              :durationType="'semester'"
+              />
+            </q-tab-panel>
+            <q-tab-panel name="year">
+              <FacadeLineChartComponent
+              :durationType="'year'"
+              />
             </q-tab-panel>
             <q-tab-panel name="yeardeux">
               <FacadeLineChartComponent
@@ -137,6 +155,7 @@
                           bordered
                           separator
                           v-for="wdata in weekData"
+                          v-on:click="weightWeekSelected = wdata"
                           v-bind:key="wdata.date">
                           <q-item clickable v-ripple>
                             <q-item-section class="col-1">
@@ -338,7 +357,7 @@ export default {
       // maintenant
       today: new Date(),
       // données à charger differement
-      id_user: 12,
+      id_user: 15,
       expanded_imc: true,
       charttest: undefined,
       // la taille sera à récupérer depuis la fiche de santé
@@ -346,7 +365,7 @@ export default {
       objective: 70,
       // loseWeight est un booleen qui désigne le fait de vouloir perdre du poid, ou d'en gagner
       loseWeight: true,
-      panel: 'year',
+      panel: 'week',
       addNewData: false,
       // il faudrait l'initialiser a la derniere valeur
       new_weight: '',
@@ -359,10 +378,15 @@ export default {
         color: 'positive',
         icon: 'check'
       },
+      weightWeekSelected: undefined,
+      weightMonthSelected: undefined,
+      weightSemestreSelected: undefined,
+      weightYearSelected: undefined,
       loadedYear: false,
       loadedYearTwo: false,
       // ces 3 variables, pour stocker les données provenant de l'api
-      lastWeekData: [],
+      lastWeekData: [75, 76, 78, 74, 72, 71, 70],
+      lastWeekDataIMC: [23.15, 23.46, 24.07, 22.84, 22.22, 21.91, 21.60],
       lastMonthData: [],
       lastTrimesterData: [],
       lastSemestersData: [],
