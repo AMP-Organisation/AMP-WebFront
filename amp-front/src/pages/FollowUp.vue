@@ -332,13 +332,6 @@
             </div>
           </div>
         </q-card-section>
-
-        <!-- toto -->
-        <q-card-section>
-          <div>
-            <p>toto</p>
-          </div>
-        </q-card-section>
         </q-expansion-item>
       </q-card>
       <!-- le deuxieme expansion item pour un autre suivi -->
@@ -704,8 +697,6 @@ export default {
   },
   created () {
     this.userToFollow = JSON.parse(localStorage.getItem('user'))
-    console.log('dans el created le user :')
-    console.log(this.userToFollow)
     this.id_user = this.userToFollow.id
     this.getFollowUpData()
     this.formDate = new Date()

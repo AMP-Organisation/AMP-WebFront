@@ -123,11 +123,9 @@ export default {
       this.getUserData()
     },
     goToFollowUpPage () {
-      console.log('dans le go to follow up page')
       this.$router.push({ path: '/followup', params: { id: this.user.id } })
     },
     goToTestPage () {
-      console.log('dans le go to test page')
       this.$router.push({ path: '/testlinechart', params: { id: this.user.id } })
     },
     updateUser () {

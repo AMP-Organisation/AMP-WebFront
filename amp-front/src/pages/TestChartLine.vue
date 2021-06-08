@@ -1,5 +1,6 @@
 <template lang="">
   <div>
+    <!-- Cette page pourra etre supprimé non ? -->
     <IconAndTitle :title="intro" :color="'teal-4'" :icon="'add'" />
     <FacadeLineChartComponent :durationType="'week'"/>
     <FacadeLineChartComponent :durationType="'semester'" :customTitle="'par semestre'"/>
@@ -25,9 +26,6 @@ export default {
   components: {
     IconAndTitle,
     FacadeLineChartComponent
-  },
-  created () {
-    console.log('creation TEST line chart')
   }
 }
 </script>

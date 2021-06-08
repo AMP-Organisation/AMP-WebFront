@@ -10,9 +10,6 @@
           />
         </div>
       </q-card-section>
-      <q-card-section>
-        <q-btn label="DEBUG" :color="'amber-5'" v-on:click="totoFunction()"/>
-      </q-card-section>
     </q-card>
   </div>
 </template>
@@ -133,10 +130,6 @@ export default {
     }
   },
   methods: {
-    totoFunction () {
-      console.log('salut')
-      console.log(this.preLabels)
-    },
     generateLabelForDuration (period) {
       for (let i = period + 1; i > 0; i--) {
         // const strDate = antes.toDateString()
@@ -145,13 +138,13 @@ export default {
         this.preLabels.push(temp.toDateString())
         // antes = antes.setDate(antes.getDate() + 1)
       }
-      console.log('les labels custom')
-      console.log(this.preLabels)
     },
+    /**
+    * This function generate the labels of the line chart
+    * according to the duration given to the component
+    */
     generateLabel () {
-      console.log('generate label')
       if (this.durationType === 'week') {
-        console.log('c\'est en semaine qu\'on genere ')
         for (let i = 0; i < week.length; i++) {
           if (i + this.dayToday >= week.length) {
             this.preLabels.push(week[i - (7 - this.dayToday)])
@@ -159,12 +152,9 @@ export default {
             this.preLabels.push(week[i + this.dayToday])
           }
         }
-        console.log('***FIN du for***')
       } else if (this.durationType === 'month') {
-        console.log('c\'est en mois qu\'on genere ')
         this.generateLabelForDuration(30)
       } else if (this.durationType === 'semester') {
-        console.log('c\'est en semestre qu\'on genere ')
         for (let i = 6; i < month.length; i++) {
           if (i + this.monthToday >= month.length) {
             this.preLabels.push(month[i - (12 - this.monthToday)])
@@ -172,24 +162,14 @@ export default {
             this.preLabels.push(month[i + this.monthToday])
           }
         }
-        console.log('***FIN du for semestre ***')
       } else if (this.durationType === 'year') {
-        console.log('c\'est en année qu\'on genere ')
-        console.log(month.length)
-        console.log(month)
         for (let i = 0; i < month.length; i++) {
           if (i + this.monthToday >= month.length) {
-            console.log('if')
-            console.log(month[i - (12 - this.monthToday)])
             this.preLabels.push(month[i - (12 - this.monthToday)])
           } else {
-            console.log('else')
-            console.log(this.monthToday)
-            console.log(month[i + this.monthToday])
             this.preLabels.push(month[i + this.monthToday])
           }
         }
-        console.log('***FIN du for year***')
       } else if (this.durationType === 'custom') {
         // attention, duration n'est pas requis donc pb eventuel
         this.generateLabelForDuration(this.duration)

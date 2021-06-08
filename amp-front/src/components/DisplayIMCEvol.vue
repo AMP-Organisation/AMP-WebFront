@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     doSomething () {
-      console.log('toto')
     }
   }
 }
