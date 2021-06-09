@@ -120,7 +120,6 @@ export default {
   },
   methods: {
     register: function () {
-      console.log(this.$refs.email)
       if (this.$refs.first_name.hasError || this.$refs.last_name.hasError || this.$refs.email.hasError ||
         this.$refs.username.hasError || this.$refs.birthdate.hasError) {
         this.$q.notify({
