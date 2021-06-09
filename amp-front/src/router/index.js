@@ -5,9 +5,8 @@ import routes from './routes'
 import store from 'src/store/store'
 import VueNativeNotification from 'vue-native-notification'
 import { i18n } from 'boot/i18n'
-import FlagIcon from 'vue-flag-icon'
 
-Vue.use(VueRouter, i18n, FlagIcon)
+Vue.use(VueRouter, i18n)
 Vue.use(VueNativeNotification, {
   requestOnNotify: true
 })

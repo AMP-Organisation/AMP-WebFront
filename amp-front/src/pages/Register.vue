@@ -23,7 +23,7 @@
                 class="q-pl-md"
                 label="Your first name *"
                 hint="Jérome"
-                :rules="[ val => val && val.length > 5 || 'Please type something']"
+                :rules="[ val => val && val.length > 2 || 'Please type something']"
               />
               <q-input
                 class="q-pl-md"
@@ -31,7 +31,7 @@
                 hint="Rousseau"
                 v-model="input.last_name"
                 aria-autocomplete="inline"
-                :rules="[ val => val && val.length > 3 || 'Please type something']"
+                :rules="[ val => val && val.length > 2 || 'Please type something']"
                 label="Your last name *"
               />
             </div>
@@ -43,13 +43,13 @@
                type="email"
                label="Your email *"
                hint="email address"
-               :rules="[val => !!val || 'Email is missing', isValidEmail(),]"
+               :rules="[val => !!val || 'Email is missing', isValidEmail]"
              />
              <q-input
                type="password"
                class="q-pl-md"
+               hint="password"
                v-model="input.password"
-               aria-autocomplete="inline"
                :rules="[ val => val && val.length > 5 || 'Please type a strong password']"
                label="Your password *"
              />
@@ -69,8 +69,7 @@
              @change="updateDate"
              mask="date"
              label="your birthdate *"
-             hint="1998/03/14"
-             :rules="['date']">
+             hint="1998/03/14">
              <template v-slot:append>
                <q-icon name="event" class="cursor-pointer">
                  <q-popup-proxy>
@@ -121,6 +120,7 @@ export default {
   },
   methods: {
     register: function () {
+      console.log(this.$refs.email)
       if (this.$refs.first_name.hasError || this.$refs.last_name.hasError || this.$refs.email.hasError ||
         this.$refs.username.hasError || this.$refs.birthdate.hasError) {
         this.$q.notify({
@@ -145,9 +145,9 @@ export default {
     updateDate: function (val) {
       this.input.birthDate = val
     },
-    isValidEmail: function () {
+    isValidEmail: function (val) {
       const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
-      return emailPattern.test(this.regEmail) || 'Invalid email'
+      return emailPattern.test(val) || 'Invalid email'
     },
     getAge: function (dateString) {
       const today = new Date()
