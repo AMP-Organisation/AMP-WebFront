@@ -17,12 +17,12 @@
             <div class="col">
               <div class="col-1">
                 <div v-if="hasReachedObjective()">
-                  <div class="text-h3 text-red-9" color="red-9">
+                  <div class="text-h3 text-red-9" color="teal-9">
                     {{ objective }}
                   </div>
                 </div>
                 <div v-else>
-                  <div class="text-h3 text-teal-9" color="teal-9">
+                  <div class="text-h3 text-teal-9" color="red-9">
                     {{ objective }}
                   </div>
                 </div>
@@ -36,18 +36,13 @@
         <q-card-section>
           <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
             <q-tab-panel name="week" v-model="weekTabObject">
-              <!-- <LineChart
-                v-if="datatab"
-                :chartData="dataChartWeek"
-                :options="dataOption"
-                :which="true"
-                :duration="'week'"
-                :dataToCompute="dataTabdeci"
-              /> -->
               <FacadeLineChartComponent
               :durationType="'week'"
               :firstData="weekDataTabWeight"
               :secondData="weekDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur une semaine'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
               <!-- <FacadeLineChartComponent
                 :duration="7"
@@ -58,24 +53,31 @@
             <q-tab-panel name="month">
               <FacadeLineChartComponent
               :durationType="'month'"
+              :firstData="monthDataTabWeight"
+              :secondData="monthDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur un mois'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
-              <!-- <LineChart
-                v-if="datatab"
-                :chartData="dataChartMonth"
-                :options="dataOption"
-                :which="true"
-                :duration="'month'"
-                :dataToCompute="dataTabdeci"
-              /> -->
             </q-tab-panel>
             <q-tab-panel name="semester">
               <FacadeLineChartComponent
               :durationType="'semester'"
+              :firstData="semesterDataTabWeight"
+              :secondData="semesterDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur un semestre par mois'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
             </q-tab-panel>
             <q-tab-panel name="year">
               <FacadeLineChartComponent
               :durationType="'year'"
+              :firstData="yearDataTabWeight"
+              :secondData="yearDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur un an par mois'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
             </q-tab-panel>
             <q-tab-panel name="yeardeux">
@@ -149,7 +151,7 @@
                       <!-- par semaine -->
                       <q-tab-panel name="week">
                         <div class="text-h5 q-mb-sm">
-                          Week
+                          {{ this.$t('week') }}
                         </div>
                         <q-list
                           bordered
@@ -159,14 +161,22 @@
                           v-bind:key="wdata.date">
                           <q-item clickable v-ripple>
                             <q-item-section class="col-1">
-                              <div v-if="loseWeight">
-                                <q-icon v-if="progression(wdata.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                                  <q-tooltip>You lost some weight</q-tooltip>
-                                </q-icon>
-                                <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                                  <q-tooltip>You gain some weight</q-tooltip>
-                                </q-icon>
-                              </div>
+                              <progress-icone :dataComponent="wdata"></progress-icone>
+                              <!-- <div v-if="loseWeight">
+                                <div v-if="!wdata.previousWeight">
+                                  <q-icon name="flag" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>nothing before</q-tooltip>
+                                  </q-icon>
+                                </div>
+                                <div v-else>
+                                  <q-icon v-if="progression(wdata)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>You lost some weight</q-tooltip>
+                                  </q-icon>
+                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
+                                    <q-tooltip>You gain some weight</q-tooltip>
+                                  </q-icon>
+                                </div>
+                              </div> -->
                             </q-item-section>
                             <q-item-section class="col">
                               <q-item-label>Le : {{ wdata.date | formatTheDate }}</q-item-label>
@@ -181,55 +191,72 @@
                           <q-list
                             bordered
                             separator
-                            v-for="elemData in monthData"
-                            v-bind:key="elemData.date">
+                            v-for="mData in monthTabObject"
+                            v-bind:key="mData.date">
                             <q-item clickable v-ripple>
-                              <q-item-section class="col-1">
+                              <progress-icone :dataComponent="mData"></progress-icone>
+                              <!-- <q-item-section class="col-1">
                                 <div v-if="loseWeight">
-                                  <q-icon v-if="progression(elemData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                  <q-icon v-if="progression(mData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
                                     <q-tooltip>You lost some weight</q-tooltip>
                                   </q-icon>
                                   <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
                                     <q-tooltip>You gain some weight</q-tooltip>
                                   </q-icon>
                                 </div>
-                              </q-item-section>
+                              </q-item-section> -->
                               <q-item-section class="col">
-                                <q-item-label>Le : {{ elemData.date | formatTheDate }}</q-item-label>
-                                <q-item-label>Poids de : {{ elemData.weight }} </q-item-label>
+                                <q-item-label>Le : {{ mData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ mData.weight }} </q-item-label>
                               </q-item-section>
                             </q-item>
                           </q-list>
                       </q-tab-panel>
                       <!-- par semestre (enfin je ne sais pas si on le gardera celui ci) -->
                       <q-tab-panel name="semester">
-                        <div class="text-h6">Month</div>
-                        <q-list
-                            bordered
-                            separator
-                            v-for="elemData in gotData"
-                            v-bind:key="elemData.date">
+                        <div class="text-h6">Semestre</div>
+                        <q-list bordered separator v-for="sData in semesterTabObject" v-bind:key="sData.date">
                             <q-item clickable v-ripple>
-                              <q-item-section class="col-1">
+                              <progress-icone :dataComponent="sData"></progress-icone>
+                              <!-- <q-item-section class="col-1">
                                 <div v-if="loseWeight">
-                                  <q-icon v-if="progression(elemData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                  <q-icon v-if="progression(sData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
                                     <q-tooltip>You lost some weight</q-tooltip>
                                   </q-icon>
                                   <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
                                     <q-tooltip>You gain some weight</q-tooltip>
                                   </q-icon>
                                 </div>
-                              </q-item-section>
+                              </q-item-section> -->
                               <q-item-section class="col">
-                                <q-item-label>Le : {{ elemData.date | formatTheDate }}</q-item-label>
-                                <q-item-label>Poids de : {{ elemData.weight }} </q-item-label>
+                                <q-item-label>Le : {{ sData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ sData.weight }} </q-item-label>
                               </q-item-section>
                             </q-item>
-                          </q-list>
-                        </q-tab-panel>
+                        </q-list>
+                      </q-tab-panel>
+                      <!-- par an  -->
                       <q-tab-panel name="year">
-                        <div class="text-h6">Movies</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        <div class="text-h6">Année</div>
+                        <q-list bordered separator v-for="sData in yearTabObject" v-bind:key="sData.date">
+                            <q-item clickable v-ripple>
+                              <progress-icone :dataComponent="sData"></progress-icone>
+                              <!-- <q-item-section class="col-1">
+                                <div v-if="loseWeight">
+                                  <q-icon v-if="progression(sData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>You lost some weight</q-tooltip>
+                                  </q-icon>
+                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
+                                    <q-tooltip>You gain some weight</q-tooltip>
+                                  </q-icon>
+                                </div>
+                              </q-item-section> -->
+                              <q-item-section class="col">
+                                <q-item-label>Le : {{ sData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ sData.weight }} </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                        </q-list>
                       </q-tab-panel>
                     </q-tab-panels>
                   </div>
@@ -250,28 +277,7 @@
                 v-on:click="addNewData = !addNewData"
                 v-if="addNewData"
               />
-              <!-- <q-list
-                bordered
-                separator
-                v-for="wdata in weekData"
-                v-bind:key="wdata.date">
-                <q-item clickable v-ripple>
-                  <q-item-section class="col-1">
-                    <div v-if="loseWeight">
-                      <q-icon v-if="progression(wdata.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                        <q-tooltip>You lost some weight</q-tooltip>
-                      </q-icon>
-                      <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                        <q-tooltip>You gain some weight</q-tooltip>
-                      </q-icon>
-                    </div>
-                  </q-item-section>
-                  <q-item-section class="col">
-                    <q-item-label>Le : {{ wdata.date | formatTheDate }}</q-item-label>
-                    <q-item-label>Poids de : {{ wdata.weight }} </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list> -->
+
               <!-- la carte pour ajouter une donnée de suivi d'imc -->
               <q-card class="q-mt-md" v-if="addNewData">
                 <q-card-section>
@@ -319,14 +325,13 @@
               </q-card>
               <q-tab-panels v-model="panel" v-if="weightWeekSelected" animated class="shadow-2 q-mt-md">
                 <q-tab-panel name="week">
-                  <q-card class="q-mt-md" :bordered="false">
                     <div class="q-ml-md">
                       <!-- {{weightWeekSelected}} -->
+                      <progress-icone v-model="weightWeekSelected" :dataComponent="weightWeekSelected"></progress-icone>
                       <h3>{{weightWeekSelected.date | formatTheDate }}</h3>
                       <h5>pour un poid de : {{weightWeekSelected.weight}}</h5>
                       <h5>un imc de : {{weightWeekSelected.imc_computed}}</h5>
                     </div>
-                  </q-card>
                 </q-tab-panel>
               </q-tab-panels>
             </div>
@@ -352,6 +357,7 @@
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 // import LineChart from 'components/LineChart.vue'
 import FacadeLineChartComponent from 'components/FacadeLineChartComponent.vue'
+import ProgressIcone from 'components/ProgressIcon.vue'
 
 import { axiosInstance } from 'boot/axios'
 import { date } from 'quasar'
@@ -392,13 +398,14 @@ export default {
       weightYearSelected: undefined,
       loadedYear: false,
       loadedYearTwo: false,
-      // ces 3 variables, pour stocker les données provenant de l'api
+      // ces variables ci dessous, pour stocker les données provenant de l'api
       lastWeekData: [],
       lastWeekDataIMC: [23.15, 23.46, 24.07, 22.84, 22.22, 21.91, 21.60],
       lastMonthData: [],
       lastTrimesterData: [],
       lastSemestersData: [],
       lastYearData: [],
+      // dsf
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       lastData: [
         {
@@ -411,165 +418,21 @@ export default {
       weekTabObject: [],
       weekDataTabWeight: [],
       weekDataTabImc: [],
-      weekData: [
-        {
-          date: '2021-04-030T15:01:09.538Z',
-          weight: 75.1,
-          imc: 0
-        },
-        {
-          date: '2021-04-029T15:01:09.538Z',
-          weight: 75.2,
-          imc: 0
-        },
-        {
-          date: '2021-04-028T15:01:09.538Z',
-          weight: 75.1,
-          imc: 0
-        },
-        {
-          date: '2021-04-027T15:01:09.538Z',
-          weight: 74.3,
-          imc: 0
-        },
-        {
-          date: '2021-04-026T15:01:09.538Z',
-          weight: 74.8,
-          imc: 0
-        },
-        {
-          date: '2021-04-025T15:01:09.538Z',
-          weight: 75.1,
-          imc: 0
-        },
-        {
-          date: '2021-04-024T15:01:09.538Z',
-          weight: 75.4,
-          imc: 0
-        }
-      ],
-      monthData: [
-        {
-          date: '2021-02-09T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-08T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-07T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-06T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-05T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-04T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-03T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-02T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-01T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-01-31T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-30T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-29T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        }
-      ],
-      gotData: [],
-      dataOption: {
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'My Data bis'
-        }
-      },
-      datatab: [],
-      dataChartWeek: {
-        labels: [
-          'Lundi',
-          'Mardi',
-          'Mercredi',
-          'Jeudi',
-          'Vendredi',
-          'Samedi',
-          'Dimanche'
-        ],
-        datasets: [
-          {
-            label: 'Data 1',
-            data: [42, 36, 76, 42, 36, 76, 42, 36, 76, 42, 36, 76],
-            backgroundColor: 'transparent',
-            borderColor: 'rgba(1, 116, 188, 0.50)',
-            pointBackgroundColor: 'rgba(171, 71, 188, 1)'
-          }
-        ]
-      },
-      dataChartMonth: {
-        labels: [
-          'Janvier',
-          'Février',
-          'Mars',
-          'Avril',
-          'Mai',
-          'Juin',
-          'Juillet',
-          'Aout',
-          'Septembre',
-          'Octobre',
-          'Novembre',
-          'Décembre'
-        ],
-        datasets: [
-          {
-            label: 'Data 1',
-            data: [42, 36, 76, 42, 36, 76, 42, 36, 76, 42, 36, 76],
-            backgroundColor: 'transparent',
-            borderColor: 'rgba(1, 116, 188, 0.50)',
-            pointBackgroundColor: 'rgba(171, 71, 188, 1)'
-          }
-        ]
-      }
+      monthTabObject: [],
+      monthDataTabWeight: [],
+      monthDataTabImc: [],
+      semesterTabObject: [],
+      semesterDataTabWeight: [],
+      semesterDataTabImc: [],
+      yearTabObject: [],
+      yearDataTabWeight: [],
+      yearDataTabImc: []
     }
   },
   components: {
     IconAndTitle,
-    FacadeLineChartComponent
+    FacadeLineChartComponent,
+    ProgressIcone
     // LineChart
   },
   watch: {
@@ -630,9 +493,12 @@ export default {
       }
     },
     hasReachedObjective () {
+      console.log('les objectif dsotn attein')
       if (this.lastData.weight <= this.objective) {
+        console.log('true')
         return true
       } else {
+        console.log('false')
         return false
       }
     },
@@ -658,29 +524,95 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      ret.data.filter(elem => {
+      this.weekTabObject = ret.data.reverse()
+      let previousWeight = null
+
+      this.weekTabObject.filter(elem => {
         this.weekDataTabWeight.push(elem.weight)
         this.weekDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
       })
-      this.weekDataTabWeight = this.weekDataTabWeight.reverse()
-      this.weekDataTabImc = this.weekDataTabImc.reverse()
-      this.weekTabObject = ret.data
       this.lastWeekData = ret.data
+      console.log('dans le get last week data : ')
+      console.log(ret.data)
+      console.log(this.weekTabObject)
+      console.log(this.weekDataTabWeight)
+      console.log(this.weekDataTabImc)
     },
     async getLastMonthData () {
       const ret = await axiosInstance.get(`/followup/imc/lastmonth/${this.id_user}`).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      this.lastWeekData = ret.data
+      this.monthTabObject = ret.data.reverse()
+      let previousWeight = null
+
+      this.monthTabObject.filter(elem => {
+        this.monthDataTabWeight.push(elem.weight)
+        this.monthDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
+      })
+      console.log('get last month data')
+      console.log(ret.data)
+      console.log(this.monthTabObject)
+      console.log(this.monthDataTabWeight)
+      console.log(this.monthDataTabImc)
     },
-    async getLastYearData () {
-      const ret = await axiosInstance.get(`/followup/imc/lastyear${this.id_user}`).catch(function (error) {
+    async getLastSemesterData () {
+      console.log('get last semester data')
+      const ret = await axiosInstance.get(`/followup/imc/lastsemester/${this.id_user}`).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      this.lastWeekData = ret.data
-      this.loadedYearTwo = true
+      this.semesterTabObject = ret.data.reverse()
+
+      this.semesterTabObject.filter(elem => {
+        this.semesterDataTabWeight.push(elem.weight)
+        this.semesterDataTabImc.push(elem.imc_computed)
+      })
+      console.log('get last semester data ici')
+      console.log(ret.data)
+      console.log(this.semesterTabObject)
+      console.log(this.semesterDataTabWeight)
+      console.log(this.semesterDataTabImc)
+    },
+    async getLastYearData () {
+      const ret = await axiosInstance.get(`/followup/imc/lastyear/${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      this.yearTabObject = ret.data.reverse()
+
+      this.yearTabObject.filter(elem => {
+        this.yearDataTabWeight.push(elem.weight)
+        this.yearDataTabImc.push(elem.imc_computed)
+      })
+      console.log('get last year data ici')
+      console.log(ret.data)
+      console.log(this.yearTabObject)
+      console.log(this.yearDataTabWeight)
+      console.log(this.yearDataTabImc)
+    },
+    async getLastData () {
+      const ret = await axiosInstance.get(`/followup/imc/last/${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      console.log('get LAST data')
+      this.lastData = ret.data
+      console.log(ret.data)
     },
     validatefollowUpIMC () {
       const data = {
@@ -691,8 +623,12 @@ export default {
       }
       this.sendNewFollowUpData(data)
     },
-    progression () {
-      return true
+    progression (elem) {
+      if (elem.weight > elem.previousWeight) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   created () {
@@ -700,10 +636,11 @@ export default {
     this.id_user = this.userToFollow.id
     this.getFollowUpData()
     this.formDate = new Date()
-    this.weekData.filter(elem => {
-      this.datatab.push(elem.weight)
-    })
     this.getLastWeekData()
+    this.getLastMonthData()
+    this.getLastSemesterData()
+    this.getLastYearData()
+    this.getLastData()
   }
 }
 

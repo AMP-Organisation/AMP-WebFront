@@ -96,6 +96,10 @@ const messages = {
     hospital_service: 'Service supported by the hospital :',
     // page de follow up
     follow_up_title_page: 'Follow up Page',
+    week_tlt: 'Week',
+    month_tlt: 'Month',
+    semester_tlt: 'Semester',
+    year_tlt: 'Year',
     link0: 'Informations',
     link1: 'Places',
     link2: 'Medicines',
@@ -202,6 +206,10 @@ const messages = {
     hospital_service: 'Service pris en charge par l\'hôpital :',
     // page follow up
     follow_up_title_page: 'Page de suivi',
+    week_tlt: 'Semaine',
+    month_tlt: 'Mois',
+    semester_tlt: 'Semestre',
+    year_tlt: 'An',
     link0: 'Informations',
     link1: 'Lieux',
     link2: 'Médicaments',

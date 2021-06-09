@@ -10,6 +10,9 @@
           />
         </div>
       </q-card-section>
+      <q-card-section>
+        <q-btn label="DEBUG" :color="'amber-5'" v-on:click="debugFunction()"/>
+      </q-card-section>
     </q-card>
   </div>
 </template>
@@ -35,13 +38,25 @@ export default {
       type: Array,
       default: null
     },
+    firstLabel: {
+      type: String,
+      default: 'first data'
+    },
     secondData: {
       type: Array,
       default: null
     },
+    secondLabel: {
+      type: String,
+      default: 'first data'
+    },
     customTitle: {
       type: String,
       default: null
+    },
+    titleChart: {
+      type: String,
+      default: 'double line chart'
     }
   },
   components: {
@@ -65,7 +80,7 @@ export default {
         labels: [],
         datasets: [
           {
-            label: 'Donnée de la facade',
+            label: this.firstLabel,
             // les données
             data: [],
             backgroundColor: 'transparent',
@@ -74,7 +89,7 @@ export default {
             yAxisID: 'y'
           },
           {
-            label: 'Donnée bis',
+            label: this.secondLabel,
             // les données
             data: [22, 23, 24, 32, 23, 21, 20],
             backgroundColor: 'transparent',
@@ -96,20 +111,8 @@ export default {
         },
         title: {
           display: true,
-          text: 'my double line chart'
+          text: this.titleChart
         },
-        // scales: {
-        //   y: {
-        //     type: 'linear',
-        //     display: true,
-        //     position: 'left'
-        //   },
-        //   y1: {
-        //     type: 'linear',
-        //     display: true,
-        //     position: 'right'
-        //   }
-        // }
         scales: {
           yAxes: [{
             id: 'y',
@@ -130,6 +133,12 @@ export default {
     }
   },
   methods: {
+    debugFunction () {
+      console.log('DEBUG')
+      console.log(this.preLabels)
+      console.log(this.firstData)
+      console.log(this.secondData)
+    },
     generateLabelForDuration (period) {
       for (let i = period + 1; i > 0; i--) {
         // const strDate = antes.toDateString()
@@ -208,7 +217,7 @@ export default {
   created () {
     this.loadData()
     this.generateLabel()
-    this.generateData()
+    // this.generateData()
     this.checkOtherCustomProps()
   }
 }
