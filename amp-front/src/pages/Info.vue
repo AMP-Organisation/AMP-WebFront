@@ -21,7 +21,7 @@
           <q-btn
             v-if="active"
             size="lg"
-            icon="home"
+            icon="fiber_manual_record"
             color="yellow"
             flat
             round

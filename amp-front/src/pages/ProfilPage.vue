@@ -23,6 +23,7 @@
             <p class="text-h5"><q-icon class="q-mr-sm" name="insert_emoticon" color="green-6" />{{ $t('username') }} :</p>
             <p class="text-h5"><q-icon class="q-mr-sm" name="email" color="green-6" />e-mail :</p>
             <p class="text-h5"><q-icon class="q-mr-sm" name="cake" color="green-6" />Age :</p>
+            <p class="text-h5"><q-icon class="q-mr-sm" name="height" color="green-6" />{{ $t('height') }}</p>
           </div>
           <div class="col q-ml-sm" align="left">
             <div v-if="!isEdit">
@@ -31,6 +32,8 @@
               <p class="text-h5">{{ user.username }}</p>
               <p class="text-h5">{{ user.email }}</p>
               <p class="text-h5">{{ user.age }}</p>
+              <p class="text-h5" v-if="user.height!=null">{{ user.height }} m</p>
+              <p class="text-h5" v-else>{{ $t('no_information') }}</p>
             </div>
             <div v-if="isEdit" class="col-10">
               <q-input square outlined v-model="majData.editLastName" v-bind:label="this.$t('last_name')" />
@@ -38,6 +41,7 @@
               <q-input square outlined v-model="majData.editUserName" v-bind:label="this.$t('username')" />
               <q-input square outlined v-model="majData.editEmail" label="e-mail" />
               <q-input square outlined v-model="majData.age" type="number" label="age" />
+              <q-input square outlined v-model="majData.height" type="number" v-bind:label="this.$t('height')" />
             </div>
           </div>
         </div>
@@ -97,7 +101,8 @@ export default {
         editFirstName: '',
         editUserName: '',
         editEmail: '',
-        age: 42
+        age: 42,
+        height: 1.70
       }
     }
   },
@@ -112,6 +117,7 @@ export default {
       this.majData.editUserName = this.user.username
       this.majData.editEmail = this.user.email
       this.majData.age = this.user.age
+      this.majData.height = this.user.height
     },
     getUserData () {
       axiosInstance.post('users/get', { email: this.user.email }).then(elem => {
@@ -137,7 +143,8 @@ export default {
           first_name: this.majData.editFirstName,
           username: this.majData.editUserName,
           email: this.majData.editEmail,
-          age: 27,
+          age: this.majData.age,
+          height: this.majData.height,
           id: this.user.id
         }
       }).catch(function (error) {
