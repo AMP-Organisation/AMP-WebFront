@@ -46,18 +46,17 @@
                     <div class="col-auto q-ml-md q-mt-md">
                       <q-list bordered separator class="q-mr-sm">
                         <q-item>
-                          <q-item-section >{{this.$t('medicine1')}} : {{ props.row.dose }} mg</q-item-section>
+                          <q-item-section >{{$t('medicine1')}} : {{ props.row.dose }} mg</q-item-section>
                         </q-item>
                         <q-item>
                           <q-item-section>
-                            <q-item-label >{{this.$t('medicine1') }}: {{ props.row.dose_max }} mg</q-item-label>
+                            <q-item-label >{{$t('medicine1')}} : {{ props.row.dose_max }} mg</q-item-label>
                           </q-item-section>
                         </q-item>
 
                         <q-item>
                           <q-item-section>
-                            <q-item-label >{{this.$t('medicine4')}} : {{ props.row.delay }} h</q-item-label>
-                            <p>{{  }}</p>
+                            <q-item-label >{{$t('medicine4')}} : {{ props.row.delay }} h</q-item-label>
                           </q-item-section>
                         </q-item>
                       </q-list>
@@ -67,7 +66,7 @@
                   <q-separator/>
                   <q-card-actions class="justify-end" >
                     <q-btn color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{medicine_id: parseInt(props.row.id)} }">
-                      <q-tooltip content-class="bg-secondary">{{this.$t('more_details')}}</q-tooltip>
+                      <q-tooltip content-class="bg-secondary">{{$t('more_details')}}</q-tooltip>
                     </q-btn>
                   </q-card-actions>
                 </q-card>
@@ -92,7 +91,7 @@
         <q-card-section>
           <div class="row">
             <div class="col">
-              <div class="text-h6">{{this.$t('add_new_med')}}</div>
+              <div class="text-h6">{{$t('add_new_med')}}</div>
               <div class="text-subtitle2"></div>
             </div>
           </div>
@@ -121,7 +120,7 @@
             icon="add"
             v-show="!addNewMedDialog"
             v-on:click="addNewMedDialog = true">
-              <q-tooltip>{{this.$t('add_new_med')}}</q-tooltip>
+              <q-tooltip>{{$t('add_new_med')}}</q-tooltip>
             </q-btn>
         </div>
       </div>
@@ -131,7 +130,7 @@
           <q-card-section class="justify-between">
             <div class="row">
               <div class="col">
-                <div class="text-h6">{{this.$t('add_new_med')}}</div>
+                <div class="text-h6">{{$t('add_new_med')}}</div>
               </div>
               <div class="col-1 q-mr-sm">
               <q-btn
@@ -139,7 +138,7 @@
                 color="warning"
                 icon="close"
                 v-on:click="addNewMedDialog = !addNewMedDialog">
-                <q-tooltip>{{this.$t('cancel')}}</q-tooltip>
+                <q-tooltip>{{$t('cancel')}}</q-tooltip>
                 </q-btn>
               </div>
             </div>
@@ -172,7 +171,7 @@
                 color="secondary"
                 icon="add"
                 v-on:click="validateNewMedicine()">
-              <q-tooltip>{{this.$t('validate')}}</q-tooltip>
+              <q-tooltip>{{$t('validate')}}</q-tooltip>
               </q-btn>
             </div>
           </q-card-actions>
@@ -184,7 +183,6 @@
 </template>
 <script>
 import { axiosInstance } from 'boot/axios'
-// import Medicine from 'components/Medicine.vue'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 
 export default {
