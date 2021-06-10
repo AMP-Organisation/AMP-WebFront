@@ -96,8 +96,6 @@ const messages = {
     hospital_service: 'Service supported by the hospital :',
     height: 'Height',
     no_information: 'No information',
-    // page de follow up
-    follow_up_title_page: 'Follow up Page',
     introduction1: 'Hello, this site aims to offer you all the information you want on the medical field,\n' +
       '         whether it\'s symptom-based disease research, medical places you wouldn\'t know existed\n' +
       '         in your city, or information on the consumption of certain drugs for example.',
@@ -230,8 +228,6 @@ const messages = {
     hospital_service: 'Service pris en charge par l\'hôpital :',
     height: 'Taille',
     no_information: 'Aucune information',
-    // page follow up
-    follow_up_title_page: 'Page de suivi',
     introduction1: ' Bonjour, ce site à pour but vous offrir toute les informations que vous désirer sur le domaine médical,\n' +
       '         que ce soit la recherche de maladie à partir de symptômes, de lieux médicaux dont vous ignoreriez l\'existance\n' +
       '         dans votre ville, ou bien des informations sur la consommation de certains médicament par exemple.',
