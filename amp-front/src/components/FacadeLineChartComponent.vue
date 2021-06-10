@@ -8,9 +8,6 @@
           />
         </div>
       </q-card-section>
-      <q-card-section v-show="isDebug">
-        <q-btn label="DEBUG" :color="'amber-5'" v-on:click="debugFunction()"/>
-      </q-card-section>
   </div>
 </template>
 <script>
@@ -61,7 +58,6 @@ export default {
   },
   data () {
     return {
-      isDebug: false,
       // la date maintenant
       today: new Date(),
       intro: 'component facade to use line chart',
@@ -131,12 +127,6 @@ export default {
     }
   },
   methods: {
-    debugFunction () {
-      console.log('DEBUG')
-      console.log(this.preLabels)
-      console.log(this.firstData)
-      console.log(this.secondData)
-    },
     generateLabelForDuration (period) {
       for (let i = period + 1; i > 0; i--) {
         // const strDate = antes.toDateString()

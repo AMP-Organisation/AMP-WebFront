@@ -495,12 +495,9 @@ export default {
       }
     },
     hasReachedObjective () {
-      console.log('les objectif dsotn attein')
       if (this.lastData.weight <= this.objective) {
-        console.log('true')
         return true
       } else {
-        console.log('false')
         return false
       }
     },
