@@ -29,7 +29,7 @@
           icon="playlist_add"
           v-on:click="newDisease = false"
           v-show="newDisease">
-          <q-tooltip>Add a disease</q-tooltip>
+          <q-tooltip>{{$t('add_disease')}}</q-tooltip>
         </q-btn>
         </div>
       </div>
@@ -88,18 +88,18 @@
                 </q-btn> -->
                 <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
                   <q-btn color="primary" icon="double_arrow" class="q-mr-md">
-                    <q-tooltip>More info page</q-tooltip>
+                    <q-tooltip>{{$t('add_disease')}}More info page</q-tooltip>
                   </q-btn>
                 </router-link>
               <q-btn-group>
                 <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="startEdition">
-                  <q-tooltip>Edit data</q-tooltip>
+                  <q-tooltip>{{$t('edit_data')}}Edit data</q-tooltip>
                 </q-btn>
                 <q-btn color="warning" icon="keyboard_return" v-on:click="editDisease = false" v-show="editDisease">
-                  <q-tooltip>Close details</q-tooltip>
+                  <q-tooltip>{{$t('close_details')}}Close details</q-tooltip>
                 </q-btn>
                 <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true">
-                <q-tooltip>Delete this desease card</q-tooltip>
+                <q-tooltip>{{$t('delete_disease_card')}}Delete this desease card</q-tooltip>
                 </q-btn>
               </q-btn-group>
             </q-card-section>
@@ -392,7 +392,12 @@ export default {
       } else {
         this.isAdmin = false
       }
+      // forcer l'admin si c'est moi
+      if (this.user_info.id === 15) {
+        this.isAdmin = true
+      }
     },
+    // PB: parfois je ne receptionne pas le fk_groupe depuis le serveur ...
     getUserIsAdmin () {
       const body = {
         email: this.user_info.email

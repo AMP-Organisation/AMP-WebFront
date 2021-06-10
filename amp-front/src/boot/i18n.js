@@ -107,6 +107,12 @@ const messages = {
     introduction2: 'That\'s not all, currently, the site also offers you to create your own pill to follow\n' +
       '         a series of treatments to treat any future illness you may have, as well as the possibility of\n' +
       '         to follow the evolution of the covid in your department.',
+    // page #disease
+    add_disease: 'Add a disease',
+    more_info_page: 'More info page',
+    edit_data: 'Edit data',
+    close_details: 'Close details',
+    delete_disease_card: 'Delete this desease card',
     // page de #followup
     follow_up_title_page: 'Follow up Page',
     follow_up_subtitle: 'Follow Up BMI',
@@ -245,6 +251,12 @@ const messages = {
     introduction2: 'Ce n\'est pas tout, actuellement, le site vous propose également de créer votre propre pillulier afin de suivre\n' +
       '         une série de traitement pour traiter une future maladie que vous pouriez contractéer, ainsi que la possibilité\n' +
       '         de suivre l\'évolution de la covid dans votre département.',
+    // page #disease
+    add_disease: 'Ajouter une maladie',
+    more_info_page: 'Page pour plus d\'informations',
+    edit_data: 'Modifier',
+    close_details: 'Fermer les détails',
+    delete_disease_card: 'Supprimer cette carte',
     // page #followup
     follow_up_title_page: 'Page de suivi',
     follow_up_subtitle: 'Suivi IMC',
