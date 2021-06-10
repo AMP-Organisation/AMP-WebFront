@@ -158,7 +158,8 @@
             </div>
           </q-card-section>
           <q-card-section class="column">
-            <q-checkbox class="col q-ml-md" dense v-model="isComprime" label="Is un comprimé ?" color="orange" />
+            <q-checkbox class="col q-ml-md" dense v-model="isComprime" :label="this.$t('is_pill')" color="orange" />
+            <q-checkbox class="col q-ml-md" dense v-model="isCapsule" :label="this.$t('is_capsule')" color="amber" />
             <!-- These two commented line are for futur improvment -->
             <!-- <q-checkbox class="col q-ml-md q-mt-sm" dense v-model="bolleanToTest" label="checkbox pour l'ui" color="green" />
             <q-toggle class="col" label="ceci est un label" v-model="bolleanToTest" color="yellow" /> -->
@@ -201,6 +202,7 @@ export default {
       newMedDoseMax: 0,
       newMedDelay: 0,
       isComprime: true,
+      isCapsule: false,
       bolleanToTest: true,
       addNewTreatmentDialog: false,
       columnsTab: [
