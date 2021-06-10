@@ -295,7 +295,9 @@
                     <q-input filled v-model="new_weight" :label="this.$t('cur_weight')" hint="in kg" />
                     <q-input filled v-model="imcComputation" :label="this.$t('cur_imc')" hint="" readonly />
                     <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" />
-                    <q-input filled v-model="size" :label="this.$t('cur_height')" hint="" readonly />
+                    <q-input filled v-model="size" :label="this.$t('cur_height')" hint="" readonly >
+                      <q-tooltip>{{this.$t('info_height')}}</q-tooltip>
+                    </q-input>
                     <q-input filled v-model="formDate">
                       <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
@@ -578,10 +580,18 @@ export default {
         console.log('ERRRR:: ', error.response.data)
       })
       this.semesterTabObject = ret.data.reverse()
+      let previousWeight = null
 
       this.semesterTabObject.filter(elem => {
         this.semesterDataTabWeight.push(elem.weight)
         this.semesterDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
       })
       console.log('get last semester data ici')
       console.log(ret.data)
@@ -595,10 +605,18 @@ export default {
         console.log('ERRRR:: ', error.response.data)
       })
       this.yearTabObject = ret.data.reverse()
+      let previousWeight = null
 
       this.yearTabObject.filter(elem => {
         this.yearDataTabWeight.push(elem.weight)
         this.yearDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
       })
       console.log('get last year data ici')
       console.log(ret.data)
