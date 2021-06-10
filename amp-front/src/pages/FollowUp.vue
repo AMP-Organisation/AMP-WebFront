@@ -7,7 +7,7 @@
         expand-separator
         v-model="expanded_imc"
         icon="monitor_weight"
-        label="Follow-up IMC"
+        :label="this.$t('follow_up_subtitle')"
         :expand-icon-class="'text-teal-4'"
         :header-class="'text-h5'"
         >
@@ -17,12 +17,12 @@
             <div class="col">
               <div class="col-1">
                 <div v-if="hasReachedObjective()">
-                  <div class="text-h3 text-red-9" color="red-9">
+                  <div class="text-h3 text-red-9" color="teal-9">
                     {{ objective }}
                   </div>
                 </div>
                 <div v-else>
-                  <div class="text-h3 text-teal-9" color="teal-9">
+                  <div class="text-h3 text-teal-9" color="red-9">
                     {{ objective }}
                   </div>
                 </div>
@@ -36,18 +36,13 @@
         <q-card-section>
           <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
             <q-tab-panel name="week" v-model="weekTabObject">
-              <!-- <LineChart
-                v-if="datatab"
-                :chartData="dataChartWeek"
-                :options="dataOption"
-                :which="true"
-                :duration="'week'"
-                :dataToCompute="dataTabdeci"
-              /> -->
               <FacadeLineChartComponent
               :durationType="'week'"
               :firstData="weekDataTabWeight"
               :secondData="weekDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur une semaine'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
               <!-- <FacadeLineChartComponent
                 :duration="7"
@@ -58,27 +53,34 @@
             <q-tab-panel name="month">
               <FacadeLineChartComponent
               :durationType="'month'"
+              :firstData="monthDataTabWeight"
+              :secondData="monthDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur un mois'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
-              <!-- <LineChart
-                v-if="datatab"
-                :chartData="dataChartMonth"
-                :options="dataOption"
-                :which="true"
-                :duration="'month'"
-                :dataToCompute="dataTabdeci"
-              /> -->
             </q-tab-panel>
             <q-tab-panel name="semester">
               <FacadeLineChartComponent
               :durationType="'semester'"
+              :firstData="semesterDataTabWeight"
+              :secondData="semesterDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur un semestre par mois'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
             </q-tab-panel>
             <q-tab-panel name="year">
               <FacadeLineChartComponent
               :durationType="'year'"
+              :firstData="yearDataTabWeight"
+              :secondData="yearDataTabImc"
+              :titleChart="'Graphique de l\'évolution sur un an par mois'"
+              :firstLabel="'poids'"
+              :secondLabel="'IMC'"
               />
             </q-tab-panel>
-            <q-tab-panel name="yeardeux">
+            <!-- <q-tab-panel name="yeardeux">
               <FacadeLineChartComponent
                 v-if="loadedYearTwo"
                 :duration="12"
@@ -103,8 +105,8 @@
                 v-on:click="loadedYear = true"
                 >
               <q-tooltip>load data</q-tooltip>
-            </q-btn>
-            </q-tab-panel>
+              </q-btn>
+            </q-tab-panel> -->
           </q-tab-panels>
         </q-card-section>
         <q-card-section >
@@ -114,10 +116,10 @@
                       v-model="panel"
                       inline
                       :options="[
-                        { label: 'Week', value: 'week' },
-                        { label: 'Month', value: 'month' },
-                        { label: 'Semester', value: 'semester' },
-                        { label: 'Year', value: 'year' }
+                        { label: this.$t('week_tlt'), value: 'week' },
+                        { label: this.$t('month_tlt'), value: 'month' },
+                        { label: this.$t('semester_tlt'), value: 'semester' },
+                        { label: this.$t('year_tlt'), value: 'year' }
                       ]"
                     />
             </div>
@@ -149,7 +151,7 @@
                       <!-- par semaine -->
                       <q-tab-panel name="week">
                         <div class="text-h5 q-mb-sm">
-                          Week
+                          {{ this.$t('week') }}
                         </div>
                         <q-list
                           bordered
@@ -159,14 +161,22 @@
                           v-bind:key="wdata.date">
                           <q-item clickable v-ripple>
                             <q-item-section class="col-1">
-                              <div v-if="loseWeight">
-                                <q-icon v-if="progression(wdata.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                                  <q-tooltip>You lost some weight</q-tooltip>
-                                </q-icon>
-                                <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                                  <q-tooltip>You gain some weight</q-tooltip>
-                                </q-icon>
-                              </div>
+                              <progress-icone :dataComponent="wdata"></progress-icone>
+                              <!-- <div v-if="loseWeight">
+                                <div v-if="!wdata.previousWeight">
+                                  <q-icon name="flag" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>nothing before</q-tooltip>
+                                  </q-icon>
+                                </div>
+                                <div v-else>
+                                  <q-icon v-if="progression(wdata)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>You lost some weight</q-tooltip>
+                                  </q-icon>
+                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
+                                    <q-tooltip>You gain some weight</q-tooltip>
+                                  </q-icon>
+                                </div>
+                              </div> -->
                             </q-item-section>
                             <q-item-section class="col">
                               <q-item-label>Le : {{ wdata.date | formatTheDate }}</q-item-label>
@@ -181,55 +191,72 @@
                           <q-list
                             bordered
                             separator
-                            v-for="elemData in monthData"
-                            v-bind:key="elemData.date">
+                            v-for="mData in monthTabObject"
+                            v-bind:key="mData.date">
                             <q-item clickable v-ripple>
-                              <q-item-section class="col-1">
+                              <progress-icone :dataComponent="mData"></progress-icone>
+                              <!-- <q-item-section class="col-1">
                                 <div v-if="loseWeight">
-                                  <q-icon v-if="progression(elemData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                  <q-icon v-if="progression(mData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
                                     <q-tooltip>You lost some weight</q-tooltip>
                                   </q-icon>
                                   <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
                                     <q-tooltip>You gain some weight</q-tooltip>
                                   </q-icon>
                                 </div>
-                              </q-item-section>
+                              </q-item-section> -->
                               <q-item-section class="col">
-                                <q-item-label>Le : {{ elemData.date | formatTheDate }}</q-item-label>
-                                <q-item-label>Poids de : {{ elemData.weight }} </q-item-label>
+                                <q-item-label>Le : {{ mData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ mData.weight }} </q-item-label>
                               </q-item-section>
                             </q-item>
                           </q-list>
                       </q-tab-panel>
                       <!-- par semestre (enfin je ne sais pas si on le gardera celui ci) -->
                       <q-tab-panel name="semester">
-                        <div class="text-h6">Month</div>
-                        <q-list
-                            bordered
-                            separator
-                            v-for="elemData in gotData"
-                            v-bind:key="elemData.date">
+                        <div class="text-h6">Semestre</div>
+                        <q-list bordered separator v-for="sData in semesterTabObject" v-bind:key="sData.date">
                             <q-item clickable v-ripple>
-                              <q-item-section class="col-1">
+                              <progress-icone :dataComponent="sData"></progress-icone>
+                              <!-- <q-item-section class="col-1">
                                 <div v-if="loseWeight">
-                                  <q-icon v-if="progression(elemData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                  <q-icon v-if="progression(sData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
                                     <q-tooltip>You lost some weight</q-tooltip>
                                   </q-icon>
                                   <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
                                     <q-tooltip>You gain some weight</q-tooltip>
                                   </q-icon>
                                 </div>
-                              </q-item-section>
+                              </q-item-section> -->
                               <q-item-section class="col">
-                                <q-item-label>Le : {{ elemData.date | formatTheDate }}</q-item-label>
-                                <q-item-label>Poids de : {{ elemData.weight }} </q-item-label>
+                                <q-item-label>Le : {{ sData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ sData.weight }} </q-item-label>
                               </q-item-section>
                             </q-item>
-                          </q-list>
-                        </q-tab-panel>
+                        </q-list>
+                      </q-tab-panel>
+                      <!-- par an  -->
                       <q-tab-panel name="year">
-                        <div class="text-h6">Movies</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        <div class="text-h6">Année</div>
+                        <q-list bordered separator v-for="sData in yearTabObject" v-bind:key="sData.date">
+                            <q-item clickable v-ripple>
+                              <progress-icone :dataComponent="sData"></progress-icone>
+                              <!-- <q-item-section class="col-1">
+                                <div v-if="loseWeight">
+                                  <q-icon v-if="progression(sData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
+                                    <q-tooltip>You lost some weight</q-tooltip>
+                                  </q-icon>
+                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
+                                    <q-tooltip>You gain some weight</q-tooltip>
+                                  </q-icon>
+                                </div>
+                              </q-item-section> -->
+                              <q-item-section class="col">
+                                <q-item-label>Le : {{ sData.date | formatTheDate }}</q-item-label>
+                                <q-item-label>Poids de : {{ sData.weight }} </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                        </q-list>
                       </q-tab-panel>
                     </q-tab-panels>
                   </div>
@@ -243,52 +270,34 @@
                 icon="add"
                 v-on:click="addNewData = !addNewData"
                 v-if="!addNewData"
-              />
+              >
+                <q-tooltip>{{this.$t('add_data')}}</q-tooltip>
+              </q-btn>
               <q-btn
                 color="amber-8"
                 icon="cancel"
                 v-on:click="addNewData = !addNewData"
                 v-if="addNewData"
-              />
-              <!-- <q-list
-                bordered
-                separator
-                v-for="wdata in weekData"
-                v-bind:key="wdata.date">
-                <q-item clickable v-ripple>
-                  <q-item-section class="col-1">
-                    <div v-if="loseWeight">
-                      <q-icon v-if="progression(wdata.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                        <q-tooltip>You lost some weight</q-tooltip>
-                      </q-icon>
-                      <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                        <q-tooltip>You gain some weight</q-tooltip>
-                      </q-icon>
-                    </div>
-                  </q-item-section>
-                  <q-item-section class="col">
-                    <q-item-label>Le : {{ wdata.date | formatTheDate }}</q-item-label>
-                    <q-item-label>Poids de : {{ wdata.weight }} </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list> -->
+              >
+                <q-tooltip>{{this.$t('cancel')}}</q-tooltip>
+              </q-btn>
+
               <!-- la carte pour ajouter une donnée de suivi d'imc -->
               <q-card class="q-mt-md" v-if="addNewData">
                 <q-card-section>
-                  <div class="text-h5">add new data</div>
+                  <div class="text-h5">{{this.$t('add_data')}}</div>
                 </q-card-section>
                 <q-separator/>
                 <q-card-section>
                   <q-form
-                    @submit="onSubmit"
-                    @reset="onReset"
                     class="q-gutter-md"
                   >
-                    <q-input filled v-model="new_weight" label="Your current weight" hint="in kg" />
-                    <q-input filled v-model="imcComputation" label="Your IMC" hint="" readonly />
-                    <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" v-on:click="validatefollowUpIMC" />
-                    <q-input filled v-model="size" label="Your size in m" hint="" readonly />
-                    <q-input filled v-model="watched" label="test watch" hint="" readonly />
+                    <q-input filled v-model="new_weight" :label="this.$t('cur_weight')" hint="in kg" />
+                    <q-input filled v-model="imcComputation" :label="this.$t('cur_imc')" hint="" readonly />
+                    <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" />
+                    <q-input filled v-model="size" :label="this.$t('cur_height')" hint="" readonly >
+                      <q-tooltip>{{this.$t('info_height')}}</q-tooltip>
+                    </q-input>
                     <q-input filled v-model="formDate">
                       <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
@@ -319,14 +328,11 @@
               </q-card>
               <q-tab-panels v-model="panel" v-if="weightWeekSelected" animated class="shadow-2 q-mt-md">
                 <q-tab-panel name="week">
-                  <q-card class="q-mt-md" :bordered="false">
                     <div class="q-ml-md">
-                      <!-- {{weightWeekSelected}} -->
                       <h3>{{weightWeekSelected.date | formatTheDate }}</h3>
-                      <h5>pour un poid de : {{weightWeekSelected.weight}}</h5>
-                      <h5>un imc de : {{weightWeekSelected.imc_computed}}</h5>
+                      <h5>{{this.$t('label_details_weight')}}{{weightWeekSelected.weight}}</h5>
+                      <h5>{{this.$t('label_detail_imc')}}{{weightWeekSelected.imc_computed}}</h5>
                     </div>
-                  </q-card>
                 </q-tab-panel>
               </q-tab-panels>
             </div>
@@ -335,7 +341,7 @@
         </q-expansion-item>
       </q-card>
       <!-- le deuxieme expansion item pour un autre suivi -->
-      <q-card class="q-ml-md q-mr-md q-mt-md">
+      <q-card class="q-ml-md q-mr-md q-mt-md" v-show="otherFollowUp">
         <q-expansion-item
         expand-separator
         icon="shuffle"
@@ -352,6 +358,7 @@
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
 // import LineChart from 'components/LineChart.vue'
 import FacadeLineChartComponent from 'components/FacadeLineChartComponent.vue'
+import ProgressIcone from 'components/ProgressIcon.vue'
 
 import { axiosInstance } from 'boot/axios'
 import { date } from 'quasar'
@@ -368,6 +375,7 @@ export default {
       id_user: 42,
       expanded_imc: true,
       charttest: undefined,
+      otherFollowUp: false,
       // la taille sera à récupérer depuis la fiche de santé
       size: 1.80,
       objective: 70,
@@ -392,13 +400,14 @@ export default {
       weightYearSelected: undefined,
       loadedYear: false,
       loadedYearTwo: false,
-      // ces 3 variables, pour stocker les données provenant de l'api
+      // ces variables ci dessous, pour stocker les données provenant de l'api
       lastWeekData: [],
       lastWeekDataIMC: [23.15, 23.46, 24.07, 22.84, 22.22, 21.91, 21.60],
       lastMonthData: [],
       lastTrimesterData: [],
       lastSemestersData: [],
       lastYearData: [],
+      // dsf
       dataTabdeci: [75.4, 75.1, 74.8, 74.3, 75.1, 75.2, 75.1],
       lastData: [
         {
@@ -411,165 +420,21 @@ export default {
       weekTabObject: [],
       weekDataTabWeight: [],
       weekDataTabImc: [],
-      weekData: [
-        {
-          date: '2021-04-030T15:01:09.538Z',
-          weight: 75.1,
-          imc: 0
-        },
-        {
-          date: '2021-04-029T15:01:09.538Z',
-          weight: 75.2,
-          imc: 0
-        },
-        {
-          date: '2021-04-028T15:01:09.538Z',
-          weight: 75.1,
-          imc: 0
-        },
-        {
-          date: '2021-04-027T15:01:09.538Z',
-          weight: 74.3,
-          imc: 0
-        },
-        {
-          date: '2021-04-026T15:01:09.538Z',
-          weight: 74.8,
-          imc: 0
-        },
-        {
-          date: '2021-04-025T15:01:09.538Z',
-          weight: 75.1,
-          imc: 0
-        },
-        {
-          date: '2021-04-024T15:01:09.538Z',
-          weight: 75.4,
-          imc: 0
-        }
-      ],
-      monthData: [
-        {
-          date: '2021-02-09T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-08T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-07T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-06T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-05T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-04T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-03T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-02T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-01T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-01-31T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-30T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        },
-        {
-          date: '2021-02-29T15:01:09.538Z',
-          weight: 75,
-          imc: 0
-        }
-      ],
-      gotData: [],
-      dataOption: {
-        responsive: true,
-        maintainAspectRatio: false,
-        title: {
-          display: true,
-          text: 'My Data bis'
-        }
-      },
-      datatab: [],
-      dataChartWeek: {
-        labels: [
-          'Lundi',
-          'Mardi',
-          'Mercredi',
-          'Jeudi',
-          'Vendredi',
-          'Samedi',
-          'Dimanche'
-        ],
-        datasets: [
-          {
-            label: 'Data 1',
-            data: [42, 36, 76, 42, 36, 76, 42, 36, 76, 42, 36, 76],
-            backgroundColor: 'transparent',
-            borderColor: 'rgba(1, 116, 188, 0.50)',
-            pointBackgroundColor: 'rgba(171, 71, 188, 1)'
-          }
-        ]
-      },
-      dataChartMonth: {
-        labels: [
-          'Janvier',
-          'Février',
-          'Mars',
-          'Avril',
-          'Mai',
-          'Juin',
-          'Juillet',
-          'Aout',
-          'Septembre',
-          'Octobre',
-          'Novembre',
-          'Décembre'
-        ],
-        datasets: [
-          {
-            label: 'Data 1',
-            data: [42, 36, 76, 42, 36, 76, 42, 36, 76, 42, 36, 76],
-            backgroundColor: 'transparent',
-            borderColor: 'rgba(1, 116, 188, 0.50)',
-            pointBackgroundColor: 'rgba(171, 71, 188, 1)'
-          }
-        ]
-      }
+      monthTabObject: [],
+      monthDataTabWeight: [],
+      monthDataTabImc: [],
+      semesterTabObject: [],
+      semesterDataTabWeight: [],
+      semesterDataTabImc: [],
+      yearTabObject: [],
+      yearDataTabWeight: [],
+      yearDataTabImc: []
     }
   },
   components: {
     IconAndTitle,
-    FacadeLineChartComponent
+    FacadeLineChartComponent,
+    ProgressIcone
     // LineChart
   },
   watch: {
@@ -608,23 +473,23 @@ export default {
         return null
       }
       if (imc >= 25 && imc < 30) {
-        this.infoIMC.state = 'Surpoids'
+        this.infoIMC.state = this.$t('button_imc_surpoids')
         this.infoIMC.color = 'warning'
         this.infoIMC.icon = 'warning'
       } else if (imc < 18.5 && imc >= 16.5) {
-        this.infoIMC.state = 'Maigreur'
+        this.infoIMC.state = this.$t('button_imc_maigreur')
         this.infoIMC.color = 'warning'
         this.infoIMC.icon = 'warning'
       } else if (imc < 16.5) {
-        this.infoIMC.state = 'Famine'
+        this.infoIMC.state = this.$t('button_imc_famine')
         this.infoIMC.color = 'red-9'
         this.infoIMC.icon = 'warning'
       } else if (imc >= 30) {
-        this.infoIMC.state = 'Obésité'
+        this.infoIMC.state = this.$t('button_imc_obese')
         this.infoIMC.color = 'red-9'
         this.infoIMC.icon = 'warning'
       } else {
-        this.infoIMC.state = 'Normale'
+        this.infoIMC.state = this.$t('button_imc_normal')
         this.infoIMC.color = 'positive'
         this.infoIMC.icon = 'check'
       }
@@ -658,13 +523,20 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      ret.data.filter(elem => {
+      this.weekTabObject = ret.data.reverse()
+      let previousWeight = null
+
+      this.weekTabObject.filter(elem => {
         this.weekDataTabWeight.push(elem.weight)
         this.weekDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
       })
-      this.weekDataTabWeight = this.weekDataTabWeight.reverse()
-      this.weekDataTabImc = this.weekDataTabImc.reverse()
-      this.weekTabObject = ret.data
       this.lastWeekData = ret.data
     },
     async getLastMonthData () {
@@ -672,27 +544,87 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      this.lastWeekData = ret.data
+      this.monthTabObject = ret.data.reverse()
+      let previousWeight = null
+
+      this.monthTabObject.filter(elem => {
+        this.monthDataTabWeight.push(elem.weight)
+        this.monthDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
+      })
     },
-    async getLastYearData () {
-      const ret = await axiosInstance.get(`/followup/imc/lastyear${this.id_user}`).catch(function (error) {
+    async getLastSemesterData () {
+      const ret = await axiosInstance.get(`/followup/imc/lastsemester/${this.id_user}`).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      this.lastWeekData = ret.data
-      this.loadedYearTwo = true
+      this.semesterTabObject = ret.data.reverse()
+      let previousWeight = null
+
+      this.semesterTabObject.filter(elem => {
+        this.semesterDataTabWeight.push(elem.weight)
+        this.semesterDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
+      })
+    },
+    async getLastYearData () {
+      const ret = await axiosInstance.get(`/followup/imc/lastyear/${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      this.yearTabObject = ret.data.reverse()
+      let previousWeight = null
+
+      this.yearTabObject.filter(elem => {
+        this.yearDataTabWeight.push(elem.weight)
+        this.yearDataTabImc.push(elem.imc_computed)
+        if (previousWeight == null) {
+          previousWeight = elem.weight
+          elem.previousWeight = null
+        } else {
+          elem.previousWeight = previousWeight
+          previousWeight = elem.weight
+        }
+      })
+    },
+    async getLastData () {
+      const ret = await axiosInstance.get(`/followup/imc/last/${this.id_user}`).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
+      this.lastData = ret.data
     },
     validatefollowUpIMC () {
+      // il y a un probleme entre le back et le front sur la timezone ...
+      const dateToSet = new Date(this.formDate)
       const data = {
         id_user: this.id_user,
         imc: this.newIMC,
         weight: this.new_weight,
-        date: new Date(this.formDate)
+        date: dateToSet,
+        day: dateToSet.getDay(),
+        month: dateToSet.getMonth()
       }
       this.sendNewFollowUpData(data)
     },
-    progression () {
-      return true
+    progression (elem) {
+      if (elem.weight > elem.previousWeight) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   created () {
@@ -700,10 +632,11 @@ export default {
     this.id_user = this.userToFollow.id
     this.getFollowUpData()
     this.formDate = new Date()
-    this.weekData.filter(elem => {
-      this.datatab.push(elem.weight)
-    })
     this.getLastWeekData()
+    this.getLastMonthData()
+    this.getLastSemesterData()
+    this.getLastYearData()
+    this.getLastData()
   }
 }
 

@@ -32,12 +32,9 @@ export default {
   methods: {
     getDisease (id) {
       axios.get(`${apiAddr}/diseases/${id}`).then(elem => { this.disease = elem.data })
-      console.log('les maladie chargé')
-      console.log(this.diseases)
     },
     async loadOneDisease (id) {
-      const ret = await axios.get(`${apiAddr}/diseases/${id}`)
-      console.log(ret)
+      await axios.get(`${apiAddr}/diseases/${id}`)
     }
   },
   created () {
