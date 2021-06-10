@@ -1,7 +1,5 @@
 <template lang="">
   <div>
-    {{ intro }}
-    <q-card>
       <q-card-section>
         <div class="mysmall">
           <LineChart
@@ -10,7 +8,6 @@
           />
         </div>
       </q-card-section>
-    </q-card>
   </div>
 </template>
 <script>
@@ -35,13 +32,25 @@ export default {
       type: Array,
       default: null
     },
+    firstLabel: {
+      type: String,
+      default: 'first data'
+    },
     secondData: {
       type: Array,
       default: null
     },
+    secondLabel: {
+      type: String,
+      default: 'first data'
+    },
     customTitle: {
       type: String,
       default: null
+    },
+    titleChart: {
+      type: String,
+      default: 'double line chart'
     }
   },
   components: {
@@ -65,7 +74,7 @@ export default {
         labels: [],
         datasets: [
           {
-            label: 'Donnée de la facade',
+            label: this.firstLabel,
             // les données
             data: [],
             backgroundColor: 'transparent',
@@ -74,7 +83,7 @@ export default {
             yAxisID: 'y'
           },
           {
-            label: 'Donnée bis',
+            label: this.secondLabel,
             // les données
             data: [22, 23, 24, 32, 23, 21, 20],
             backgroundColor: 'transparent',
@@ -96,20 +105,8 @@ export default {
         },
         title: {
           display: true,
-          text: 'my double line chart'
+          text: this.titleChart
         },
-        // scales: {
-        //   y: {
-        //     type: 'linear',
-        //     display: true,
-        //     position: 'left'
-        //   },
-        //   y1: {
-        //     type: 'linear',
-        //     display: true,
-        //     position: 'right'
-        //   }
-        // }
         scales: {
           yAxes: [{
             id: 'y',

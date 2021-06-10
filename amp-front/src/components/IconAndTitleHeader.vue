@@ -39,14 +39,6 @@ export default {
     upperFirstChar: function (str) {
       return str.replace(str.charAt(0), str.charAt(0).toUpperCase())
     }
-  },
-  methods: {
-    doSomething () {
-      console.log('bonjour')
-    }
-  },
-  created () {
-
   }
 }
 </script>
