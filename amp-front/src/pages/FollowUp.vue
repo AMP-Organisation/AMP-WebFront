@@ -270,13 +270,17 @@
                 icon="add"
                 v-on:click="addNewData = !addNewData"
                 v-if="!addNewData"
-              />
+              >
+                <q-tooltip>add new data</q-tooltip>
+              </q-btn>
               <q-btn
                 color="amber-8"
                 icon="cancel"
                 v-on:click="addNewData = !addNewData"
                 v-if="addNewData"
-              />
+              >
+                <q-tooltip>cancel</q-tooltip>
+              </q-btn>
 
               <!-- la carte pour ajouter une donnée de suivi d'imc -->
               <q-card class="q-mt-md" v-if="addNewData">
@@ -286,7 +290,6 @@
                 <q-separator/>
                 <q-card-section>
                   <q-form
-                    @submit="onSubmit"
                     class="q-gutter-md"
                   >
                     <q-input filled v-model="new_weight" label="Your current weight" hint="in kg" />
@@ -324,8 +327,6 @@
               <q-tab-panels v-model="panel" v-if="weightWeekSelected" animated class="shadow-2 q-mt-md">
                 <q-tab-panel name="week">
                     <div class="q-ml-md">
-                      <!-- {{weightWeekSelected}} -->
-                      <progress-icone v-model="weightWeekSelected" :dataComponent="weightWeekSelected"></progress-icone>
                       <h3>{{weightWeekSelected.date | formatTheDate }}</h3>
                       <h5>pour un poid de : {{weightWeekSelected.weight}}</h5>
                       <h5>un imc de : {{weightWeekSelected.imc_computed}}</h5>
@@ -338,7 +339,7 @@
         </q-expansion-item>
       </q-card>
       <!-- le deuxieme expansion item pour un autre suivi -->
-      <q-card class="q-ml-md q-mr-md q-mt-md">
+      <q-card class="q-ml-md q-mr-md q-mt-md" v-show="otherFollowUp">
         <q-expansion-item
         expand-separator
         icon="shuffle"
@@ -372,6 +373,7 @@ export default {
       id_user: 42,
       expanded_imc: true,
       charttest: undefined,
+      otherFollowUp: false,
       // la taille sera à récupérer depuis la fiche de santé
       size: 1.80,
       objective: 70,

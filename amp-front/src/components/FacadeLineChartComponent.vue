@@ -1,7 +1,5 @@
 <template lang="">
   <div>
-    {{ intro }}
-    <q-card>
       <q-card-section>
         <div class="mysmall">
           <LineChart
@@ -10,10 +8,9 @@
           />
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section v-show="isDebug">
         <q-btn label="DEBUG" :color="'amber-5'" v-on:click="debugFunction()"/>
       </q-card-section>
-    </q-card>
   </div>
 </template>
 <script>
@@ -64,6 +61,7 @@ export default {
   },
   data () {
     return {
+      isDebug: false,
       // la date maintenant
       today: new Date(),
       intro: 'component facade to use line chart',
