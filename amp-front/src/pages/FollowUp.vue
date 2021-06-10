@@ -508,8 +508,7 @@ export default {
       // ici on post les nouvelles données
       axiosInstance.post('/followup/imc/', data)
         .then(elem => {
-          console.log('done')
-          // this.$router.go()
+          this.$router.go()
         })
         .catch(function (error) {
           console.log(error)
@@ -542,11 +541,6 @@ export default {
         }
       })
       this.lastWeekData = ret.data
-      console.log('dans le get last week data : ')
-      console.log(ret.data)
-      console.log(this.weekTabObject)
-      console.log(this.weekDataTabWeight)
-      console.log(this.weekDataTabImc)
     },
     async getLastMonthData () {
       const ret = await axiosInstance.get(`/followup/imc/lastmonth/${this.id_user}`).catch(function (error) {
@@ -567,14 +561,8 @@ export default {
           previousWeight = elem.weight
         }
       })
-      console.log('get last month data')
-      console.log(ret.data)
-      console.log(this.monthTabObject)
-      console.log(this.monthDataTabWeight)
-      console.log(this.monthDataTabImc)
     },
     async getLastSemesterData () {
-      console.log('get last semester data')
       const ret = await axiosInstance.get(`/followup/imc/lastsemester/${this.id_user}`).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
@@ -593,11 +581,6 @@ export default {
           previousWeight = elem.weight
         }
       })
-      console.log('get last semester data ici')
-      console.log(ret.data)
-      console.log(this.semesterTabObject)
-      console.log(this.semesterDataTabWeight)
-      console.log(this.semesterDataTabImc)
     },
     async getLastYearData () {
       const ret = await axiosInstance.get(`/followup/imc/lastyear/${this.id_user}`).catch(function (error) {
@@ -618,20 +601,13 @@ export default {
           previousWeight = elem.weight
         }
       })
-      console.log('get last year data ici')
-      console.log(ret.data)
-      console.log(this.yearTabObject)
-      console.log(this.yearDataTabWeight)
-      console.log(this.yearDataTabImc)
     },
     async getLastData () {
       const ret = await axiosInstance.get(`/followup/imc/last/${this.id_user}`).catch(function (error) {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      console.log('get LAST data')
       this.lastData = ret.data
-      console.log(ret.data)
     },
     validatefollowUpIMC () {
       // il y a un probleme entre le back et le front sur la timezone ...
