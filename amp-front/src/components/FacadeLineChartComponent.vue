@@ -217,7 +217,7 @@ export default {
   created () {
     this.loadData()
     this.generateLabel()
-    // this.generateData()
+    this.generateData()
     this.checkOtherCustomProps()
   }
 }

@@ -4,7 +4,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', name: 'home', component: () => import('pages/Index.vue'), meta: { requiresAuth: true } },
+      { path: '', name: 'home', component: () => import('pages/Info.vue'), meta: { requiresAuth: true } },
       { path: '/info', name: 'info', component: () => import('pages/Info.vue') },
       { path: '/places', name: 'places', component: () => import('pages/Places.vue'), meta: { requiresAuth: true } },
       { path: '/details_place', name: 'details_places', component: () => import('pages/DetailsPlace.vue'), meta: { requiresAuth: true } },

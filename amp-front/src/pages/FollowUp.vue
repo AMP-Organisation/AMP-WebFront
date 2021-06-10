@@ -80,7 +80,7 @@
               :secondLabel="'IMC'"
               />
             </q-tab-panel>
-            <q-tab-panel name="yeardeux">
+            <!-- <q-tab-panel name="yeardeux">
               <FacadeLineChartComponent
                 v-if="loadedYearTwo"
                 :duration="12"
@@ -105,8 +105,8 @@
                 v-on:click="loadedYear = true"
                 >
               <q-tooltip>load data</q-tooltip>
-            </q-btn>
-            </q-tab-panel>
+              </q-btn>
+            </q-tab-panel> -->
           </q-tab-panels>
         </q-card-section>
         <q-card-section >
@@ -287,14 +287,12 @@
                 <q-card-section>
                   <q-form
                     @submit="onSubmit"
-                    @reset="onReset"
                     class="q-gutter-md"
                   >
                     <q-input filled v-model="new_weight" label="Your current weight" hint="in kg" />
                     <q-input filled v-model="imcComputation" label="Your IMC" hint="" readonly />
                     <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" v-on:click="validatefollowUpIMC" />
                     <q-input filled v-model="size" label="Your size in m" hint="" readonly />
-                    <q-input filled v-model="watched" label="test watch" hint="" readonly />
                     <q-input filled v-model="formDate">
                       <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
@@ -506,7 +504,8 @@ export default {
       // ici on post les nouvelles données
       axiosInstance.post('/followup/imc/', data)
         .then(elem => {
-          this.$router.go()
+          console.log('done')
+          // this.$router.go()
         })
         .catch(function (error) {
           console.log(error)
@@ -615,11 +614,15 @@ export default {
       console.log(ret.data)
     },
     validatefollowUpIMC () {
+      // il y a un probleme entre le back et le front sur la timezone ...
+      const dateToSet = new Date(this.formDate)
       const data = {
         id_user: this.id_user,
         imc: this.newIMC,
         weight: this.new_weight,
-        date: new Date(this.formDate)
+        date: dateToSet,
+        day: dateToSet.getDay(),
+        month: dateToSet.getMonth()
       }
       this.sendNewFollowUpData(data)
     },
