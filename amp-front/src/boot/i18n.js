@@ -229,7 +229,7 @@ const messages = {
     cancel: 'annuler',
     cur_weight: 'Votre poids actuel',
     cur_imc: 'Votre IMC calculé',
-    cur_height: 'Votre Taille en metrs',
+    cur_height: 'Votre Taille en mètre',
     label_details_weight: 'Pour votre poids actuel : ',
     label_detail_imc: 'Vous avez comme IMC : ',
     button_imc_surpoids: 'Surpoids',
