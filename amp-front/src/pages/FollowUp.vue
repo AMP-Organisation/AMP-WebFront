@@ -7,7 +7,7 @@
         expand-separator
         v-model="expanded_imc"
         icon="monitor_weight"
-        label="Follow-up IMC"
+        :label="this.$t('follow_up_subtitle')"
         :expand-icon-class="'text-teal-4'"
         :header-class="'text-h5'"
         >
@@ -116,10 +116,10 @@
                       v-model="panel"
                       inline
                       :options="[
-                        { label: 'Week', value: 'week' },
-                        { label: 'Month', value: 'month' },
-                        { label: 'Semester', value: 'semester' },
-                        { label: 'Year', value: 'year' }
+                        { label: this.$t('week_tlt'), value: 'week' },
+                        { label: this.$t('month_tlt'), value: 'month' },
+                        { label: this.$t('semester_tlt'), value: 'semester' },
+                        { label: this.$t('year_tlt'), value: 'year' }
                       ]"
                     />
             </div>
@@ -271,7 +271,7 @@
                 v-on:click="addNewData = !addNewData"
                 v-if="!addNewData"
               >
-                <q-tooltip>add new data</q-tooltip>
+                <q-tooltip>{{this.$t('add_data')}}</q-tooltip>
               </q-btn>
               <q-btn
                 color="amber-8"
@@ -279,23 +279,23 @@
                 v-on:click="addNewData = !addNewData"
                 v-if="addNewData"
               >
-                <q-tooltip>cancel</q-tooltip>
+                <q-tooltip>{{this.$t('cancel')}}</q-tooltip>
               </q-btn>
 
               <!-- la carte pour ajouter une donnée de suivi d'imc -->
               <q-card class="q-mt-md" v-if="addNewData">
                 <q-card-section>
-                  <div class="text-h5">add new data</div>
+                  <div class="text-h5">{{this.$t('add_data')}}</div>
                 </q-card-section>
                 <q-separator/>
                 <q-card-section>
                   <q-form
                     class="q-gutter-md"
                   >
-                    <q-input filled v-model="new_weight" label="Your current weight" hint="in kg" />
-                    <q-input filled v-model="imcComputation" label="Your IMC" hint="" readonly />
-                    <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" v-on:click="validatefollowUpIMC" />
-                    <q-input filled v-model="size" label="Your size in m" hint="" readonly />
+                    <q-input filled v-model="new_weight" :label="this.$t('cur_weight')" hint="in kg" />
+                    <q-input filled v-model="imcComputation" :label="this.$t('cur_imc')" hint="" readonly />
+                    <q-btn :color="this.infoIMC.color" :label="this.infoIMC.state" :icon="this.infoIMC.icon" />
+                    <q-input filled v-model="size" :label="this.$t('cur_height')" hint="" readonly />
                     <q-input filled v-model="formDate">
                       <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
@@ -328,8 +328,8 @@
                 <q-tab-panel name="week">
                     <div class="q-ml-md">
                       <h3>{{weightWeekSelected.date | formatTheDate }}</h3>
-                      <h5>pour un poid de : {{weightWeekSelected.weight}}</h5>
-                      <h5>un imc de : {{weightWeekSelected.imc_computed}}</h5>
+                      <h5>{{this.$t('label_details_weight')}}{{weightWeekSelected.weight}}</h5>
+                      <h5>{{this.$t('label_detail_imc')}}{{weightWeekSelected.imc_computed}}</h5>
                     </div>
                 </q-tab-panel>
               </q-tab-panels>
@@ -471,23 +471,23 @@ export default {
         return null
       }
       if (imc >= 25 && imc < 30) {
-        this.infoIMC.state = 'Surpoids'
+        this.infoIMC.state = this.$t('button_imc_surpoids')
         this.infoIMC.color = 'warning'
         this.infoIMC.icon = 'warning'
       } else if (imc < 18.5 && imc >= 16.5) {
-        this.infoIMC.state = 'Maigreur'
+        this.infoIMC.state = this.$t('button_imc_maigreur')
         this.infoIMC.color = 'warning'
         this.infoIMC.icon = 'warning'
       } else if (imc < 16.5) {
-        this.infoIMC.state = 'Famine'
+        this.infoIMC.state = this.$t('button_imc_famine')
         this.infoIMC.color = 'red-9'
         this.infoIMC.icon = 'warning'
       } else if (imc >= 30) {
-        this.infoIMC.state = 'Obésité'
+        this.infoIMC.state = this.$t('button_imc_obese')
         this.infoIMC.color = 'red-9'
         this.infoIMC.icon = 'warning'
       } else {
-        this.infoIMC.state = 'Normale'
+        this.infoIMC.state = this.$t('button_imc_normal')
         this.infoIMC.color = 'positive'
         this.infoIMC.icon = 'check'
       }
