@@ -46,18 +46,18 @@
                     <div class="col-auto q-ml-md q-mt-md">
                       <q-list bordered separator class="q-mr-sm">
                         <q-item>
-                          <q-item-section >Dose : {{ props.row.dose }} mg</q-item-section>
+                          <q-item-section >{{this.$t('medicine1')}} : {{ props.row.dose }} mg</q-item-section>
                         </q-item>
                         <q-item>
                           <q-item-section>
-                            <q-item-label >Dose Maximum : {{ props.row.dose_max }} mg</q-item-label>
+                            <q-item-label >{{this.$t('medicine1') }}: {{ props.row.dose_max }} mg</q-item-label>
                           </q-item-section>
                         </q-item>
 
                         <q-item>
                           <q-item-section>
-                            <q-item-label >Temps entre deux dose : {{ props.row.delay }} h</q-item-label>
-                           <p>{{  }}</p>
+                            <q-item-label >{{this.$t('medicine4')}} : {{ props.row.delay }} h</q-item-label>
+                            <p>{{  }}</p>
                           </q-item-section>
                         </q-item>
                       </q-list>
@@ -67,7 +67,7 @@
                   <q-separator/>
                   <q-card-actions class="justify-end" >
                     <q-btn color="secondary" icon="double_arrow" :to="{name: 'medicine_details', params:{medicine_id: parseInt(props.row.id)} }">
-                      <q-tooltip content-class="bg-secondary">More details</q-tooltip>
+                      <q-tooltip content-class="bg-secondary">{{this.$t('more_details')}}</q-tooltip>
                     </q-btn>
                   </q-card-actions>
                 </q-card>
@@ -92,7 +92,7 @@
         <q-card-section>
           <div class="row">
             <div class="col">
-              <div class="text-h6">Add a new Medicine</div>
+              <div class="text-h6">{{this.$t('add_new_med')}}</div>
               <div class="text-subtitle2"></div>
             </div>
           </div>
@@ -121,7 +121,7 @@
             icon="add"
             v-show="!addNewMedDialog"
             v-on:click="addNewMedDialog = true">
-              <q-tooltip>Add a new medicine</q-tooltip>
+              <q-tooltip>{{this.$t('add_new_med')}}</q-tooltip>
             </q-btn>
         </div>
       </div>
@@ -131,7 +131,7 @@
           <q-card-section class="justify-between">
             <div class="row">
               <div class="col">
-                <div class="text-h6">Add a new Medicine dialog</div>
+                <div class="text-h6">{{this.$t('add_new_med')}}</div>
               </div>
               <div class="col-1 q-mr-sm">
               <q-btn
@@ -139,7 +139,7 @@
                 color="warning"
                 icon="close"
                 v-on:click="addNewMedDialog = !addNewMedDialog">
-                <q-tooltip>Cancel</q-tooltip>
+                <q-tooltip>{{this.$t('cancel')}}</q-tooltip>
                 </q-btn>
               </div>
             </div>
@@ -172,7 +172,7 @@
                 color="secondary"
                 icon="add"
                 v-on:click="validateNewMedicine()">
-              <q-tooltip>Confirm</q-tooltip>
+              <q-tooltip>{{this.$t('validate')}}</q-tooltip>
               </q-btn>
             </div>
           </q-card-actions>
@@ -292,9 +292,6 @@ export default {
   created () {
     this.loadMedicine()
     this.user_info = JSON.parse(localStorage.getItem('user'))
-    console.log('creation created medicine page')
-    console.log(this.user_info)
-    console.log(this.user_info.fk_group)
   }
 }
 </script>
