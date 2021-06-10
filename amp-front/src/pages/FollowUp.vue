@@ -539,6 +539,7 @@ export default {
   },
   created () {
     this.userToFollow = JSON.parse(localStorage.getItem('user'))
+    console.log(this.userToFollow)
     this.id_user = this.userToFollow.id
     this.getFollowUpData()
     this.formDate = new Date()

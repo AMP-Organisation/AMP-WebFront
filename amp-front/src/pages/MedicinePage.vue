@@ -205,6 +205,7 @@ export default {
       isCapsule: false,
       bolleanToTest: true,
       addNewTreatmentDialog: false,
+      user_info: [],
       columnsTab: [
         {
           label: '0',
@@ -290,6 +291,10 @@ export default {
   },
   created () {
     this.loadMedicine()
+    this.user_info = JSON.parse(localStorage.getItem('user'))
+    console.log('creation created medicine page')
+    console.log(this.user_info)
+    console.log(this.user_info.fk_group)
   }
 }
 </script>

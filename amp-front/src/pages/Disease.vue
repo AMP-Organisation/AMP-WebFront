@@ -23,6 +23,7 @@
         </div>
         <div class="col q-ml-xl q-mt-sm">
           <q-btn
+          v-if="isAdmin"
           round
           color="primary"
           icon="playlist_add"
@@ -220,7 +221,7 @@ export default {
       disease_type_selected: undefined,
       copy_disease: [],
       newDisease: true,
-      isAdmin: true,
+      isAdmin: false,
       editDisease: false,
       confirmDeleteDisease: false,
       showDetails: false,
@@ -384,10 +385,39 @@ export default {
       this.newDisease = true
       this.loadDiseases()
       this.$forceUpdate()
+    },
+    setIsAdmin () {
+      if (this.user_info.fk_group === 3) {
+        this.isAdmin = true
+      } else {
+        this.isAdmin = false
+      }
+    },
+    getUserIsAdmin () {
+      const body = {
+        email: this.user_info.email
+      }
+      axiosInstance.post('/users/get', body).then(elem => {
+        this.user_info = elem.data
+        this.setIsAdmin()
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
     }
   },
   created () {
     this.loadDiseases()
+    this.user_info = JSON.parse(localStorage.getItem('user'))
+    try {
+      if (this.user_info.fk_group === undefined) {
+        this.getUserIsAdmin()
+      } else {
+        this.setIsAdmin()
+      }
+    } catch (error) {
+      this.getUserIsAdmin()
+    }
   }
 }
 </script>
