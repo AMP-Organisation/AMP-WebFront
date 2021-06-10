@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ $t('messageAccueil') }}
     <div class="q-pa-md">
       <q-carousel
         v-model="slide"
@@ -21,7 +20,7 @@
           <q-btn
             v-if="active"
             size="lg"
-            icon="home"
+            icon="fiber_manual_record"
             color="yellow"
             flat
             round
@@ -70,17 +69,34 @@
         </q-carousel-slide>
       </q-carousel>
       <div class="column q-mt-md">
-        <h4 class="text-center">{{ $t('welcomeMsg') }}</h4>
-        <p class="text-body1 text-center">
-          {{ message }}
-        </p>
+        <h4 class="text-center">
+          <vue-typer
+            :text="[this.$t('welcomeMsg')]"
+            :repeat='Infinity'
+            :shuffle='false'
+            initial-action='typing'
+            :pre-type-delay='70'
+            :type-delay='70'
+            :pre-erase-delay='2000'
+            :erase-delay='250'
+            erase-style='clear'
+            :erase-on-complete='false'
+            caret-animation='smooth'
+          ></vue-typer>
+        </h4>
+       <p style="text-align: justify">
+         {{ $t('introduction1') }}
+         <br>
+         <br>
+         {{ $t('introduction2') }}
+       </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import { VueTyper } from 'vue-typer'
 export default {
   name: 'Info',
   data () {
@@ -89,6 +105,9 @@ export default {
       lorem:
         'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque voluptatem totam, architecto cupiditate officia rerum, error dignissimos praesentium libero ab nemo.'
     }
+  },
+  components: {
+    VueTyper
   }
 }
 </script>

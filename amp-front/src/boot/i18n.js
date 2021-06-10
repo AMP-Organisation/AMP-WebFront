@@ -94,6 +94,14 @@ const messages = {
     reputation: 'Reputation :',
     type_place: 'Type',
     hospital_service: 'Service supported by the hospital :',
+    height: 'Height',
+    no_information: 'No information',
+    introduction1: 'Hello, this site aims to offer you all the information you want on the medical field,\n' +
+      '         whether it\'s symptom-based disease research, medical places you wouldn\'t know existed\n' +
+      '         in your city, or information on the consumption of certain drugs for example.',
+    introduction2: 'That\'s not all, currently, the site also offers you to create your own pill to follow\n' +
+      '         a series of treatments to treat any future illness you may have, as well as the possibility of\n' +
+      '         to follow the evolution of the covid in your department.',
     // page de #followup
     follow_up_title_page: 'Follow up Page',
     follow_up_subtitle: 'Follow Up BMI',
@@ -218,6 +226,14 @@ const messages = {
     reputation: 'Réputation :',
     type_place: 'Type de lieux',
     hospital_service: 'Service pris en charge par l\'hôpital :',
+    height: 'Taille',
+    no_information: 'Aucune information',
+    introduction1: ' Bonjour, ce site à pour but vous offrir toute les informations que vous désirer sur le domaine médical,\n' +
+      '         que ce soit la recherche de maladie à partir de symptômes, de lieux médicaux dont vous ignoreriez l\'existance\n' +
+      '         dans votre ville, ou bien des informations sur la consommation de certains médicament par exemple.',
+    introduction2: 'Ce n\'est pas tout, actuellement, le site vous propose également de créer votre propre pillulier afin de suivre\n' +
+      '         une série de traitement pour traiter une future maladie que vous pouriez contractéer, ainsi que la possibilité\n' +
+      '         de suivre l\'évolution de la covid dans votre département.',
     // page #followup
     follow_up_title_page: 'Page de suivi',
     follow_up_subtitle: 'Suivi IMC',
