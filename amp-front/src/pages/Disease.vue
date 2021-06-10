@@ -148,8 +148,8 @@
                 </div>
                 <div class="col-6">
                   <q-card-actions vertical>
-                    <q-select class="q-mt-md" square outlined :disable="disableVaccineList"  :options="vaccineList" label="vaccine name" />
-                    <q-select class="q-mt-md" square outlined :disable="disableTreatmentList" :options="treatmentList" label="treatment name" />
+                    <q-select class="q-mt-md" square outlined :disable="disableVaccineList"  v-model="vaccineListSelected" :options="vaccineList" label="vaccine name" />
+                    <q-select class="q-mt-md" square outlined :disable="disableTreatmentList" v-model="treatmentListSelected" :options="treatmentList" label="treatment name" />
                     <q-select class="q-mt-md" rounded outlined v-model="disease_type_selected" :options="diseaseType" option-label="type_name" label="Type Disease" />
                   </q-card-actions>
                 </div>
@@ -230,7 +230,9 @@ export default {
       diseaseType: [],
       diseasePages: [],
       vaccineList: ['vaccine 1', 'vaccine 2'],
+      vaccineListSelected: undefined,
       treatmentList: ['treatment 1', 'treatment 2'],
+      treatmentListSelected: undefined,
       // refacto a faire pour les variable de la nouvelle maladie à ajouter
       newDisName: undefined,
       newDisDescripption: undefined,
@@ -241,7 +243,7 @@ export default {
       dangerLevel: 0,
       maxPages: 6,
       current: 1,
-      value: '',
+      value: 'ff',
       search: '',
       maxPerPage: 10,
       majDisease: {
