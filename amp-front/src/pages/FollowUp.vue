@@ -44,11 +44,6 @@
               :firstLabel="'poids'"
               :secondLabel="'IMC'"
               />
-              <!-- <FacadeLineChartComponent
-                :duration="7"
-                :dataToCompute="[]"
-                :durationType="'week'">
-                </FacadeLineChartComponent> -->
             </q-tab-panel>
             <q-tab-panel name="month">
               <FacadeLineChartComponent
@@ -80,33 +75,6 @@
               :secondLabel="'IMC'"
               />
             </q-tab-panel>
-            <!-- <q-tab-panel name="yeardeux">
-              <FacadeLineChartComponent
-                v-if="loadedYearTwo"
-                :duration="12"
-                :dataToCompute="[]"
-                :durationType="'year'">
-                </FacadeLineChartComponent>
-                <q-btn v-show="!loadedYearTwo" round color="primary" icon="check" v-on:click="loadedYearTwo = true">
-                  <q-tooltip>load data</q-tooltip>
-                </q-btn>
-            </q-tab-panel>
-            <q-tab-panel name="weekdeux">
-              <FacadeLineChartComponent
-                v-if="loadedYear"
-                :duration="7"
-                :dataToCompute="lastWeekData">
-                </FacadeLineChartComponent>
-                <q-btn
-                v-show="!loadedYear"
-                round
-                color="primary"
-                icon="check"
-                v-on:click="loadedYear = true"
-                >
-              <q-tooltip>load data</q-tooltip>
-              </q-btn>
-            </q-tab-panel> -->
           </q-tab-panels>
         </q-card-section>
         <q-card-section >
@@ -124,29 +92,14 @@
                     />
             </div>
           </div>
-          <!-- { label: 'Year', value: 'yeardeux' },
-          { label: 'week', value: 'weekdeux' } -->
         </q-card-section>
         <!-- la deuxieme partie avec la liste et la carte a coté -->
         <q-card-section>
           <div class="row">
             <!-- la section a droite de la liste -->
             <div class="col-6">
-              <!-- <q-card class="q-ml-md q-mr-md">
-                <p>bonjour</p>
-              </q-card> -->
                 <div class="q-pa-md">
                   <div class="" >
-                    <!-- <q-option-group
-                      v-model="panel"
-                      inline
-                      :options="[
-                        { label: 'Week', value: 'week' },
-                        { label: 'Month', value: 'month' },
-                        { label: 'Semester', value: 'semester' },
-                        { label: 'Year', value: 'year' }
-                      ]"
-                    /> -->
                     <q-tab-panels v-model="panel" animated class="shadow-2 rounded-borders">
                       <!-- par semaine -->
                       <q-tab-panel name="week">
@@ -162,21 +115,6 @@
                           <q-item clickable v-ripple>
                             <q-item-section class="col-1">
                               <progress-icone :dataComponent="wdata"></progress-icone>
-                              <!-- <div v-if="loseWeight">
-                                <div v-if="!wdata.previousWeight">
-                                  <q-icon name="flag" :size="'xl'" :color="'teal-9'">
-                                    <q-tooltip>nothing before</q-tooltip>
-                                  </q-icon>
-                                </div>
-                                <div v-else>
-                                  <q-icon v-if="progression(wdata)" name="south_east" :size="'xl'" :color="'teal-9'">
-                                    <q-tooltip>You lost some weight</q-tooltip>
-                                  </q-icon>
-                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                                    <q-tooltip>You gain some weight</q-tooltip>
-                                  </q-icon>
-                                </div>
-                              </div> -->
                             </q-item-section>
                             <q-item-section class="col">
                               <q-item-label>Le : {{ wdata.date | formatTheDate }}</q-item-label>
@@ -195,16 +133,6 @@
                             v-bind:key="mData.date">
                             <q-item clickable v-ripple>
                               <progress-icone :dataComponent="mData"></progress-icone>
-                              <!-- <q-item-section class="col-1">
-                                <div v-if="loseWeight">
-                                  <q-icon v-if="progression(mData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                                    <q-tooltip>You lost some weight</q-tooltip>
-                                  </q-icon>
-                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                                    <q-tooltip>You gain some weight</q-tooltip>
-                                  </q-icon>
-                                </div>
-                              </q-item-section> -->
                               <q-item-section class="col">
                                 <q-item-label>Le : {{ mData.date | formatTheDate }}</q-item-label>
                                 <q-item-label>Poids de : {{ mData.weight }} </q-item-label>
@@ -218,16 +146,6 @@
                         <q-list bordered separator v-for="sData in semesterTabObject" v-bind:key="sData.date">
                             <q-item clickable v-ripple>
                               <progress-icone :dataComponent="sData"></progress-icone>
-                              <!-- <q-item-section class="col-1">
-                                <div v-if="loseWeight">
-                                  <q-icon v-if="progression(sData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                                    <q-tooltip>You lost some weight</q-tooltip>
-                                  </q-icon>
-                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                                    <q-tooltip>You gain some weight</q-tooltip>
-                                  </q-icon>
-                                </div>
-                              </q-item-section> -->
                               <q-item-section class="col">
                                 <q-item-label>Le : {{ sData.date | formatTheDate }}</q-item-label>
                                 <q-item-label>Poids de : {{ sData.weight }} </q-item-label>
@@ -241,16 +159,6 @@
                         <q-list bordered separator v-for="sData in yearTabObject" v-bind:key="sData.date">
                             <q-item clickable v-ripple>
                               <progress-icone :dataComponent="sData"></progress-icone>
-                              <!-- <q-item-section class="col-1">
-                                <div v-if="loseWeight">
-                                  <q-icon v-if="progression(sData.date)" name="south_east" :size="'xl'" :color="'teal-9'">
-                                    <q-tooltip>You lost some weight</q-tooltip>
-                                  </q-icon>
-                                  <q-icon v-else name="north_east" :size="'xl'" :color="'red-9'">
-                                    <q-tooltip>You gain some weight</q-tooltip>
-                                  </q-icon>
-                                </div>
-                              </q-item-section> -->
                               <q-item-section class="col">
                                 <q-item-label>Le : {{ sData.date | formatTheDate }}</q-item-label>
                                 <q-item-label>Poids de : {{ sData.weight }} </q-item-label>
@@ -354,9 +262,7 @@
   </div>
 </template>
 <script>
-// import { axiosInstance } from 'boot/axios'
 import IconAndTitle from 'components/IconAndTitleHeader.vue'
-// import LineChart from 'components/LineChart.vue'
 import FacadeLineChartComponent from 'components/FacadeLineChartComponent.vue'
 import ProgressIcone from 'components/ProgressIcon.vue'
 
@@ -604,7 +510,11 @@ export default {
         console.log(error)
         console.log('ERRRR:: ', error.response.data)
       })
-      this.lastData = ret.data
+      if (ret.data === null) {
+        console.log('c\'est vide le last data')
+      } else {
+        this.lastData = ret.data
+      }
     },
     validatefollowUpIMC () {
       // il y a un probleme entre le back et le front sur la timezone ...
