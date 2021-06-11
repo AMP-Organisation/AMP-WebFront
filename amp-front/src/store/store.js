@@ -38,10 +38,6 @@ export default new Vuex.Store({
           }
         )
           .then(resp => {
-            console.log('le login')
-            console.log(resp)
-            console.log(resp.data)
-            console.log(resp.data.fk_group)
             localStorage.setItem('user', JSON.stringify(resp.data))
             commit('auth_success', user)
             resolve(resp)
