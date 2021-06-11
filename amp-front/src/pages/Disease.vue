@@ -23,12 +23,13 @@
         </div>
         <div class="col q-ml-xl q-mt-sm">
           <q-btn
+          v-if="isAdmin"
           round
           color="primary"
           icon="playlist_add"
           v-on:click="newDisease = false"
           v-show="newDisease">
-          <q-tooltip>Add a disease</q-tooltip>
+          <q-tooltip>{{$t('add_disease')}}</q-tooltip>
         </q-btn>
         </div>
       </div>
@@ -87,18 +88,18 @@
                 </q-btn> -->
                 <router-link :to="{name: 'disease_details', params:{id: disease_selected.id} }">
                   <q-btn color="primary" icon="double_arrow" class="q-mr-md">
-                    <q-tooltip>More info page</q-tooltip>
+                    <q-tooltip>{{$t('add_disease')}}More info page</q-tooltip>
                   </q-btn>
                 </router-link>
               <q-btn-group>
                 <q-btn color="secondary" icon="edit"  v-if="isAdmin" v-on:click="startEdition">
-                  <q-tooltip>Edit data</q-tooltip>
+                  <q-tooltip>{{$t('edit_data')}}Edit data</q-tooltip>
                 </q-btn>
                 <q-btn color="warning" icon="keyboard_return" v-on:click="editDisease = false" v-show="editDisease">
-                  <q-tooltip>Close details</q-tooltip>
+                  <q-tooltip>{{$t('close_details')}}Close details</q-tooltip>
                 </q-btn>
                 <q-btn color="red-9" icon="close"  v-if="isAdmin"  v-on:click="confirmDeleteDisease = true">
-                <q-tooltip>Delete this desease card</q-tooltip>
+                <q-tooltip>{{$t('delete_disease_card')}}Delete this desease card</q-tooltip>
                 </q-btn>
               </q-btn-group>
             </q-card-section>
@@ -147,8 +148,8 @@
                 </div>
                 <div class="col-6">
                   <q-card-actions vertical>
-                    <q-select class="q-mt-md" square outlined :disable="disableVaccineList"  :options="vaccineList" label="vaccine name" />
-                    <q-select class="q-mt-md" square outlined :disable="disableTreatmentList" :options="treatmentList" label="treatment name" />
+                    <q-select class="q-mt-md" square outlined :disable="disableVaccineList"  v-model="vaccineListSelected" :options="vaccineList" label="vaccine name" />
+                    <q-select class="q-mt-md" square outlined :disable="disableTreatmentList" v-model="treatmentListSelected" :options="treatmentList" label="treatment name" />
                     <q-select class="q-mt-md" rounded outlined v-model="disease_type_selected" :options="diseaseType" option-label="type_name" label="Type Disease" />
                   </q-card-actions>
                 </div>
@@ -220,7 +221,7 @@ export default {
       disease_type_selected: undefined,
       copy_disease: [],
       newDisease: true,
-      isAdmin: true,
+      isAdmin: false,
       editDisease: false,
       confirmDeleteDisease: false,
       showDetails: false,
@@ -229,7 +230,9 @@ export default {
       diseaseType: [],
       diseasePages: [],
       vaccineList: ['vaccine 1', 'vaccine 2'],
+      vaccineListSelected: undefined,
       treatmentList: ['treatment 1', 'treatment 2'],
+      treatmentListSelected: undefined,
       // refacto a faire pour les variable de la nouvelle maladie à ajouter
       newDisName: undefined,
       newDisDescripption: undefined,
@@ -240,7 +243,7 @@ export default {
       dangerLevel: 0,
       maxPages: 6,
       current: 1,
-      value: '',
+      value: 'ff',
       search: '',
       maxPerPage: 10,
       majDisease: {
@@ -384,10 +387,44 @@ export default {
       this.newDisease = true
       this.loadDiseases()
       this.$forceUpdate()
+    },
+    setIsAdmin () {
+      if (this.user_info.fk_group === 3) {
+        this.isAdmin = true
+      } else {
+        this.isAdmin = false
+      }
+      // forcer l'admin si c'est moi
+      if (this.user_info.id === 15) {
+        this.isAdmin = true
+      }
+    },
+    // PB: parfois je ne receptionne pas le fk_groupe depuis le serveur ...
+    getUserIsAdmin () {
+      const body = {
+        email: this.user_info.email
+      }
+      axiosInstance.post('/users/get', body).then(elem => {
+        this.user_info = elem.data
+        this.setIsAdmin()
+      }).catch(function (error) {
+        console.log(error)
+        console.log('ERRRR:: ', error.response.data)
+      })
     }
   },
   created () {
     this.loadDiseases()
+    this.user_info = JSON.parse(localStorage.getItem('user'))
+    try {
+      if (this.user_info.fk_group === undefined) {
+        this.getUserIsAdmin()
+      } else {
+        this.setIsAdmin()
+      }
+    } catch (error) {
+      this.getUserIsAdmin()
+    }
   }
 }
 </script>

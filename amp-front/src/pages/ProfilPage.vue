@@ -74,13 +74,13 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <p>toto</p>
         <div>
           <q-btn color="teal" icon="local_hospital" icon-right="send" label="Suivi IMC" v-on:click="goToFollowUpPage()"/>
         </div>
       </q-card-section>
     </q-card>
-    <q-btn class="q-mt-md q-ml-md q-mr-md q-mb-xl" v-on:click="goToTestPage()" color="red-5" icon="add" label="page de test du line chart seul"/>
+    <div class="q-mt-md q-ml-md q-mr-md q-mb-xl"></div>
+    <q-btn v-show="isDebug" class="q-mt-md q-ml-md q-mr-md q-mb-xl" v-on:click="goToTestPage()" color="red-5" icon="add" label="page de test du line chart seul"/>
   </div>
 </template>
 
@@ -95,7 +95,7 @@ export default {
       lastname: '',
       user: undefined,
       isEdit: false,
-      lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      isDebug: false,
       majData: {
         editLastName: '',
         editFirstName: '',

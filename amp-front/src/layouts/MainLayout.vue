@@ -42,9 +42,6 @@
                   <q-item :to="{name: 'HealthCard'}" clickable v-close-popup>
                     <q-item-section>{{ $t('health_card') }}</q-item-section>
                   </q-item>
-                  <q-item :to="{name: 'option_two'}" clickable v-close-popup>
-                    <q-item-section>Menu 2</q-item-section>
-                  </q-item>
                   <q-separator />
                   <q-item v-ripple
                     :to="{name: 'settings_page'}" clickable v-close-popup>
@@ -208,11 +205,6 @@ export default {
           position: 7,
           color: 'text-indigo-8',
           link: 'notifications_page'
-        },
-        {
-          icon: 'forum',
-          position: 8,
-          color: 'text-teal'
         },
         {
           icon: 'feed',

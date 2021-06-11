@@ -19,6 +19,11 @@ const messages = {
     medicine1: 'dose',
     medicine2: 'maximum dose',
     medicine3: 'delay',
+    medicine4: 'delay between two dose',
+    more_details: 'more details',
+    add_new_med: 'Add a new Medicine',
+    is_pill: 'exist as pill',
+    is_capsule: 'exist as capsule',
     symptoms: 'Page to find your symptoms',
     disease: 'Page to find a disease',
     find_disease: 'search a disease',
@@ -102,6 +107,12 @@ const messages = {
     introduction2: 'That\'s not all, currently, the site also offers you to create your own pill to follow\n' +
       '         a series of treatments to treat any future illness you may have, as well as the possibility of\n' +
       '         to follow the evolution of the covid in your department.',
+    // page #disease
+    add_disease: 'Add a disease',
+    more_info_page: 'More info page',
+    edit_data: 'Edit data',
+    close_details: 'Close details',
+    delete_disease_card: 'Delete this desease card',
     // page de #followup
     follow_up_title_page: 'Follow up Page',
     follow_up_subtitle: 'Follow Up BMI',
@@ -111,6 +122,7 @@ const messages = {
     year_tlt: 'Year',
     add_data: 'Add new data',
     cancel: 'cancel',
+    validate: 'Validate',
     cur_weight: 'Your current weight',
     cur_imc: 'Your BMI computed',
     cur_height: 'Your size in meters',
@@ -147,7 +159,12 @@ const messages = {
     medicine0: 'Nom',
     medicine1: 'dose',
     medicine2: 'maximum dose',
-    medicine3: 'delay',
+    medicine3: 'délai',
+    medicine4: 'délai entre deux doses',
+    more_details: 'plus d\'informations',
+    add_new_med: 'Ajout d\'un nouveau médicament',
+    is_pill: 'existe en comprimé',
+    is_capsule: 'existe en gélule',
     symptoms: 'Page pour rechercher vos symptomes',
     disease: 'Page pour rechercher une maladie',
     find_disease: 'trouver une maladie',
@@ -234,6 +251,12 @@ const messages = {
     introduction2: 'Ce n\'est pas tout, actuellement, le site vous propose également de créer votre propre pillulier afin de suivre\n' +
       '         une série de traitement pour traiter une future maladie que vous pouriez contractéer, ainsi que la possibilité\n' +
       '         de suivre l\'évolution de la covid dans votre département.',
+    // page #disease
+    add_disease: 'Ajouter une maladie',
+    more_info_page: 'Page pour plus d\'informations',
+    edit_data: 'Modifier',
+    close_details: 'Fermer les détails',
+    delete_disease_card: 'Supprimer cette carte',
     // page #followup
     follow_up_title_page: 'Page de suivi',
     follow_up_subtitle: 'Suivi IMC',
@@ -243,6 +266,7 @@ const messages = {
     year_tlt: 'An',
     add_data: 'Ajout d\'une nouvelle donnée',
     cancel: 'annuler',
+    validate: 'Valider',
     cur_weight: 'Votre poids actuel',
     cur_imc: 'Votre IMC calculé',
     cur_height: 'Votre Taille en mètre',
