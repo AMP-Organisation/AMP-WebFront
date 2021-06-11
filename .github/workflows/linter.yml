@@ -1,0 +1,13 @@
+name: Lint
+on: [push, pull_request]
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install npm dep
+        run: npm install
+        working-directory: amp-front
+      - name: verification linter
+        run: npm run lint
+        working-directory: amp-front
